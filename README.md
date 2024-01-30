@@ -44,7 +44,5 @@ Join our Discord: https://discord.gg/Fjy3vfgy5q
 
 ## Forked From
 
-[<a href="https://palette.dev">
-  <img src=".erb/img/palette-sponsor-banner.svg" width="100%" />
-</a>](https://github.com/electron-react-boilerplate/electron-react-boilerplate)https://github.com/electron-react-boilerplate/electron-react-boilerplate
+https://github.com/electron-react-boilerplate/electron-react-boilerplate
 
