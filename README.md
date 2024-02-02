@@ -51,12 +51,12 @@ https://github.com/electron-react-boilerplate/electron-react-boilerplate
 
 You can set up in src\main\main.ts 
 
-const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '',
-  database: 'prioritrack',
-});
-
+const db = mysql.createConnection({ <br>
+  host: '127.0.0.1', <br>
+  user: 'root', <br>
+  password: '', <br>
+  database: 'prioritrack', <br>
+}); <br>
+<br>
 set this according to your connection settings so the system will connect to your database.
 
