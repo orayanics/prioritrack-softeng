@@ -46,3 +46,17 @@ Join our Discord: https://discord.gg/Fjy3vfgy5q
 
 https://github.com/electron-react-boilerplate/electron-react-boilerplate
 
+
+## In case your database connection is not yet setup
+
+You can set up in src\main\main.ts 
+
+const db = mysql.createConnection({
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'prioritrack',
+});
+
+set this according to your connection settings so the system will connect to your database.
+
