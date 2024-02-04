@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import Axios from 'axios';
 import Navbar from '../components/navbar';
-import * as styles from '../styles/add_client.module.scss';
+import styles from '../styles/add_client.module.scss';
 
 export default function UserAdd() {
   Axios.defaults.baseURL = 'http://localhost:6936';
