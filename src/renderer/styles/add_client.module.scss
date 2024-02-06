@@ -1,3 +1,25 @@
+:root {
+  --missed: #fcbdbd;
+  --on-going: #fde3f0;
+  --upcoming: #fbefb0;
+  --complete: #d3f2cc;
+  --on-hold: #d7deff;
+
+  --mrd-blue: #c1d7e0;
+  --mrd-purple: #e0d8e9;
+
+  --crud-blue: #c2d2e4;
+  --crud-fc: #00042c;
+}
+body {
+  background-color: white !important;
+  color: black !important;
+}
+
+.container_main {
+  width: 100% !important;
+}
+
 body {
   font-family:
     Roboto,
@@ -15,11 +37,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin-top: 2rem;
 }
 .card {
@@ -77,6 +102,10 @@ input {
   margin-left: 20px;
   background-color: #740000;
 }
+.cancel_text {
+  color: white;
+  text-decoration: none;
+}
 .submit {
   background-color: #00042c;
 }
@@ -86,7 +115,7 @@ input {
   background-color: #00042c;
   color: white;
 
-  width: 30%;
+  width: 90%;
   border-radius: 15px;
 }
 

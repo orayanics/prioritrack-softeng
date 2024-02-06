@@ -2,9 +2,10 @@ import { useState, FormEvent } from 'react';
 import Axios from 'axios';
 import Navbar from '../components/navbar';
 import styles from '../styles/add_client.module.scss';
+import { Outlet, Link } from 'react-router-dom';
 
 export default function UserAdd() {
-  Axios.defaults.baseURL = 'http://localhost:6936';
+  Axios.defaults.baseURL = 'http://localhost:3001';
 
   const [name, setName] = useState<string>('');
   const [property_location, setPropertyLocation] = useState<string>('');
@@ -12,7 +13,7 @@ export default function UserAdd() {
   const [client_bank_address, setClientBankAddress] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
 
-  const postDb = async (e: React.FormEvent) => {
+  const postDb = async (e) => {
     e.preventDefault();
     if (
       !name ||
@@ -24,7 +25,7 @@ export default function UserAdd() {
       return;
     }
     setIsValid(true);
-    await Axios.post('http://localhost:6936/add', {
+    await Axios.post('http://localhost:3001/add', {
       name,
       property_location,
       client_bank_name,
@@ -52,7 +53,6 @@ export default function UserAdd() {
   console.log(styles);
   return (
     <div className={styles.containermain}>
-      <Navbar />
       <div className={styles.container}>
         {!isValid && (
           <div className={styles.alert}>
@@ -100,7 +100,9 @@ export default function UserAdd() {
                   Submit
                 </button>
                 <button className={styles.btn + ' ' + styles.cancel}>
-                  Cancel
+                  <Link className={styles.cancel_text} to={`/home`}>
+                    Cancel
+                  </Link>
                 </button>
               </div>
             </form>
