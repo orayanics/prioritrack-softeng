@@ -1,0 +1,21 @@
+:root {
+  --missed: #fcbdbd;
+  --on-going: #fde3f0;
+  --upcoming: #fbefb0;
+  --complete: #d3f2cc;
+  --on-hold: #d7deff;
+
+  --mrd-blue: #c1d7e0;
+  --mrd-purple: #e0d8e9;
+
+  --crud-blue: #c2d2e4;
+  --crud-fc: #00042c;
+}
+body {
+  background-color: white !important;
+  color: black !important;
+}
+
+.container_main {
+  width: 100% !important;
+}

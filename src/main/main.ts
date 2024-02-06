@@ -31,27 +31,59 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'admin123',
-  database: 'softeng',
+  password: '',
+  database: 'prioritrack',
 });
 
 db.connect();
 
 // POST /USERS REQUEST
+// myApp.post('/add', (req, res) => {
+//   const name = req.body.name;
+//   const phone = req.body.phone;
+//   console.log('THIS IS SERVER ' + name, phone);
+//   const sql = 'INSERT INTO users (name, phone) VALUES (?, ?)';
+//   db.query(sql, [name, phone], (err, result) => {
+//     if (err) {
+//       console.error('Error inserting data into MySQL:', err);
+//       res.status(500).send('Internal Server Error');
+//     } else {
+//       console.log('Data inserted into MySQL:', result);
+//       res.status(200).send('Contact added successfully');
+//     }
+//   });
+// });
+// POST /USERS REQUEST
 myApp.post('/add', (req, res) => {
   const name = req.body.name;
-  const phone = req.body.phone;
-  console.log('THIS IS SERVER ' + name, phone);
-  const sql = 'INSERT INTO users (name, phone) VALUES (?, ?)';
-  db.query(sql, [name, phone], (err, result) => {
-    if (err) {
-      console.error('Error inserting data into MySQL:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('Data inserted into MySQL:', result);
-      res.status(200).send('Contact added successfully');
-    }
-  });
+
+  const property_location = req.body.property_location;
+
+  const client_bank_name = req.body.client_bank_name;
+
+  const client_bank_address = req.body.client_bank_address;
+
+  console.log(
+    'THIS IS SERVER ' + name,
+    property_location,
+    client_bank_name,
+    client_bank_address,
+  );
+  const sql =
+    'INSERT INTO users (name,client_property_location,client_bank_name,client_bank_address) VALUES (?, ?, ?, ?)';
+  db.query(
+    sql,
+    [name, property_location, client_bank_name, client_bank_address],
+    (err, result) => {
+      if (err) {
+        console.error('Error inserting data into MySQL:', err);
+        res.status(500).send('Internal Server Error');
+      } else {
+        console.log('Data inserted into MySQL:', result);
+        res.status(200).send('Contact added successfully');
+      }
+    },
+  );
 });
 
 // GET /USERS ALL USERS

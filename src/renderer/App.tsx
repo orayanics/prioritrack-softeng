@@ -1,9 +1,12 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import Add from './pages/Add';
+// import Home from './pages/Home';
+import Home from './pages/Dashboard';
+
+import Add from './pages/UserAdd';
 import Read from './pages/Read';
+import './styles/globals.scss';
 
 export default function App() {
   return (

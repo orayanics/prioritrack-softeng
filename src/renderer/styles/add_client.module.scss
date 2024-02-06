@@ -1,0 +1,139 @@
+:root {
+  --missed: #fcbdbd;
+  --on-going: #fde3f0;
+  --upcoming: #fbefb0;
+  --complete: #d3f2cc;
+  --on-hold: #d7deff;
+
+  --mrd-blue: #c1d7e0;
+  --mrd-purple: #e0d8e9;
+
+  --crud-blue: #c2d2e4;
+  --crud-fc: #00042c;
+}
+body {
+  background-color: white !important;
+  color: black !important;
+}
+
+.container_main {
+  width: 100% !important;
+}
+
+body {
+  font-family:
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Open Sans',
+    sans-serif;
+}
+.containermain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+.card {
+  background-color: var(--crud-blue);
+  color: var(--crud-fc);
+  width: 500px;
+  height: 100%;
+  text-align: center;
+
+  border-radius: 20px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  padding-bottom: 60px;
+}
+.title {
+  color: #00042c;
+  font-size: 22px;
+
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+input {
+  padding: 0;
+  margin: 0;
+  padding-left: 10px;
+  margin-bottom: 10px;
+
+  border-style: none;
+  border-radius: 5px;
+  width: 85%;
+  height: 28px;
+}
+.inputTitle {
+  padding-left: 40px;
+  padding-bottom: 3px;
+
+  text-align: left;
+  font-size: 15px;
+}
+.btn {
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+
+  width: 160px;
+  height: 30px;
+  border-style: none;
+  cursor: pointer;
+}
+.btn2 {
+  margin-top: 20px;
+}
+.cancel {
+  margin-left: 20px;
+  background-color: #740000;
+}
+.cancel_text {
+  color: white;
+  text-decoration: none;
+}
+.submit {
+  background-color: #00042c;
+}
+:export {
+  white: #ffffff;
+  black: #000000;
+}
+
+.alert {
+  padding: 20px;
+  background-color: #00042c;
+  color: white;
+
+  width: 90%;
+  border-radius: 15px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
