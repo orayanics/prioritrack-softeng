@@ -3,9 +3,11 @@ import Axios from 'axios';
 import Navbar from '../components/navbar';
 import styles from '../styles/add_client.module.scss';
 import { Outlet, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserAdd() {
   Axios.defaults.baseURL = 'http://localhost:3001';
+  const navigate = useNavigate();
 
   const [name, setName] = useState<string>('');
   const [property_location, setPropertyLocation] = useState<string>('');
@@ -39,6 +41,7 @@ export default function UserAdd() {
           client_bank_address,
         );
         console.log('Success');
+        navigate('/home');
       })
       .catch((err) => {
         console.log(

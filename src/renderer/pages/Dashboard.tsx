@@ -17,6 +17,8 @@ import React, { useEffect } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
 import styles from '../styles/dashboard.module.scss';
+import { FaTrashAlt } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 
 export default function Home() {
   const [users, setUsers] = React.useState([]);
@@ -94,41 +96,53 @@ export default function Home() {
             //   </button>
             //   <button onClick={() => deleteData(val.idusers)}>Delete</button>
             // </div> */}
-            <Link className={styles.export} to={`/list/${val.idusers}`}>
-              <div key={val.idusers} className={styles.card}>
-                <div className={styles.column1}>
-                  <div className={styles['card-capsule']}></div>
-                  <div className={styles.column2}>
-                    <p className={`${styles.info} ${styles.cName}`}>
-                      {val.name}
-                    </p>
-                    <p className={`${styles.info} ${styles.pLoc}`}>
-                      Property Location
-                    </p>
-                    <p className={`${styles.info} ${styles.docNo}`}>
-                      U052345606-R
-                    </p>
-                    <div className={`${styles.mrd} ${styles.info}`}>
-                      Tax Clearance
+            <div key={val.idusers} className={styles.card}>
+              <div className={styles.column1}>
+                <div className={styles['card-capsule']}></div>
+                <>
+                  <Link className={styles.export} to={`/list/${val.idusers}`}>
+                    <div className={styles.column2}>
+                      <p className={`${styles.info} ${styles.cName}`}>
+                        {val.name}
+                      </p>
+                      <p className={`${styles.info} ${styles.pLoc}`}>
+                        Property Location
+                      </p>
+                      <p className={`${styles.info} ${styles.docNo}`}>
+                        U052345606-R
+                      </p>
+                      <div className={`${styles.mrd} ${styles.info}`}>
+                        Tax Clearance
+                      </div>
+                      <p className={`${styles.info} ${styles.dateSub}`}>
+                        10/9/2023
+                      </p>
+                      <div className={`${styles.status} ${styles.info}`}>
+                        Missed
+                      </div>
                     </div>
-                    <p className={`${styles.info} ${styles.dateSub}`}>
-                      10/9/2023
-                    </p>
-                    <div className={`${styles.status} ${styles.info}`}>
-                      Missed
-                    </div>
-                    <div>
-                      <button
-                        className={`${styles.status} ${styles.info}  ${styles.delete}`}
-                        onClick={() => deleteData(val.idusers)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
+                  </Link>
+                </>
+                <div className={`${styles.cursor}`}>
+                  <button
+                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
+                    onClick={() => deleteData(val.idusers)}
+                  >
+                    {/* Delete */}
+                    <FaTrashAlt />
+                  </button>
                 </div>
+                <div className={`${styles.cursor}`}>
+                  <button
+                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
+                    // onClick={() => deleteData(val.idusers)}
+                  >
+                    <FaEdit />
+                  </button>
+                </div>
+                {/* end */}
               </div>
-            </Link>
+            </div>
           </>
         );
       })}
