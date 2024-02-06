@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import Axios from 'axios';
-import Navbar from '../components/navbar';
-import styles from '../styles/add_client.module.scss';
+import Navbar from '../../components/navbar';
+import styles from '../../styles/add_client.module.scss';
 import { Outlet, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 

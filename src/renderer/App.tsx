@@ -4,8 +4,8 @@ import Layout from './components/Layout';
 // import Home from './pages/Home';
 import Home from './pages/Dashboard';
 
-import Add from './pages/UserAdd';
-import Read from './pages/Read';
+import Add from './pages/client/Add';
+import Read from './pages/client/Read';
 import './styles/globals.scss';
 
 export default function App() {
