@@ -7,7 +7,7 @@ import Home from './pages/Dashboard';
 import Add from './pages/client/Add';
 import Read from './pages/client/Read';
 import './styles/globals.scss';
-
+import Update from './pages/client/Update';
 export default function App() {
   return (
     <Router>
@@ -16,7 +16,9 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/add" element={<Add />} />
           <Route path="/list/:id" element={<Read />} />
-          {/* <Route path="/list/edit/:id" element={<Update />} /> */}
+          {/* <Route path="/edit" element={<Update />} /> */}
+
+          <Route path="/list/edit/:id" element={<Update />} />
         </Route>
       </Routes>
     </Router>

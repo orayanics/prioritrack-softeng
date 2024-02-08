@@ -124,20 +124,22 @@ export default function Home() {
                   </Link>
                 </>
                 <div className={`${styles.cursor}`}>
-                  <button
-                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
-                    onClick={() => deleteData(val.idusers)}
-                  >
-                    {/* Delete */}
-                    <FaTrashAlt />
+                  <button className={`${styles.info} ${styles.edit}`}>
+                    <Link
+                      to={`/list/edit/${val.idusers}`}
+                      className={`${styles.info} ${styles.edit}  `}
+                    >
+                      <FaEdit className={`${styles.green} `} />
+                    </Link>
                   </button>
                 </div>
                 <div className={`${styles.cursor}`}>
                   <button
-                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
-                    // onClick={() => deleteData(val.idusers)}
+                    className={` ${styles.info}  ${styles.delete}`}
+                    onClick={() => deleteData(val.idusers)}
                   >
-                    <FaEdit />
+                    {/* Delete */}
+                    <FaTrashAlt className={`${styles.deletered}`} />
                   </button>
                 </div>
                 {/* end */}

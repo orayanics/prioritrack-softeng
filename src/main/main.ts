@@ -31,7 +31,7 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'admin123',
+  password: '',
   database: 'prioritrack',
 });
 
@@ -108,8 +108,23 @@ myApp.get(`/list/:id`, (req, res) => {
 // UPDATE /USERS/ID
 myApp.post(`/list/edit/:id`, (req, res) => {
   const id = req.params.id;
-  const query = 'UPDATE users SET name = ?, phone = ? WHERE idusers = ?';
-  const values = [req.body.name, req.body.phone, id];
+  const name = req.body.name;
+
+  const client_property_location = req.body.client_property_location;
+
+  const client_bank_name = req.body.client_bank_name;
+
+  const client_bank_address = req.body.client_bank_address;
+
+  const query =
+    'UPDATE users SET name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE idusers = ?';
+  const values = [
+    req.body.name,
+    req.body.client_property_location,
+    req.body.client_bank_name,
+    req.body.client_bank_address,
+    id,
+  ];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
