@@ -28,18 +28,21 @@ body {
   border: none;
   color: black;
   padding: 15px 32px;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 0.5px 5px #c9c9c9;
 
-  width: 150px;
+  width: 200px;
   margin: 20px 20px 20px 0px;
   /* top right bottom left */
+  display: flex;
+  justify-content: space-between;
 }
+
 .export {
   text-decoration: none;
   color: #2f3241;
@@ -48,13 +51,16 @@ body {
   display: flex;
   align-items: flex-start;
   flex-direction: row;
+
+  flex-wrap: wrap; // To allow wrapping if needed
+  // justify-content: space-between;
 }
 .column2 {
   display: flex;
   align-items: flex-start;
   flex-direction: row;
 
-  padding-top: 10px;
+  padding-top: 16px;
 }
 
 .card {
@@ -80,6 +86,10 @@ body {
 .c-name {
   padding-left: 10px;
 }
+.cbn {
+  width: 150px !important;
+  margin-left: 0px !important;
+}
 .p-loc {
   padding-left: 10px;
 }
@@ -91,49 +101,44 @@ body {
 }
 .title {
   font-size: 15px;
-  // padding-right: 20px;
-  // padding-left: 10px;
+  // padding-right: 40px;
+  // padding-left: 20x;
   font-weight: bold;
-  width: 100px;
+  margin-left: 10px;
+
+  // text-align: left;
+
+  color: black;
+  width: 170px;
 }
 
 .title1 {
-  padding-left: 25px;
-}
-.pl {
-  width: 140px;
-}
-.title_mrd {
-  width: 150px;
-  display: flex;
-  text-align: center !important;
-}
-.dn {
-  width: 110px;
-  text-align: center !important;
-}
-.ds {
+  padding-left: 10px;
   width: 120px;
-  text-align: center !important;
 }
-
 .tStatus {
-  width: 100px;
-  text-align: center !important;
-  // margin-left: 10px;
-  // margin-left: -10px !important;
+  // margin-left: -30px !important;
+  width: 70px;
+  text-align: center;
+}
+.cba {
+  width: 170px;
+}
+.action {
+  width: 90px;
+  text-align: center;
 }
 .mrd {
   font-size: 14px;
   background-color: var(--mrd-blue);
-  width: 150px !important;
+  width: 150px;
   border-radius: 35px;
   // padding: 0px 0px 1px 25px !important;
   /* top right bottom left */
   height: 25px;
-  // margin: 1px 0px 0px 0px;
+  margin: 1px 0px 0px 0px;
 
-  text-align: center !important;
+  text-align: center;
 }
 .edit {
   padding-left: 1px !important;
@@ -141,7 +146,7 @@ body {
   padding-top: 3px;
   background-color: var(--complete);
 
-  margin: 13px 0px 0px 10px;
+  margin: 18px 0px 0px 10px;
   border: none;
   border-radius: 10px;
 }
@@ -159,32 +164,33 @@ body {
   border: none;
   border-radius: 10px;
   /* top right bottom left */
-  margin: 13px 0px 0px 10px;
+  margin: 18px 0px 0px 10px;
   padding-left: 8px !important;
   padding-right: 8px !important;
   padding-top: 3px;
 }
-.cName {
-  // padding-top: 5px;
-  width: 100px !important;
-  margin-left: 15px !important;
+// .cName {
+//   padding-top: 0px;
+// }
+.clientBN {
+  width: 160px !important;
+}
+.clientBA {
+  width: 175px !important;
+  margin-left: 0px !important;
 }
 .pLoc {
-  width: 135px !important;
-}
-.docNo {
-  padding-right: 15px;
-}
-.dateSub {
-  text-align: center !important;
+  width: 160px !important;
 }
 .info {
-  font-size: 14px;
+  font-size: 16px;
+  // padding-right: 35px;
+  margin-left: 10px;
 
-  text-align: left;
+  // text-align: left;
 
   color: black;
-  width: 100px;
+  width: 115px;
 }
 .status {
   font-size: 14px;
@@ -194,7 +200,7 @@ body {
   padding: 3px 2px 2px 0px;
   /* top right bottom left */
   height: 20px;
-  margin: 2px 0px 0px 30px;
+  // margin: 2px 0px 0px 30px;
 
   text-align: center;
 }
@@ -224,7 +230,8 @@ body {
   flex-direction: column;
   max-width: 840px;
   margin: 0 auto;
-  padding: 15px 30px 0 30px;
+  // padding: 15px 50px 0 30px;
+  /* top right bottom left */
 }
 
 @media (max-width: 840px) {

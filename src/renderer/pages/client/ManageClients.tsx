@@ -1,26 +1,12 @@
-// const { connectDb } = require('../database/conn.tsx');
-
-// export default function Home() {
-
-//   const getProducts = async () => {
-//     const conn = await connectDb();
-//     const results = await conn.query('SELECT * FROM users');
-//     return results;
-//   };
-
-//   return (
-//     <div>Home</div>
-//   )
-// }
-
+import styles from '../../styles/manage_clients.module.scss';
 import React, { useEffect } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
-import styles from '../styles/dashboard.module.scss';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
-export default function Home() {
+function ManageClients(): JSX.Element {
   const [users, setUsers] = React.useState([]);
 
   // FETCH DATA ONCE
@@ -52,52 +38,28 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.column1}>
-        <button className={styles.button}>
+        {/* <button className={styles.button}>
           <Link to={`/AddClient`} className={styles.export}>
             Export Data
           </Link>
-        </button>
-        <button className={styles.button}>Reports</button>
+        </button> */}
+        <Link to={`/add`} className={styles.export}>
+          <button className={styles.button}>
+            Add a Client <FaPlus />
+          </button>{' '}
+        </Link>
       </div>
       <div className={styles.column1}>
         <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
-        <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
-        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
-        <p className={`${styles.title} ${styles.title_mrd}`}>
-          Most Recent Document
-        </p>
-        <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
+        <p className={styles.title}>Property Location</p>
+        <p className={`${styles.title} ${styles.cbn}`}>Client Bank Name</p>
+        <p className={`${styles.title} ${styles.cba}`}>Client Bank Address</p>
         <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
-        <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
+        <p className={`${styles.title} ${styles.action}`}>Action</p>
       </div>
       {users.map((val) => {
         return (
-          // <div key={val.idusers}>
-          //   <p>{val.idusers}</p>
-          //   <p>{val.name}</p>
-          //   <p>{val.phone}</p>
-          //   <button>
-          //     <Link to={`/list/${val.idusers}`}>Read</Link>
-          //   </button>
-          //   <button>
-          //     <Link to={`/list/edit/${val.idusers}`}>Update</Link>
-          //   </button>
-          //   <button onClick={() => deleteData(val.idusers)}>Delete</button>
-          // </div>
-
           <>
-            {/* // <div key={val.idusers}>
-            //   <p>{val.idusers}</p>
-            //   <p>{val.name}</p>
-            //   <p>{val.phone}</p>
-            //   <button>
-            //     <Link to={`/list/${val.idusers}`}>Read</Link>
-            //   </button>
-            //   <button>
-            //     <Link to={`/list/edit/${val.idusers}`}>Update</Link>
-            //   </button>
-            //   <button onClick={() => deleteData(val.idusers)}>Delete</button>
-            // </div> */}
             <div key={val.idusers} className={styles.card}>
               <div className={styles.column1}>
                 <div className={styles['card-capsule']}></div>
@@ -110,15 +72,15 @@ export default function Home() {
                       <p className={`${styles.info} ${styles.pLoc}`}>
                         {val.client_property_location}
                       </p>
-                      <p className={`${styles.info} ${styles.docNo}`}>
-                        U052345606-R
+                      <p className={`${styles.info} ${styles.clientBN}`}>
+                        {val.client_bank_name}
                       </p>
-                      <div className={`${styles.mrd} ${styles.info}`}>
-                        Tax Clearance
+                      <div className={`${styles.clientBA} ${styles.info}`}>
+                        {val.client_bank_address}
                       </div>
-                      <p className={`${styles.info} ${styles.dateSub}`}>
+                      {/* <p className={`${styles.info} ${styles.dateSub}`}>
                         10/9/2023
-                      </p>
+                      </p> */}
                       <div className={`${styles.status} ${styles.info}`}>
                         Missed
                       </div>
@@ -137,7 +99,7 @@ export default function Home() {
                 </div>
                 <div className={`${styles.cursor}`}>
                   <button
-                    className={`   ${styles.delete}`}
+                    className={`  ${styles.delete}`}
                     onClick={() => deleteData(val.idusers)}
                   >
                     {/* Delete */}
@@ -153,3 +115,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default ManageClients;

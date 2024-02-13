@@ -13,7 +13,8 @@ export default function Navbar() {
         <Link to={`/home`}>Dashboard</Link>
         {/* <Link to={`/`}>Root</Link> */}
         <a href="#">Reports</a>
-        <Link to={`/add`}>Add</Link>
+        {/* <Link to={`/add`}>Add</Link> */}
+        <Link to={`/clients`}>Clients</Link>
 
         <a href="#">Logout</a>
       </div>
