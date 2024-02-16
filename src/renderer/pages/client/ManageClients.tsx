@@ -17,7 +17,7 @@ function ManageClients(): JSX.Element {
   // PUT INTO FUNCTION GET USERS
   const fetchData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3001/list');
+      const response = await Axios.get('http://localhost:3001/client/list');
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -28,7 +28,7 @@ function ManageClients(): JSX.Element {
   const deleteData = async (id) => {
     try {
       const response = await Axios.delete(
-        `http://localhost:3001/list/delete/${id}`,
+        `http://localhost:3001/client/delete/${id}`,
       );
       fetchData();
     } catch (error) {
@@ -38,12 +38,7 @@ function ManageClients(): JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.column1}>
-        {/* <button className={styles.button}>
-          <Link to={`/AddClient`} className={styles.export}>
-            Export Data
-          </Link>
-        </button> */}
-        <Link to={`/add`} className={styles.export}>
+        <Link to={`/client/add`} className={styles.export}>
           <button className={styles.button}>
             Add a Client <FaPlus />
           </button>{' '}
@@ -57,24 +52,28 @@ function ManageClients(): JSX.Element {
         <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
         <p className={`${styles.title} ${styles.action}`}>Action</p>
       </div>
-      {users.map((val) => {
+      {users.map((val, key) => {
         return (
           <>
-            <div key={val.idusers} className={styles.card}>
+            <div key={val.client_id} className={styles.card}>
               <div className={styles.column1}>
                 <div className={styles['card-capsule']}></div>
                 <>
-                  <Link className={styles.export} to={`/list/${val.idusers}`}>
+                  <Link className={styles.export} to={`/client/list/${val.client_id}`}>
                     <div className={styles.column2}>
+
                       <p className={`${styles.info} ${styles.cName}`}>
-                        {val.name}
+                        {val.client_name}
                       </p>
+
                       <p className={`${styles.info} ${styles.pLoc}`}>
                         {val.client_property_location}
                       </p>
+
                       <p className={`${styles.info} ${styles.clientBN}`}>
                         {val.client_bank_name}
                       </p>
+
                       <div className={`${styles.clientBA} ${styles.info}`}>
                         {val.client_bank_address}
                       </div>
@@ -90,7 +89,7 @@ function ManageClients(): JSX.Element {
                 <div className={`${styles.cursor}`}>
                   <button className={`${styles.edit}`}>
                     <Link
-                      to={`/list/edit/${val.idusers}`}
+                      to={`/list/edit/${val.client_id}`}
                       className={` ${styles.edit}  `}
                     >
                       <FaEdit className={`${styles.green} `} />
@@ -100,7 +99,7 @@ function ManageClients(): JSX.Element {
                 <div className={`${styles.cursor}`}>
                   <button
                     className={`  ${styles.delete}`}
-                    onClick={() => deleteData(val.idusers)}
+                    onClick={() => deleteData(val.client_id)}
                   >
                     {/* Delete */}
                     <FaTrashAlt className={`${styles.deletered}`} />

@@ -27,7 +27,7 @@ export default function UserAdd() {
       return;
     }
     setIsValid(true);
-    await Axios.post('http://localhost:3001/add', {
+    await Axios.post('http://localhost:3001/client/add_submit', {
       name,
       property_location,
       client_bank_name,
