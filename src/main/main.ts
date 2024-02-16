@@ -142,10 +142,20 @@ myApp.get(`/list/:id`, (req, res) => {
   });
 });
 
+// GET CLIENT:ID
+myApp.get('/client/update/:id', (req, res) => {
+  const clientId = req.params.id;
+  const query = 'SELECT * FROM clients WHERE client_id = ?';
+  db.query(query, [clientId], (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
 // UPDATE /USERS/ID
 myApp.post(`/list/edit/:id`, (req, res) => {
   const id = req.params.id;
-  const name = req.body.name;
+  const client_name = req.body.client_name;
 
   const client_property_location = req.body.client_property_location;
 
@@ -154,13 +164,13 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   const client_bank_address = req.body.client_bank_address;
 
   const query =
-    'UPDATE users SET name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE idusers = ?';
+    'UPDATE clients SET client_name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE client_id = ?';
   const values = [
-    req.body.name,
-    req.body.client_property_location,
-    req.body.client_bank_name,
-    req.body.client_bank_address,
-    id,
+    client_name,
+    client_property_location,
+    client_bank_name,
+    client_bank_address,
+    id
   ];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
