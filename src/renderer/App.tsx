@@ -6,7 +6,7 @@ import Layout from './components/Layout';
 // CLIENT SIDE
 import Dashboard from './pages/Dashboard';
 import AddClient from './pages/client/AddClient';
-import Read from './pages/client/ReadClient';
+import ReadClient from './pages/client/ReadClient';
 import ManageClients from './pages/client/ManageClients';
 import './styles/globals.scss';
 import UpdateClient from './pages/client/UpdateClient';
@@ -21,17 +21,13 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/home" element={<ManageClients />} />
+          <Route path="/home" element={<Dashboard />} />
+          <Route path="/client" element={<ManageClients />} />
           <Route path="/client/add" element={<AddClient />} />
           <Route path="/client/document/:id" element={<AddDocument />} />
-          <Route path="/list/:id" element={<Read />} />
-          {/* <Route path="/client" element={<ManageDocuments />} /> */}
-          {/* <Route path="/client" element={<List />} /> */}
-          <Route path="/client" element={<ManageClients />} />
-          <Route path="/client/list/:id" element={<ManageDocuments />} />
+          <Route path="/client/detail/:id" element={<ManageDocuments />} />
 
-
-          <Route path="/list/edit/:id" element={<UpdateClient />} />
+          <Route path="/client/edit/:id" element={<UpdateClient />} />
         </Route>
       </Routes>
     </Router>

@@ -59,7 +59,7 @@ function ManageClients(): JSX.Element {
               <div className={styles.column1}>
                 <div className={styles['card-capsule']}></div>
                 <>
-                  <Link className={styles.export} to={`/client/list/${val.client_id}`}>
+                  <Link className={styles.export} to={`/client/detail/${val.client_id}`}>
                     <div className={styles.column2}>
 
                       <p className={`${styles.info} ${styles.cName}`}>
@@ -89,7 +89,7 @@ function ManageClients(): JSX.Element {
                 <div className={`${styles.cursor}`}>
                   <button className={`${styles.edit}`}>
                     <Link
-                      to={`/list/edit/${val.client_id}`}
+                      to={`/client/edit/${val.client_id}`}
                       className={` ${styles.edit}  `}
                     >
                       <FaEdit className={`${styles.green} `} />
