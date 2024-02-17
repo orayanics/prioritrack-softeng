@@ -11,21 +11,30 @@ import ReadClient from './pages/client/ReadClient';
 import ManageClients from './pages/client/ManageClients';
 import './styles/globals.scss';
 import UpdateClient from './pages/client/UpdateClient';
-import List from './pages/client/List'
-
+import List from './pages/client/List';
+import ChangePass from './pages/client/ChangePass';
+import ForgotPass from './pages/client/ForgotPass';
 // DOCUMENT SIDE
 import ManageDocuments from './pages/client/ManageDocuments';
 import AddDocument from './pages/document/AddDocument';
+import Login from './pages/client/Login';
 
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
+          {/* account components */}
+          <Route path="/changepass" element={<ChangePass />} />
+          <Route path="/forgotpass" element={<ForgotPass />} />
+          <Route path="/login" element={<Login />} />
+
           <Route path="/home" element={<Dashboard />} />
+
           <Route path="/Reports" element={<Reports />} />
           <Route path="/client" element={<ManageClients />} />
           <Route path="/client/add" element={<AddClient />} />
+
           <Route path="/client/document/:id" element={<AddDocument />} />
           <Route path="/client/detail/:id" element={<ManageDocuments />} />
 

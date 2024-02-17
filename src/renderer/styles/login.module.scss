@@ -1,0 +1,111 @@
+// body {
+//   font-family: Arial, sans-serif;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100vh;
+
+//   //   background-image: url('../assets/bg.png');
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat;
+
+//   opacity: 1;
+//   z-index: -1;
+// }
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #00042c;
+}
+
+.forgotPassword {
+  color: #575757;
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.forgotLink {
+  color: #575757;
+}
+
+.logo {
+  max-width: 100%; /* Ensure the logo is responsive */
+  height: 400px;
+  margin-right: 20px;
+  z-index: 1;
+}
+
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  //   margin-right: 150px;
+  //   z-index: 1;
+}
+
+.card {
+  background-color: #c2d2e4;
+  padding: 50px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-radius: 20px;
+  width: 300px;
+  text-align: left;
+  height: fit-content;
+}
+
+.h2 {
+  margin-bottom: 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  color: #00042c;
+}
+
+.label {
+  margin-bottom: 8px;
+}
+
+.input {
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+}
+
+.button {
+  background-color: #00042c;
+  color: #ffffff;
+  padding: 10px;
+  border: none;
+  width: 160px;
+  align-self: center;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Media query for responsiveness */
+@media only screen and (max-width: 720px) {
+  .card {
+    max-width: 90%; /* Adjust for smaller screens */
+  }
+
+  .card-container {
+    justify-content: center; /* Center the card on smaller screens */
+    margin-right: 0; /* Remove margin for smaller screens */
+    align-self: center;
+  }
+  body {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

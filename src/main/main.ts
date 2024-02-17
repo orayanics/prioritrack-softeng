@@ -31,7 +31,7 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'admin123',
+  password: '',
   database: 'prioritrack',
 });
 
@@ -67,23 +67,28 @@ myApp.post('/client/add_submit', (req, res) => {
 });
 
 // ADD DOCUMENT TO CLIENT:ID
-myApp.post("/client/document/add/:id", (req, res) => {
-  const doc_status = req.body.doc_status
-  const doc_no = req.body.doc_no
-  const doc_date_submission = req.body.doc_date_submission
-  const doc_type = req.body.doc_type
+myApp.post('/client/document/add/:id', (req, res) => {
+  const doc_status = req.body.doc_status;
+  const doc_no = req.body.doc_no;
+  const doc_date_submission = req.body.doc_date_submission;
+  const doc_type = req.body.doc_type;
   const client_id = req.body.client_id;
-  console.log("SERVER") + client_id;
-  const sql = "INSERT INTO documents (client_id, doc_no, doc_date_submission, doc_type, doc_status) VALUES (?, ?, ?, ?, ?)";
-  db.query(sql, [client_id, doc_no, doc_date_submission, doc_type, doc_status], (err, result) => {
-    if (err) {
-      console.error("Error inserting data into MySQL:", err);
-      res.status(500).send("Internal Server Error");
-    } else {
-      console.log("Data inserted into MySQL:", result);
-      res.status(200).send("Contact added successfully");
-    }
-  });
+  console.log('SERVER') + client_id;
+  const sql =
+    'INSERT INTO documents (client_id, doc_no, doc_date_submission, doc_type, doc_status) VALUES (?, ?, ?, ?, ?)';
+  db.query(
+    sql,
+    [client_id, doc_no, doc_date_submission, doc_type, doc_status],
+    (err, result) => {
+      if (err) {
+        console.error('Error inserting data into MySQL:', err);
+        res.status(500).send('Internal Server Error');
+      } else {
+        console.log('Data inserted into MySQL:', result);
+        res.status(200).send('Contact added successfully');
+      }
+    },
+  );
 });
 
 // GET ALL USERS
@@ -106,11 +111,11 @@ myApp.get(`/list/:id`, (req, res) => {
     WHERE u.client_id = ?`;
   db.query(query, [id], (err, result) => {
     if (err) {
-      console.error("Database error:", err);
-      res.status(500).json({ message: "Server error" });
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
     } else {
       if (result.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: 'User not found' });
       }
 
       const userData = {
@@ -131,7 +136,7 @@ myApp.get(`/list/:id`, (req, res) => {
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
             doc_type: row.doc_type,
-            doc_status: row.doc_status
+            doc_status: row.doc_status,
           });
         }
       });
@@ -170,7 +175,7 @@ myApp.post(`/list/edit/:id`, (req, res) => {
     client_property_location,
     client_bank_name,
     client_bank_address,
-    id
+    id,
   ];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
@@ -179,19 +184,18 @@ myApp.post(`/list/edit/:id`, (req, res) => {
 });
 
 // DELETE USER AND ALL DOCUMENTS
-myApp.delete("/client/delete/:id", (req, res) => {
+myApp.delete('/client/delete/:id', (req, res) => {
   const userId = req.params.id;
-  const sql =
-    `DELETE clients, documents FROM clients
+  const sql = `DELETE clients, documents FROM clients
     LEFT JOIN documents ON clients.client_id = documents.client_id
     WHERE clients.client_id = ?`;
   db.query(sql, [userId], (err, result) => {
     if (err) {
-      console.error("Error deleting user:", err);
-      res.status(500).send("Internal Server Error");
+      console.error('Error deleting user:', err);
+      res.status(500).send('Internal Server Error');
     } else {
-      console.log("User deleted successfully");
-      res.status(200).send("User deleted successfully");
+      console.log('User deleted successfully');
+      res.status(200).send('User deleted successfully');
     }
   });
 });
