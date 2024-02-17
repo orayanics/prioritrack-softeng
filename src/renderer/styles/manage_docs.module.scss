@@ -1,0 +1,174 @@
+.container {
+  display: flex;
+  justify-content: center;
+  margin: 5rem;
+}
+
+.col1,
+.col2 {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  background-color: #f2f2f2;
+  border: none;
+  color: black;
+  padding: 15px 0px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 1px 5px #888787;
+  width: 280px;
+  margin: 20px 20px 20px 20px;
+}
+
+.rec {
+  background-color: #f2f2f2;
+  border: none;
+  padding: 20px 25px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 1px 5px #888787;
+  line-height: 2rem;
+}
+
+h3 {
+  background-color: #e0d8e9;
+  border-radius: 25px;
+  padding-left: 0.5rem;
+  padding-right: 1rem;
+}
+
+.col2 {
+  display: flex;
+  max-width: 840px;
+  margin: 0;
+  padding: 25px 10px;
+}
+
+.row1 {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.row2 {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  padding-top: 20px;
+}
+
+.card {
+  margin-top: 10px;
+  background-color: #f2f2f2;
+  width: 100%;
+  height: 60px;
+  border-radius: 5px;
+  padding: 2px 16px;
+  padding-left: 0px;
+}
+.card-capsule {
+  background-color: #fcbdbd;
+  width: 5px;
+  border-radius: 5px;
+  padding: 0px 10px 5px 0px;
+  /* top right bottom left */
+  height: 59px;
+  margin-top: -2px;
+}
+.info {
+  font-size: 17px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 5px;
+  text-align: left;
+
+  color: black;
+}
+
+.title {
+  font-size: 15px;
+  padding-right: 30px;
+  padding-left: 30px;
+  font-weight: bold;
+}
+
+.title1 {
+  padding-left: 15px;
+}
+.t-status {
+  margin-left: -10px !important;
+}
+.mrd {
+  font-size: 14px;
+  background-color: #fcbdbd;
+  width: 150px;
+  border-radius: 35px;
+  padding: 1px;
+  /* top right bottom left */
+  height: 25px;
+  margin: 0px 0px 0px 0px;
+
+  text-align: center;
+}
+.status {
+  font-size: 14px;
+  background-color: #fcbdbd;
+  width: 80px;
+  border-radius: 35px;
+  padding: 3px 2px 2px 0px;
+  /* top right bottom left */
+  height: 20px;
+  margin: 0px 10px 0px 50px;
+  text-align: center;
+}
+.docNo {
+  width: 150px;
+  text-align: center;
+  padding-right: 15px;
+}
+.dateSub {
+  width: 120px;
+  text-align: center;
+  padding-left: 50px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+.edit {
+  padding-left: 1px !important;
+  padding-right: 4px !important;
+  padding-top: 3px;
+  background-color: var(--complete);
+
+  margin: 0px 0px 0px 10px;
+  border: none;
+  border-radius: 10px;
+}
+.green {
+  color: var(--success-green);
+  width: 15px;
+}
+.deletered {
+  color: var(--delete-red);
+  width: 12px;
+}
+.delete {
+  cursor: pointer;
+  background-color: var(--missed);
+  border: none;
+  border-radius: 10px;
+  /* top right bottom left */
+  margin: 0px 0px 0px 10px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  padding-top: 3px;
+}

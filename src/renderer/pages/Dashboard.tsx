@@ -57,14 +57,17 @@ export default function Home() {
             Export Data
           </Link>
         </button>
-        <button className={styles.button}>Reports</button>
+        <Link to="/reports">
+        <button className={styles.button}>Reports</button></Link>
       </div>
       <div className={styles.column1}>
         <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
-        <p className={styles.title}>Property Location</p>
-        <p className={styles.title}>Document No.</p>
-        <p className={styles.title}>Most Recent Document</p>
-        <p className={styles.title}>Date of Submission</p>
+        <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
+        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
+        <p className={`${styles.title} ${styles.title_mrd}`}>
+          Most Recent Document
+        </p>
+        <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
         <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
         <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
       </div>
@@ -106,7 +109,7 @@ export default function Home() {
                         {val.name}
                       </p>
                       <p className={`${styles.info} ${styles.pLoc}`}>
-                        Property Location
+                        {val.client_property_location}
                       </p>
                       <p className={`${styles.info} ${styles.docNo}`}>
                         U052345606-R
@@ -124,20 +127,22 @@ export default function Home() {
                   </Link>
                 </>
                 <div className={`${styles.cursor}`}>
-                  <button
-                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
-                    onClick={() => deleteData(val.idusers)}
-                  >
-                    {/* Delete */}
-                    <FaTrashAlt />
+                  <button className={`${styles.edit}`}>
+                    <Link
+                      to={`/list/edit/${val.idusers}`}
+                      className={` ${styles.edit}  `}
+                    >
+                      <FaEdit className={`${styles.green} `} />
+                    </Link>
                   </button>
                 </div>
                 <div className={`${styles.cursor}`}>
                   <button
-                    className={`${styles.status} ${styles.info}  ${styles.delete}`}
-                    // onClick={() => deleteData(val.idusers)}
+                    className={`   ${styles.delete}`}
+                    onClick={() => deleteData(val.idusers)}
                   >
-                    <FaEdit />
+                    {/* Delete */}
+                    <FaTrashAlt className={`${styles.deletered}`} />
                   </button>
                 </div>
                 {/* end */}
