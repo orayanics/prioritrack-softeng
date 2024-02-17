@@ -10,12 +10,10 @@ export default function Navbar() {
         <img src={navlogo} alt="Prioritrack " />
       </div>
       <div className="navbar-links">
-        <Link to={`/home`}>Dashboard</Link>
+        <Link to={`/client/add`}>Add Client</Link>
         {/* <Link to={`/`}>Root</Link> */}
-        <a href="#">Reports</a>
-        {/* <Link to={`/add`}>Add</Link> */}
-        <Link to={`/clients`}>Clients</Link>
-
+        <Link to="/reports">Reports</Link>
+        <Link to={`/client`}>Manage Clients</Link>
         <a href="#">Logout</a>
       </div>
     </nav>

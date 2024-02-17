@@ -31,38 +31,18 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: '',
+  password: 'admin123',
   database: 'prioritrack',
 });
 
 db.connect();
 
-// POST /USERS REQUEST
-// myApp.post('/add', (req, res) => {
-//   const name = req.body.name;
-//   const phone = req.body.phone;
-//   console.log('THIS IS SERVER ' + name, phone);
-//   const sql = 'INSERT INTO users (name, phone) VALUES (?, ?)';
-//   db.query(sql, [name, phone], (err, result) => {
-//     if (err) {
-//       console.error('Error inserting data into MySQL:', err);
-//       res.status(500).send('Internal Server Error');
-//     } else {
-//       console.log('Data inserted into MySQL:', result);
-//       res.status(200).send('Contact added successfully');
-//     }
-//   });
-// });
-// POST /USERS REQUEST
-myApp.post('/add', (req, res) => {
+// ADD CLIENT
+myApp.post('/client/add_submit', (req, res) => {
   const name = req.body.name;
-
   const property_location = req.body.property_location;
-
   const client_bank_name = req.body.client_bank_name;
-
   const client_bank_address = req.body.client_bank_address;
-
   console.log(
     'THIS IS SERVER ' + name,
     property_location,
@@ -70,7 +50,7 @@ myApp.post('/add', (req, res) => {
     client_bank_address,
   );
   const sql =
-    'INSERT INTO users (name,client_property_location,client_bank_name,client_bank_address) VALUES (?, ?, ?, ?)';
+    'INSERT INTO clients (client_name,client_property_location,client_bank_name,client_bank_address) VALUES (?, ?, ?, ?)';
   db.query(
     sql,
     [name, property_location, client_bank_name, client_bank_address],
@@ -86,29 +66,96 @@ myApp.post('/add', (req, res) => {
   );
 });
 
-// GET /USERS ALL USERS
-myApp.get('/list', (req, res) => {
-  const query = 'SELECT * FROM users';
+// ADD DOCUMENT TO CLIENT:ID
+myApp.post("/client/document/add/:id", (req, res) => {
+  const doc_status = req.body.doc_status
+  const doc_no = req.body.doc_no
+  const doc_date_submission = req.body.doc_date_submission
+  const doc_type = req.body.doc_type
+  const client_id = req.body.client_id;
+  console.log("SERVER") + client_id;
+  const sql = "INSERT INTO documents (client_id, doc_no, doc_date_submission, doc_type, doc_status) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [client_id, doc_no, doc_date_submission, doc_type, doc_status], (err, result) => {
+    if (err) {
+      console.error("Error inserting data into MySQL:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      console.log("Data inserted into MySQL:", result);
+      res.status(200).send("Contact added successfully");
+    }
+  });
+});
+
+// GET ALL USERS
+myApp.get('/client/list', (req, res) => {
+  const query = 'SELECT * FROM clients';
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
   });
 });
 
-// GET /USERS/ID ALL USERS
+// GET CLIENT + CLIENT'S DOCUMENTS
 myApp.get(`/list/:id`, (req, res) => {
-  const id = req.params.id;
-  const query = 'SELECT * FROM users where idusers = ?';
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?`;
   db.query(query, [id], (err, result) => {
-    if (err) res.json({ message: 'Server error' });
-    return res.json(result);
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Server error" });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status
+          });
+        }
+      });
+
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+
+// GET CLIENT:ID
+myApp.get('/client/update/:id', (req, res) => {
+  const clientId = req.params.id;
+  const query = 'SELECT * FROM clients WHERE client_id = ?';
+  db.query(query, [clientId], (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
   });
 });
 
 // UPDATE /USERS/ID
 myApp.post(`/list/edit/:id`, (req, res) => {
   const id = req.params.id;
-  const name = req.body.name;
+  const client_name = req.body.client_name;
 
   const client_property_location = req.body.client_property_location;
 
@@ -117,13 +164,13 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   const client_bank_address = req.body.client_bank_address;
 
   const query =
-    'UPDATE users SET name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE idusers = ?';
+    'UPDATE clients SET client_name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE client_id = ?';
   const values = [
-    req.body.name,
-    req.body.client_property_location,
-    req.body.client_bank_name,
-    req.body.client_bank_address,
-    id,
+    client_name,
+    client_property_location,
+    client_bank_name,
+    client_bank_address,
+    id
   ];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
@@ -131,18 +178,20 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   });
 });
 
-// DELETE USER
-myApp.delete('/list/delete/:id', (req, res) => {
+// DELETE USER AND ALL DOCUMENTS
+myApp.delete("/client/delete/:id", (req, res) => {
   const userId = req.params.id;
-  const sql = 'DELETE FROM users WHERE idusers = ?';
-
+  const sql =
+    `DELETE clients, documents FROM clients
+    LEFT JOIN documents ON clients.client_id = documents.client_id
+    WHERE clients.client_id = ?`;
   db.query(sql, [userId], (err, result) => {
     if (err) {
-      console.error('Error deleting user:', err);
-      res.status(500).send('Internal Server Error');
+      console.error("Error deleting user:", err);
+      res.status(500).send("Internal Server Error");
     } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
+      console.log("User deleted successfully");
+      res.status(200).send("User deleted successfully");
     }
   });
 });

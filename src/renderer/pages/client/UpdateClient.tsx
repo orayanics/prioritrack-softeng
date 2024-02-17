@@ -8,17 +8,19 @@ import { useNavigate } from 'react-router-dom';
 export default function Update() {
   const [users, setUsers] = useState([]);
   const { id } = useParams();
+  const client_id = parseInt(id,10);
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get(`http://localhost:3001/list/${id}`)
+    Axios.get(`http://localhost:3001/client/update/${id}`)
       .then((res) => {
-        setUsers([res.data]); // Assuming the response is an object representing a single user
+        setUsers(res.data); // Assuming the response is an object representing a single user
+        console.log(client_id);
       })
       .catch((err) => console.log(err));
   }, [id]);
 
-  const [name, setName] = useState('');
+  const [client_name, setName] = useState('');
   const [client_property_location, setPropertyLocation] = useState('');
   const [client_bank_name, setClientBankName] = useState('');
   const [client_bank_address, setClientBankAddress] = useState('');
@@ -27,7 +29,7 @@ export default function Update() {
   useEffect(() => {
     if (users.length > 0) {
       const user = users[0];
-      setName(user.name || '');
+      setName(user.client_name || '');
       setPropertyLocation(user.client_property_location || '');
       setClientBankName(user.client_bank_name || '');
       setClientBankAddress(user.client_bank_address || '');
@@ -37,7 +39,7 @@ export default function Update() {
   const updateDb = async (e) => {
     e.preventDefault();
     if (
-      !name ||
+      !client_name ||
       !client_property_location ||
       !client_bank_name ||
       !client_bank_address
@@ -47,15 +49,16 @@ export default function Update() {
     }
     setIsValid(true);
     await Axios.post(`http://localhost:3001/list/edit/${id}`, {
-      name,
+      client_name,
       client_property_location,
       client_bank_name,
       client_bank_address,
+      client_id
     })
       .then(() => {
         console.log(
           'Success',
-          name,
+          client_name,
           client_property_location,
           client_bank_name,
           client_bank_address,
@@ -70,17 +73,14 @@ export default function Update() {
   return (
     <div className={styles.container}>
       {users.map((val) => (
-        <div className={styles.card} key={val.idusers}>
-          <p>{val.idusers}</p>
-          <p>{val.name}</p>
-          <p>{val.phone}</p>
+        <div className={styles.card} key={val.client_id}>
           <h1 className={styles.title}>Edit a Client</h1>
           <form onSubmit={updateDb}>
             <h3 className={styles.inputTitle}>Client Name</h3>
             <input
               className={styles.input}
               type="text"
-              value={name}
+              value={client_name}
               onChange={(e) => setName(e.target.value)}
             />
             <h3 className={styles.inputTitle}>Property Location</h3>
