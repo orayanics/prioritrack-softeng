@@ -57,7 +57,8 @@ export default function Home() {
             Export Data
           </Link>
         </button>
-        <button className={styles.button}>Reports</button>
+        <Link to="/reports">
+        <button className={styles.button}>Reports</button></Link>
       </div>
       <div className={styles.column1}>
         <p className={`${styles.title} ${styles.title1}`}>Client Name</p>

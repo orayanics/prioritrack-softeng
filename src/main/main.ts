@@ -112,7 +112,7 @@ myApp.get(`/list/:id`, (req, res) => {
       if (result.length === 0) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       const userData = {
         client_id: result[0].client_id,
         client_name: result[0].client_name,

@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="navbar-links">
         <Link to={`/client/add`}>Add Client</Link>
         {/* <Link to={`/`}>Root</Link> */}
-        <a href="#">Reports</a>
+        <Link to="/reports">Reports</Link>
         <Link to={`/client`}>Manage Clients</Link>
         <a href="#">Logout</a>
       </div>

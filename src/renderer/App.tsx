@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 // import Home from './pages/Home';
 
 // CLIENT SIDE
+import Reports from './pages/Reports';
 import Dashboard from './pages/Dashboard';
 import AddClient from './pages/client/AddClient';
 import ReadClient from './pages/client/ReadClient';
@@ -22,6 +23,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/home" element={<Dashboard />} />
+          <Route path="/Reports" element={<Reports />} />
           <Route path="/client" element={<ManageClients />} />
           <Route path="/client/add" element={<AddClient />} />
           <Route path="/client/document/:id" element={<AddDocument />} />
