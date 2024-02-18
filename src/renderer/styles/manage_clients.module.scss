@@ -44,7 +44,8 @@ body {
 }
 
 .export {
-  text-decoration: none;
+  text-decoration: none !important;
+  border: none !important;
   color: #2f3241;
 }
 .column1 {
