@@ -54,14 +54,36 @@ function ManageDocuments() {
               <p>Client Bank Address</p>
               <h3>{userData.client_bank_address}</h3>
               <p>Most Recent Document</p>
-              <h3>Minutes of Auction Sale</h3>
+
+              {userData.documents.length > 0 ? (
+                <>
+                  {userData.documents
+                    .map((doc) => ({
+                      ...doc,
+                      doc_date_submission: new Date(doc.doc_date_submission),
+                    }))
+                    .sort(
+                      (a, b) => b.doc_date_submission - a.doc_date_submission,
+                    )
+                    .slice(0, 1)
+                    .map((doc) => (
+                      <div key={doc.doc_id}>
+                        <h3>{doc.doc_type}</h3>
+                      </div>
+                    ))}
+                </>
+              ) : (
+                <p>No documents found</p>
+              )}
             </div>
           </div>
           <div className={styles.col2}>
             <div className={styles.row1}>
               <p className={`${styles.title} ${styles.title1}`}>Document No.</p>
               <p className={styles.title}>Document Type</p>
-              <p className={`${styles.title} ${styles.cbn}`}>Date of Submission</p>
+              <p className={`${styles.title} ${styles.cbn}`}>
+                Date of Submission
+              </p>
               <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
               <p className={`${styles.title} ${styles.action}`}>Action</p>
             </div>
@@ -82,7 +104,10 @@ function ManageDocuments() {
                       </button>
                     </div>
                     <div className={styles.cursor}>
-                      <button className={styles.delete} onClick={() => deleteData(doc.doc_id)}>
+                      <button
+                        className={styles.delete}
+                        onClick={() => deleteData(doc.doc_id)}
+                      >
                         <FaTrashAlt className={styles.deletered} />
                       </button>
                     </div>
