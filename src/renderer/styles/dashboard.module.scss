@@ -43,7 +43,9 @@ body {
 .export {
   text-decoration: none;
   color: #2f3241;
+  border: none !important;
 }
+
 .column1 {
   display: flex;
   align-items: flex-start;
