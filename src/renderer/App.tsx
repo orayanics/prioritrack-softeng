@@ -18,7 +18,7 @@ import ForgotPass from './pages/client/ForgotPass';
 import ManageDocuments from './pages/client/ManageDocuments';
 import AddDocument from './pages/document/AddDocument';
 import Login from './pages/client/Login';
-
+import EditDoc from './pages/document/EditDocument';
 export default function App() {
   return (
     <Router>
@@ -30,6 +30,8 @@ export default function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/home" element={<Dashboard />} />
+
+          <Route path="/editdocument" element={<EditDoc />} />
 
           <Route path="/Reports" element={<Reports />} />
           <Route path="/client" element={<ManageClients />} />
