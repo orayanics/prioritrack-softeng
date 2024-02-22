@@ -31,7 +31,7 @@ export default function App() {
 
           <Route path="/home" element={<Dashboard />} />
 
-          <Route path="/editdocument" element={<EditDoc />} />
+          <Route path="/document/edit/:id" element={<EditDoc />} />
 
           <Route path="/Reports" element={<Reports />} />
           <Route path="/client" element={<ManageClients />} />

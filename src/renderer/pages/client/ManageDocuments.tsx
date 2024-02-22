@@ -98,7 +98,7 @@ function ManageDocuments() {
                     <div className={styles.status}>{doc.doc_status}</div>
                     <div className={styles.cursor}>
                       <button className={styles.edit}>
-                        <Link to={`/client/edit/${doc.doc_id}`}>
+                        <Link to={`/document/edit/${doc.doc_id}`}>
                           <FaEdit className={styles.green} />
                         </Link>
                       </button>
