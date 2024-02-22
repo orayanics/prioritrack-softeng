@@ -27,7 +27,7 @@ function ManageDocuments() {
 
   const deleteData = async (id) => {
     try {
-      await Axios.delete(`http://localhost:3001/list/delete/${id}`);
+      await Axios.delete(`http://localhost:3001/doc/delete/${id}`);
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
