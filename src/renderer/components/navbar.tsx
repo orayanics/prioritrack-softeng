@@ -16,7 +16,7 @@ export default function Navbar() {
 
         <Link to="/reports">Reports</Link>
         <Link to={`/client`}>Manage Clients</Link>
-        <Link to={`/editdocument`}>Edit Document</Link>
+        <Link to={`/document/edit/:id`}>Edit Document</Link>
         <Link to={`/client/document/:id`}>Add Document</Link>
 
         {/* <Link to={`/changepass`}>Change Pass</Link>

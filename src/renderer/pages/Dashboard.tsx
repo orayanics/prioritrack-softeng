@@ -44,6 +44,7 @@ export default function Home() {
       console.error('Error deleting data:', error);
     }
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.column1}>
@@ -71,7 +72,10 @@ export default function Home() {
         users.map((val) => (
           <div key={val.client_id} className={styles.card}>
             <div className={styles.column1}>
-              <div className={styles['card-capsule']}></div>
+              <div
+                className={`${styles.cardCapsule}  ${styles.statusMissed}`}
+              ></div>
+
               <Link
                 className={styles.export}
                 to={`/client/detail/${val.client_id}`}
