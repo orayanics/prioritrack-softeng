@@ -19,9 +19,22 @@ import { Outlet, Link } from 'react-router-dom';
 import styles from '../styles/dashboard.module.scss';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 
 export default function Home() {
   const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  // const [clientDetails, setClientDetails] = useState({});
+  interface Client {
+    client_name: string;
+    client_property_location: string;
+    client_bank_name: string;
+    client_bank_address: string;
+  }
+
+  const [clientDetails, setClientDetails] = useState<Client | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -45,8 +58,52 @@ export default function Home() {
     }
   };
 
+ const handleDeleteConfirmation = async () => {
+    await deleteData(clientIdToDelete);
+    setIsModalOpen(false);
+  };
+  const openDeleteModal = async (id) => {
+    setClientIdToDelete(id);
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
+      setClientDetails(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching client details:', error);
+    }
+  };
   return (
     <div className={styles.container}>
+      {isModalOpen && (
+        // {users.map((val) => (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.titleDelete}>
+              Are you sure you want to delete this client?
+            </h3>
+            {/* <p>Client Name: {clientDetails.client_name}</p>
+            <p>Property Location: {clientDetails.client_property_location}</p>
+            <p>Bank Name: {clientDetails.client_bank_name}</p>
+            <p>Bank Address: {clientDetails.client_bank_address}</p> */}
+            <div className={styles.midDelete}>
+              <button
+                onClick={handleDeleteConfirmation}
+                className={styles.btn + ' ' + styles.cancel}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className={styles.btn + ' ' + styles.submit}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className={styles.column1}>
         <button className={styles.button}>
           <Link to={`/AddClient`} className={styles.export}>
@@ -115,10 +172,19 @@ export default function Home() {
                   </Link>
                 </button>
               </div>
-              <div className={`${styles.cursor}`}>
-                <button
+             <div className={`${styles.cursor}`}>
+                {/* <button
                   className={`${styles.delete}`}
                   onClick={() => deleteData(val.client_id)}
+                >
+                  <FaTrashAlt className={`${styles.deletered}`} />
+                </button> */}
+                <button
+                  className={`${styles.delete}`}
+                  onClick={() => {
+                    setClientIdToDelete(val.client_id);
+                    setIsModalOpen(true);
+                  }}
                 >
                   <FaTrashAlt className={`${styles.deletered}`} />
                 </button>
