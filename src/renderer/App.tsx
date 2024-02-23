@@ -29,6 +29,7 @@ export default function App() {
           <Route path="/forgotpass" element={<ForgotPass />} />
           <Route path="/login" element={<Login />} />
 
+          {/* MEDJ PROBLEMATIC ATA TO */}
           <Route path="/home" element={<Dashboard />} />
 
           <Route path="/Reports" element={<Reports />} />

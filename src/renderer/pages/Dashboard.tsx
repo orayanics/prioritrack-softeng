@@ -13,44 +13,103 @@
 //   )
 // }
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
 import styles from '../styles/dashboard.module.scss';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 
 export default function Home() {
-  const [users, setUsers] = React.useState([]);
+  const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  // const [clientDetails, setClientDetails] = useState({});
+  interface Client {
+    client_name: string;
+    client_property_location: string;
+    client_bank_name: string;
+    client_bank_address: string;
+  }
 
-  // FETCH DATA ONCE
+  const [clientDetails, setClientDetails] = useState<Client | null>(null);
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  // PUT INTO FUNCTION GET USERS
   const fetchData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3001/list');
+      const response = await Axios.get('http://localhost:3001/client/list');
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // DELETE ONCLICK HANDLER
   const deleteData = async (id) => {
     try {
-      const response = await Axios.delete(
-        `http://localhost:3001/list/delete/${id}`,
-      );
+      await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error deleting data:', error);
     }
   };
+
+  // const openDeleteModal = (id) => {
+  //   setClientIdToDelete(id);
+  //   setIsModalOpen(true);
+  // };
+
+  const handleDeleteConfirmation = async () => {
+    await deleteData(clientIdToDelete);
+    setIsModalOpen(false);
+  };
+  const openDeleteModal = async (id) => {
+    setClientIdToDelete(id);
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
+      setClientDetails(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching client details:', error);
+    }
+  };
+
   return (
     <div className={styles.container}>
+      {isModalOpen && (
+        // {users.map((val) => (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.titleDelete}>
+              Are you sure you want to delete this client?
+            </h3>
+            {/* <p>Client Name: {clientDetails.client_name}</p>
+            <p>Property Location: {clientDetails.client_property_location}</p>
+            <p>Bank Name: {clientDetails.client_bank_name}</p>
+            <p>Bank Address: {clientDetails.client_bank_address}</p> */}
+            <div className={styles.midDelete}>
+              <button
+                onClick={handleDeleteConfirmation}
+                className={styles.btn + ' ' + styles.cancel}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className={styles.btn + ' ' + styles.submit}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className={styles.column1}>
         <button className={styles.button}>
           <Link to={`/AddClient`} className={styles.export}>
@@ -58,7 +117,8 @@ export default function Home() {
           </Link>
         </button>
         <Link to="/reports">
-        <button className={styles.button}>Reports</button></Link>
+          <button className={styles.button}>Reports</button>
+        </Link>
       </div>
       <div className={styles.column1}>
         <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
@@ -71,86 +131,87 @@ export default function Home() {
         <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
         <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
       </div>
-      {users.map((val) => {
-        return (
-          // <div key={val.idusers}>
-          //   <p>{val.idusers}</p>
-          //   <p>{val.name}</p>
-          //   <p>{val.phone}</p>
-          //   <button>
-          //     <Link to={`/list/${val.idusers}`}>Read</Link>
-          //   </button>
-          //   <button>
-          //     <Link to={`/list/edit/${val.idusers}`}>Update</Link>
-          //   </button>
-          //   <button onClick={() => deleteData(val.idusers)}>Delete</button>
-          // </div>
+      {users.length > 0 ? (
+        users.map((val) => (
+          <div key={val.client_id} className={styles.card}>
+            <div className={styles.column1}>
+              <div
+                className={`${styles.cardCapsule}  ${styles.statusMissed}`}
+              ></div>
 
-          <>
-            {/* // <div key={val.idusers}>
-            //   <p>{val.idusers}</p>
-            //   <p>{val.name}</p>
-            //   <p>{val.phone}</p>
-            //   <button>
-            //     <Link to={`/list/${val.idusers}`}>Read</Link>
-            //   </button>
-            //   <button>
-            //     <Link to={`/list/edit/${val.idusers}`}>Update</Link>
-            //   </button>
-            //   <button onClick={() => deleteData(val.idusers)}>Delete</button>
-            // </div> */}
-            <div key={val.idusers} className={styles.card}>
-              <div className={styles.column1}>
-                <div className={styles['card-capsule']}></div>
-                <>
-                  <Link className={styles.export} to={`/list/${val.idusers}`}>
-                    <div className={styles.column2}>
-                      <p className={`${styles.info} ${styles.cName}`}>
-                        {val.name}
-                      </p>
-                      <p className={`${styles.info} ${styles.pLoc}`}>
-                        {val.client_property_location}
-                      </p>
-                      <p className={`${styles.info} ${styles.docNo}`}>
-                        U052345606-R
-                      </p>
-                      <div className={`${styles.mrd} ${styles.info}`}>
-                        Tax Clearance
-                      </div>
-                      <p className={`${styles.info} ${styles.dateSub}`}>
-                        10/9/2023
-                      </p>
-                      <div className={`${styles.status} ${styles.info}`}>
-                        Missed
-                      </div>
-                    </div>
-                  </Link>
-                </>
-                <div className={`${styles.cursor}`}>
-                  <button className={`${styles.edit}`}>
-                    <Link
-                      to={`/list/edit/${val.idusers}`}
-                      className={` ${styles.edit}  `}
-                    >
-                      <FaEdit className={`${styles.green} `} />
-                    </Link>
-                  </button>
+              <Link
+                className={styles.export}
+                to={`/client/detail/${val.client_id}`}
+              >
+                <div className={styles.column2}>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {val.client_name}
+                  </p>
+                  <p className={`${styles.info} ${styles.pLoc}`}>
+                    {val.client_property_location}
+                  </p>
+                  <p className={`${styles.info} ${styles.pLoc}`}>
+                    {/* document number */}
+                    Document No.
+                  </p>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {/* Most Recent Document */}
+                    Most Recent Document
+                  </p>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {/*  Date of Submission */}
+                    Date of Submission
+                  </p>
+
+                  <div className={`${styles.status} ${styles.info}`}>
+                    Missed
+                  </div>
                 </div>
-                <div className={`${styles.cursor}`}>
-                  <button
-                    className={`   ${styles.delete}`}
-                    onClick={() => deleteData(val.idusers)}
+              </Link>
+              <div className={`${styles.cursor}`}>
+                <button className={`${styles.edit}`}>
+                  <Link
+                    to={`/client/edit/${val.client_id}`}
+                    className={styles.edit}
                   >
-                    {/* Delete */}
-                    <FaTrashAlt className={`${styles.deletered}`} />
-                  </button>
-                </div>
-                {/* end */}
+                    <FaEdit className={`${styles.green}`} />
+                  </Link>
+                </button>
+              </div>
+              <div className={`${styles.cursor}`}>
+                {/* <button
+                  className={`${styles.delete}`}
+                  onClick={() => deleteData(val.client_id)}
+                >
+                  <FaTrashAlt className={`${styles.deletered}`} />
+                </button> */}
+                <button
+                  className={`${styles.delete}`}
+                  onClick={() => {
+                    setClientIdToDelete(val.client_id);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <FaTrashAlt className={`${styles.deletered}`} />
+                </button>
               </div>
             </div>
-          </>
-        );
-      })}
+          </div>
+        ))
+      ) : (
+        <div className={styles.card}>
+          <div className={styles.column1}>
+            <div className={styles['card-capsule']}></div>
+            <div className={styles.column2}>
+              <p className={`${styles.info} ${styles.cName}`}>No data</p>
+              <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
+              <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
+              <div className={`${styles.clientBA} ${styles.info}`}>No data</div>
+              <div className={`${styles.status} ${styles.info}`}>No data</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
