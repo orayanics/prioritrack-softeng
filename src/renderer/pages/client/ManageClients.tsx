@@ -3,9 +3,20 @@ import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 export default function ManageClients() {
   const [users, setUsers] = useState([]);
+  const location = useLocation(); // Use the useLocation hook
+  const [successMessage, setSuccessMessage] = useState(''); // State for the success message
+  // Effect to check for a success message in the location state
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      // Optionally, clear the message after displaying it
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+    }
+  }, [location]);
 
   useEffect(() => {
     fetchData();
@@ -31,6 +42,23 @@ export default function ManageClients() {
 
   return (
     <div className={styles.container}>
+      {/* Display the success message if it exists */}
+      {/* {successMessage && (
+           <div className={styles.logoSuccess}>
+           <FaPlus />
+         </div>
+          <div className={styles.successMessage}>{successMessage}</div>
+        )}
+        {/* The rest of your component's JSX... */}
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          <div className={styles.logoSuccess}>
+            <FaPlus />
+          </div>{' '}
+          <div className={styles.successMessage}>Client Added</div>
+          {/* The rest of your component's JSX... */}
+        </div>
+      )}
       <div className={styles.column1}>
         <Link to="/client/add" className={styles.export}>
           <button className={styles.button}>
