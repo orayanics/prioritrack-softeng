@@ -41,7 +41,10 @@ export default function UserAdd() {
           client_bank_address,
         );
         console.log('Success');
-        navigate('/client');
+        // navigate('/client');
+        navigate('/client', {
+          state: { successMessage: 'Client added successfully' },
+        });
       })
       .catch((err) => {
         console.log(
