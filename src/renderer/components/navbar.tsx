@@ -14,6 +14,8 @@ export default function Navbar() {
         {/* <Link to={`/`}>Root</Link> */}
         <Link to="/reports">Reports</Link>
         <Link to={`/client`}>Manage Clients</Link>
+        <Link to={`/login`}>Login</Link>
+
         {/* <Link to={`/changepass`}>Change Pass</Link>
         <Link to={`/forgotpass`}>forgot</Link> */}
 
