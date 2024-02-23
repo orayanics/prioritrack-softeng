@@ -41,7 +41,7 @@ export default function UserAdd() {
           client_bank_address,
         );
         console.log('Success');
-        navigate('/home');
+        navigate('/client');
       })
       .catch((err) => {
         console.log(

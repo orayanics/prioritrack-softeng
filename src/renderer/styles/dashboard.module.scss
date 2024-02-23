@@ -43,7 +43,10 @@ body {
 .export {
   text-decoration: none;
   color: #2f3241;
+  border: none !important;
+  font-weight: normal;
 }
+
 .column1 {
   display: flex;
   align-items: flex-start;
@@ -67,7 +70,7 @@ body {
   padding-left: 0px;
 }
 
-.card-capsule {
+.cardCapsule {
   background-color: var(--missed);
   width: 5px;
   border-radius: 5px;
@@ -185,10 +188,10 @@ body {
 
   color: black;
   width: 100px;
+  font-weight: normal;
 }
 .status {
   font-size: 14px;
-  background-color: var(--missed);
   width: 80px;
   border-radius: 35px;
   padding: 3px 2px 2px 0px;
@@ -198,23 +201,23 @@ body {
 
   text-align: center;
 }
-.status-missed {
+.statusMissed {
   background-color: var(--missed);
 }
 
-.status-ongoing {
+.statusOngoing {
   background-color: var(--on-going);
 }
 
-.status-upcoming {
+.statusUpcoming {
   background-color: var(--upcoming);
 }
 
-.status-complete {
+.statusComplete {
   background-color: var(--complete);
 }
 
-.status-on-hold {
+.statusOnHold {
   background-color: var(--on-hold);
 }
 

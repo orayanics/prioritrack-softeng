@@ -40,10 +40,20 @@ body {
 
   border-style: none;
   border-radius: 5px;
-  width: 85%;
+  width: 75%;
   height: 28px;
 }
-.input_title {
+.selectInput {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+
+  border-style: none;
+  border-radius: 5px;
+  width: 90%;
+  height: 28px;
+}
+.inputTitle {
   padding-left: 40px;
   padding-bottom: 3px;
 
@@ -59,7 +69,7 @@ body {
   height: 30px;
   border-style: none;
 }
-.btn2 {
+.btnContainer {
   margin-top: 20px;
 }
 .cancel {
@@ -69,7 +79,7 @@ body {
 .submit {
   background-color: #00042c;
 }
-.select_status {
+.selectStatus {
   width: 85%;
   height: 28px;
   padding: 5px;

@@ -58,12 +58,7 @@ export default function Home() {
     }
   };
 
-  // const openDeleteModal = (id) => {
-  //   setClientIdToDelete(id);
-  //   setIsModalOpen(true);
-  // };
-
-  const handleDeleteConfirmation = async () => {
+ const handleDeleteConfirmation = async () => {
     await deleteData(clientIdToDelete);
     setIsModalOpen(false);
   };
@@ -79,7 +74,6 @@ export default function Home() {
       console.error('Error fetching client details:', error);
     }
   };
-
   return (
     <div className={styles.container}>
       {isModalOpen && (
@@ -178,7 +172,7 @@ export default function Home() {
                   </Link>
                 </button>
               </div>
-              <div className={`${styles.cursor}`}>
+             <div className={`${styles.cursor}`}>
                 {/* <button
                   className={`${styles.delete}`}
                   onClick={() => deleteData(val.client_id)}

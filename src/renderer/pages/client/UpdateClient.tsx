@@ -1,4 +1,3 @@
-import React from 'react';
 import Axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -14,7 +13,7 @@ export default function Update() {
   useEffect(() => {
     Axios.get(`http://localhost:3001/client/update/${id}`)
       .then((res) => {
-        setUsers(res.data); // Assuming the response is an object representing a single user
+        setUsers(res.data);
         console.log(client_id);
       })
       .catch((err) => console.log(err));
