@@ -80,17 +80,17 @@ function ManageDocuments() {
           <div className={styles.col2}>
             <div className={styles.row1}>
               <p className={`${styles.title} ${styles.title1}`}>Document No.</p>
-              <p className={styles.title}>Document Type</p>
+              <p className={`${styles.title} ${styles.cbn}`}>Document Type</p>
               <p className={`${styles.title} ${styles.cbn}`}>
                 Date of Submission
               </p>
               <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
               <p className={`${styles.title} ${styles.action}`}>Action</p>
             </div>
-            <div className={styles.card}>
-              <div className={styles.row1}>
-                <div className={styles.cardCapsule}></div>
-                {userData.documents.map((doc) => (
+            <div className={styles.col2}>
+              {userData.documents.map((doc) => (
+                <div className={styles.card}>
+                  <div className={styles.cardCapsule}></div>
                   <div className={styles.row2} key={doc.doc_id}>
                     <p className={styles.docNo}>{doc.doc_no}</p>
                     <div className={styles.mrd}>{doc.doc_type}</div>
@@ -112,8 +112,8 @@ function ManageDocuments() {
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </>
