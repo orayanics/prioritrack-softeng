@@ -18,7 +18,7 @@ import ForgotPass from './pages/client/ForgotPass';
 import ManageDocuments from './pages/client/ManageDocuments';
 import AddDocument from './pages/document/AddDocument';
 import Login from './pages/client/Login';
-
+import EditDoc from './pages/document/EditDocument';
 export default function App() {
   return (
     <Router>
@@ -29,7 +29,10 @@ export default function App() {
           <Route path="/forgotpass" element={<ForgotPass />} />
           <Route path="/login" element={<Login />} />
 
+          {/* MEDJ PROBLEMATIC ATA TO */}
           <Route path="/home" element={<Dashboard />} />
+
+          <Route path="/document/edit/:id" element={<EditDoc />} />
 
           <Route path="/Reports" element={<Reports />} />
           <Route path="/client" element={<ManageClients />} />

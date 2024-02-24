@@ -200,39 +200,6 @@ myApp.delete('/client/delete/:id', (req, res) => {
   });
 });
 
-// LOGIN
-myApp.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Check if username and password match
-  if (username === 'egoreta') {
-    // Perform MySQL query to retrieve password for 'egoreta' from the 'login' table
-    db.query(
-      'SELECT password FROM users WHERE username = ?',
-      [username],
-      (err, results) => {
-        if (err) {
-          console.error('Error executing MySQL query:', err);
-          return res.status(500).send('Internal Server Error');
-        }
-
-        if (results.length === 0) {
-          return res.send('User not found');
-        }
-
-        const dbPassword = results[0].password;
-        if (password === dbPassword) {
-          res.send('Login successful');
-        } else {
-          res.send('Invalid password');
-        }
-      },
-    );
-  } else {
-    res.send('Invalid username');
-  }
-});
-
 // TEST SERVER CONNECTION
 myApp.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

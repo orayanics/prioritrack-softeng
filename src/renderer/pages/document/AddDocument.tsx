@@ -3,7 +3,7 @@ import Axios from 'axios';
 import Navbar from '../../components/navbar';
 import styles from '../../styles/add_client.module.scss';
 import { Outlet, Link } from 'react-router-dom';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import { cli } from 'webpack';
 
 export default function AddDocument() {
@@ -15,23 +15,18 @@ export default function AddDocument() {
   const [doc_type, setType] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
   const { id } = useParams();
-  const client_id = parseInt(id,10);
-  console.log("ID User:", client_id);
+  const client_id = parseInt(id, 10);
+  console.log('ID User:', client_id);
 
   const postDb = async (e) => {
     e.preventDefault();
-    if (
-      !doc_status ||
-      !doc_no ||
-      !doc_date_submission ||
-      !doc_type
-    ) {
+    if (!doc_status || !doc_no || !doc_date_submission || !doc_type) {
       setIsValid(false);
       return;
     }
     setIsValid(true);
     await Axios.post('http://localhost:3001/client/document/add/:id', {
-        client_id,
+      client_id,
       doc_status,
       doc_no,
       doc_date_submission,
@@ -84,7 +79,7 @@ export default function AddDocument() {
               <h3 className={styles.inputTitle}>Document Date Submission</h3>
               <input
                 className={styles.input}
-                type="text"
+                type="date"
                 onChange={(e) => setDate(e.target.value)}
               />
               <h3 className={styles.inputTitle}>Document Type</h3>
@@ -94,12 +89,19 @@ export default function AddDocument() {
                 onChange={(e) => setType(e.target.value)}
               />
               <h3 className={styles.inputTitle}>Document Status</h3>
-              <input
+              <select
+                id="status"
+                name="status"
                 className={styles.input}
-                name="query"
-                type="text"
                 onChange={(e) => setStatus(e.target.value)}
-              />
+              >
+                <option value="">Select a status</option>
+                <option value="Missed">Missed</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Complete">Complete</option>
+                <option value="On Hold">On Hold</option>
+              </select>
               <div className={styles.btn2}>
                 <button
                   type="submit"
