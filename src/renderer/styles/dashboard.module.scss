@@ -93,7 +93,7 @@ body {
   padding-left: 35px;
 }
 .title {
-  font-size: 15px;
+  font-size: 14px;
   // padding-right: 20px;
   // padding-left: 10px;
   font-weight: bold;
@@ -101,27 +101,29 @@ body {
 }
 
 .title1 {
-  padding-left: 25px;
+  padding-left: 20px;
+  width: 130px;
 }
 .pl {
-  width: 140px;
+  width: 100px;
 }
 .title_mrd {
-  width: 150px;
-  display: flex;
-  text-align: center !important;
+  width: 110px;
+  padding-left: 15px;
 }
 .dn {
   width: 110px;
-  text-align: center !important;
+  padding-left: 5px;
 }
 .ds {
   width: 120px;
-  text-align: center !important;
+  padding-left: 15px;
 }
 
 .tStatus {
   width: 100px;
+  padding-left: 25px;
+
   text-align: center !important;
   // margin-left: 10px;
   // margin-left: -10px !important;
@@ -173,7 +175,7 @@ body {
   margin-left: 15px !important;
 }
 .pLoc {
-  width: 135px !important;
+  width: 105px !important;
 }
 .docNo {
   padding-right: 15px;
