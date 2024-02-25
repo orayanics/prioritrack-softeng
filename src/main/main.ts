@@ -31,7 +31,7 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'admin123',
+  password: 'password',
   database: 'prioritrack',
 });
 
@@ -224,7 +224,7 @@ myApp.post(`/document/edited/:id`, (req, res) => {
   const query =
     'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
   const values = [
-    doc_no, 
+    doc_no,
     doc_date_submission,
     doc_type,
     doc_status,

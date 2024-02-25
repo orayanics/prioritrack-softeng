@@ -105,11 +105,7 @@ export default function Home() {
         </div>
       )}
       <div className={styles.column1}>
-        <button className={styles.button}>
-          <Link to={`/AddClient`} className={styles.export}>
-            Export Data
-          </Link>
-        </button>
+
         <Link to="/reports">
           <button className={styles.button}>Reports</button>
         </Link>
