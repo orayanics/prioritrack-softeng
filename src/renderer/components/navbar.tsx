@@ -11,9 +11,11 @@ export default function Navbar() {
       </div>
       <div className="navbar-links">
         {/* <Link to={`/client/add`}>Add Client</Link> */}
-
+        {/* <Link to={`/`}>Root</Link> */}
+        <Link to={`/login`}>Login</Link>
+        <Link to="/reports">Reports</Link>
+        {/* <Link to={`/client`}>Manage Clients</Link> */}
         <Link to={`/home`}>Dashboard</Link>
-
         <Link to="/reports">Reports</Link>
         <Link to={`/client`}>Clients</Link>
         {/* <Link to={`/document/edit/:id`}>Edit Document</Link> */}
