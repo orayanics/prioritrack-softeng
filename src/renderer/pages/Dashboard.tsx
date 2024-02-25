@@ -42,8 +42,9 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3001/client/list');
+      const response = await Axios.get('http://localhost:3001/dashboard/list');
       setUsers(response.data);
+      console.log(response)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -146,19 +147,19 @@ export default function Home() {
                   </p>
                   <p className={`${styles.info} ${styles.pLoc}`}>
                     {/* document number */}
-                    Document No.
+                    {val.doc_no}
                   </p>
                   <p className={`${styles.info} ${styles.cName}`}>
                     {/* Most Recent Document */}
-                    Most Recent Document
+                    {val.doc_type}
                   </p>
                   <p className={`${styles.info} ${styles.cName}`}>
                     {/*  Date of Submission */}
-                    Date of Submission
+                    {val.doc_date_submission}
                   </p>
 
                   <div className={`${styles.status} ${styles.info}`}>
-                    Missed
+                    {val.doc_status}
                   </div>
                 </div>
               </Link>
@@ -172,7 +173,7 @@ export default function Home() {
                   </Link>
                 </button>
               </div>
-             <div className={`${styles.cursor}`}>
+              <div className={`${styles.cursor}`}>
                 {/* <button
                   className={`${styles.delete}`}
                   onClick={() => deleteData(val.client_id)}

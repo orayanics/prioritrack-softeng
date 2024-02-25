@@ -100,6 +100,26 @@ myApp.get('/client/list', (req, res) => {
   });
 });
 
+// GET ALL USERS
+myApp.get('/dashboard/list', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
 // GET CLIENT + CLIENT'S DOCUMENTS
 myApp.get(`/list/:id`, (req, res) => {
   const userId = req.params.id;
