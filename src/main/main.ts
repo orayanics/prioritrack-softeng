@@ -37,6 +37,7 @@ const db = mysql.createConnection({
 
 db.connect();
 
+//LOGIN
 myApp.post('/login', (req: Request, res: Response) => {
   const bcrypt = require('bcrypt');
 
