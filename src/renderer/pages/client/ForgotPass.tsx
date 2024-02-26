@@ -34,7 +34,7 @@ function ForgotPass(): JSX.Element {
               />
 
               <label htmlFor="q3" className={`${styles.label}`}>
-                3. What is your mothernrs maiden name?
+                3. What is your mother's maiden name?
               </label>
               <input
                 type="text"

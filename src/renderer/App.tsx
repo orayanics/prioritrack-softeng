@@ -8,11 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Reports from './pages/Reports';
 import Dashboard from './pages/Dashboard';
 import AddClient from './pages/client/AddClient';
-import ReadClient from './pages/client/ReadClient';
 import ManageClients from './pages/client/ManageClients';
 import './styles/globals.scss';
 import UpdateClient from './pages/client/UpdateClient';
-import List from './pages/client/List';
 import ChangePass from './pages/client/ChangePass';
 import ForgotPass from './pages/client/ForgotPass';
 // DOCUMENT SIDE

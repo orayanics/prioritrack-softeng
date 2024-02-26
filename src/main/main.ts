@@ -100,6 +100,26 @@ myApp.get('/client/list', (req, res) => {
   });
 });
 
+// GET ALL USERS
+myApp.get('/dashboard/list', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
 // GET CLIENT + CLIENT'S DOCUMENTS
 myApp.get(`/list/:id`, (req, res) => {
   const userId = req.params.id;
@@ -200,56 +220,37 @@ myApp.delete('/client/delete/:id', (req, res) => {
   });
 });
 
-// GET CLIENT:ID
-myApp.get('/document/get/:id', (req, res) => {
-  const docId = req.params.id;
-  const query = 'SELECT * FROM documents WHERE doc_id = ?';
-  db.query(query, [docId], (err, data) => {
-    if (err) return res.json(err);
-    return res.send(data);
-  });
-});
+// LOGIN
+myApp.post('/login', (req, res) => {
+  const { username, password } = req.body;
 
-// EDIT OR UPDATE DOCUMENT
-myApp.post(`/document/edited/:id`, (req, res) => {
-  const id = req.params.id;
-  const doc_no = req.body.doc_no;
+  // Check if username and password match
+  if (username === 'egoreta') {
+    // Perform MySQL query to retrieve password for 'egoreta' from the 'login' table
+    db.query(
+      'SELECT password FROM users WHERE username = ?',
+      [username],
+      (err, results) => {
+        if (err) {
+          console.error('Error executing MySQL query:', err);
+          return res.status(500).send('Internal Server Error');
+        }
 
-  const doc_date_submission = req.body.doc_date_submission;
+        if (results.length === 0) {
+          return res.send('User not found');
+        }
 
-  const doc_type = req.body.doc_type;
-
-  const doc_status = req.body.doc_status;
-
-  const query =
-    'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
-  const values = [
-    doc_no, 
-    doc_date_submission,
-    doc_type,
-    doc_status,
-    id,
-  ];
-  db.query(query, values, (err, result) => {
-    if (err) res.json({ message: 'Server error' });
-    return res.json(result);
-  });
-});
-
-// DELETE DOCUMENT:ID
-myApp.delete('/doc/delete/:id', (req, res) => {
-  const docId = req.params.id;
-  const sql = `DELETE FROM documents
-    WHERE doc_id = ?`;
-  db.query(sql, [docId], (err, result) => {
-    if (err) {
-      console.error('Error deleting user:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
-    }
-  });
+        const dbPassword = results[0].password;
+        if (password === dbPassword) {
+          res.send('Login successful');
+        } else {
+          res.send('Invalid password');
+        }
+      },
+    );
+  } else {
+    res.send('Invalid username');
+  }
 });
 
 // TEST SERVER CONNECTION
