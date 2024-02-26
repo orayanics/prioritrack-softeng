@@ -1,0 +1,14 @@
+.headerIcon {
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  opacity: 40%;
+}
+
+.activeHeaderIcon {
+  opacity: 100%;
+}
+
+.sortableColumn {
+  cursor: pointer;
+}

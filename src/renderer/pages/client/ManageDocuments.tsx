@@ -1,22 +1,69 @@
 import React, { useEffect, useState } from 'react';
+import '../../styles/global_styles.css';
 import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
 import styles from '../../styles/manage_docs.module.scss';
+import icSortUp from '../../assets/icons/ic-sort-up.svg';
+import icSortDown from '../../assets/icons/ic-sort-down.svg';
+
+interface SortIcons {
+  documentType: 'asc' | 'desc';
+  dateOfSubmission: 'asc' | 'desc';
+  status: 'asc' | 'desc';
+}
 
 function ManageDocuments() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
+  const [sortIcons, setSortIcons] = useState<SortIcons>({
+    documentType: 'asc',
+    dateOfSubmission: 'asc',
+    status: 'asc',
+  });
+  const [activeSortIcon, setActiveSortIcon] = useState('');
+  const [isSortClicked, setIsSortClicked] = useState(false);
+  const handleSortIcon = (field: keyof SortIcons) => {
+    if (activeSortIcon == field) {
+      setSortIcons((prevSortIcons) => ({
+        ...prevSortIcons,
+        [field]: prevSortIcons[field] === 'asc' ? 'desc' : 'asc',
+      }));
+    }
+    setActiveSortIcon(field);
+    setIsSortClicked(true);
+    console.log(
+      activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
+    );
+  };
+  // useEffect(() => {
+  //   //call if sortIcons, activeSortIcon changes
+  //   fetchSortedData();
+  // }, [id, sortIcons, activeSortIcon]);
+
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id, sortIcons, activeSortIcon]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await Axios.get(`http://localhost:3001/list/${id}`);
+      const response =
+        id != null && isSortClicked == false
+          ? await Axios.get(`http://localhost:3001/list/${id}`)
+          : await Axios.get(
+              `http://localhost:3001/list/${id}/${activeSortIcon}/${
+                sortIcons[activeSortIcon as keyof SortIcons]
+              }`,
+            );
+      console.log(
+        `http://localhost:3001/list/${id}/${activeSortIcon}/${
+          sortIcons[activeSortIcon as keyof SortIcons]
+        }`,
+      );
+      console.log(response.data);
       setUserData(response.data);
       setLoading(false);
     } catch (error) {
@@ -55,7 +102,7 @@ function ManageDocuments() {
               <h3>{userData.client_bank_address}</h3>
               <p>Most Recent Document</p>
 
-              {userData.documents.length > 0 ? (
+              {userData.documents.length >= 0 ? (
                 <>
                   {userData.documents
                     .map((doc) => ({
@@ -80,17 +127,53 @@ function ManageDocuments() {
           <div className={styles.col2}>
             <div className={styles.row1}>
               <p className={`${styles.title} ${styles.title1}`}>Document No.</p>
-              <p className={styles.title}>Document Type</p>
-              <p className={`${styles.title} ${styles.cbn}`}>
-                Date of Submission
+              <p
+                className={`${styles.title} ${styles.dt} sortableColumn`}
+                onClick={() => handleSortIcon('documentType')}
+              >
+                Document Type
+                <img
+                  src={sortIcons.documentType === 'asc' ? icSortUp : icSortDown}
+                  alt="Sort"
+                  className={`headerIcon ${
+                    activeSortIcon === 'documentType' && 'activeHeaderIcon'
+                  }`}
+                ></img>
               </p>
-              <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
+              <p
+                className={`${styles.title} ${styles.cbn} sortableColumn`}
+                onClick={() => handleSortIcon('dateOfSubmission')}
+              >
+                Date of Submission
+                <img
+                  src={
+                    sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown
+                  }
+                  alt="Sort"
+                  className={`headerIcon ${
+                    activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
+                  }`}
+                ></img>
+              </p>
+              <p
+                className={`${styles.title} ${styles.tStatus} sortableColumn`}
+                onClick={() => handleSortIcon('status')}
+              >
+                Status
+                <img
+                  src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
+                  alt="Sort"
+                  className={`headerIcon ${
+                    activeSortIcon === 'status' && 'activeHeaderIcon'
+                  }`}
+                ></img>
+              </p>
               <p className={`${styles.title} ${styles.action}`}>Action</p>
             </div>
-            <div className={styles.card}>
-              <div className={styles.row1}>
-                <div className={styles.cardCapsule}></div>
-                {userData.documents.map((doc) => (
+            {userData.documents.map((doc) => (
+              <div className={styles.card}>
+                <div className={styles.row1}>
+                  <div className={styles.cardCapsule}></div>
                   <div className={styles.row2} key={doc.doc_id}>
                     <p className={styles.docNo}>{doc.doc_no}</p>
                     <div className={styles.mrd}>{doc.doc_type}</div>
@@ -112,9 +195,9 @@ function ManageDocuments() {
                       </button>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </>
       )}

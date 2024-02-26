@@ -46,18 +46,27 @@ body {
   border: none !important;
   font-weight: normal;
 }
+.export:focus,
+.export:hover,
+.export:active,
+.export:visited {
+  text-decoration: none !important;
+  outline: none !important;
+}
 
 .column1 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 .column2 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
-
-  padding-top: 10px;
+  margin-top: -5px;
 }
 
 .card {
@@ -68,6 +77,11 @@ body {
   border-radius: 5px;
   padding: 2px 16px;
   padding-left: 0px;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.12),
+    0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.12);
+  margin-bottom: 10px;
 }
 
 .cardCapsule {
@@ -97,17 +111,22 @@ body {
   // padding-right: 20px;
   // padding-left: 10px;
   font-weight: bold;
-  width: 100px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  text-align: center;
 }
 
 .title1 {
-  padding-left: 25px;
+  padding-left: 20px;
 }
 .pl {
-  width: 140px;
+  width: 160px;
 }
 .title_mrd {
-  width: 150px;
+  width: 110px;
   display: flex;
   text-align: center !important;
 }
@@ -116,8 +135,10 @@ body {
   text-align: center !important;
 }
 .ds {
-  width: 120px;
+  width: 100px;
   text-align: center !important;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .tStatus {
@@ -125,6 +146,10 @@ body {
   text-align: center !important;
   // margin-left: 10px;
   // margin-left: -10px !important;
+}
+.tAction {
+  width: 100px;
+  margin-right: 0 !important;
 }
 .mrd {
   font-size: 14px;
@@ -144,7 +169,7 @@ body {
   padding-top: 3px;
   background-color: var(--complete);
 
-  margin: 13px 0px 0px 10px;
+  margin: 0px 0px 0px 10px;
   border: none;
   border-radius: 10px;
 }
@@ -162,24 +187,27 @@ body {
   border: none;
   border-radius: 10px;
   /* top right bottom left */
-  margin: 13px 0px 0px 10px;
+  margin: 0px 0px 0px 10px;
   padding-left: 8px !important;
   padding-right: 8px !important;
   padding-top: 3px;
 }
 .cName {
   // padding-top: 5px;
-  width: 100px !important;
+  width: 105px !important;
   margin-left: 15px !important;
+  margin-right: 10px;
 }
 .pLoc {
-  width: 135px !important;
+  width: 160px !important;
 }
 .docNo {
-  padding-right: 15px;
+  //padding-right: 15px;
 }
 .dateSub {
   text-align: center !important;
+  margin-left: -10px;
+  margin-right: 10px;
 }
 .info {
   font-size: 14px;
@@ -192,12 +220,12 @@ body {
 }
 .status {
   font-size: 14px;
-  width: 80px;
+  width: 110px;
   border-radius: 35px;
   padding: 3px 2px 2px 0px;
   /* top right bottom left */
   height: 20px;
-  margin: 2px 0px 0px 30px;
+  margin: 2px 0px 0px 0px;
 
   text-align: center;
 }

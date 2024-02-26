@@ -12,9 +12,8 @@ body {
     'Cantarell',
     'Open Sans',
     sans-serif;
-    color: #86a5b1;
-    background-color: #2f3241;
-
+  color: #86a5b1;
+  background-color: #2f3241;
 }
 
 * {
@@ -32,11 +31,12 @@ body {
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow:  0 1px 1px rgba(0,0,0,0.12),
-  0 2px 2px rgba(0,0,0,0.12),
-  0 4px 4px rgba(0,0,0,0.12),
-  0 8px 8px rgba(0,0,0,0.12),
-  0 16px 16px rgba(0,0,0,0.12);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.12),
+    0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.12),
+    0 8px 8px rgba(0, 0, 0, 0.12),
+    0 16px 16px rgba(0, 0, 0, 0.12);
 
   width: 150px;
   margin: 20px 20px 20px 0px;
@@ -55,7 +55,7 @@ body {
 
   padding-top: 10px;
 }
-.tablerow1{
+.tablerow1 {
   border-collapse: collapse;
   width: 100%;
   table-layout: fixed;
@@ -65,7 +65,7 @@ body {
   table-layout: fixed;
 }
 
-.button2{
+.button2 {
   background-color: #dddddd; /* Green */
   border: none;
   color: black;
@@ -77,12 +77,11 @@ body {
   cursor: pointer;
   border-radius: 5px;
 
-
   width: 150px;
   margin: 20px 20px 20px 0px;
   /* top right bottom left */
 }
-select[name="month"] {
+select[name='month'] {
   /* Your styles go here */
   /* For example: */
   padding: 10px;
@@ -90,7 +89,7 @@ select[name="month"] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-select[name="year"] {
+select[name='year'] {
   /* Your styles go here */
   /* For example: */
   padding: 10px;
@@ -99,41 +98,35 @@ select[name="year"] {
   border-radius: 4px;
 }
 .card {
-  margin-top: -50px;
-  border: 1px solid black;
-  color:black;
-   /* Add border to the card section */
-   box-shadow:  0 1px 1px rgba(0,0,0,0.12),
-   0 2px 2px rgba(0,0,0,0.12),
-   0 4px 4px rgba(0,0,0,0.12),
-   0 8px 8px rgba(0,0,0,0.12),
-   0 16px 16px rgba(0,0,0,0.12);
+  margin-top: -43px;
+  color: black;
+  /* Add border to the card section */
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.12),
+    0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.12);
 
   background-color: #f2f2f2;
   width: 100%;
   border-radius: 15px;
 
   position: relative;
-
 }
 
 .card-capsule {
-
- background-color: #f58989;
+  background-color: var(--missed);
   width: 5px;
-  border-radius: 100px;
+  border-radius: 5px;
   padding: 0px 10px 5px 0px;
   /* top right bottom left */
   height: 59px;
-
-  position: relative; /* Add this line */
-  top: 15.5px; /* Adjust the positioning as needed */
-  left: 0px; /* Adjust the positioning as needed */
-  z-index: 10; /* Add this line */
+  position: relative;
+  top: 20px;
+  left: 0px;
+  z-index: 10;
 }
 .info {
   font-size: 17px;
-
 
   color: black;
 }
@@ -371,16 +364,16 @@ a:hover {
 }
 
 .table {
-   /* Add border style */
+  /* Add border style */
   border-collapse: collapse;
   width: 100%;
   table-layout: fixed;
 }
 
-.table th, .table td {
-  padding: 10px; /* Add padding for better spacing */
-   /* Add border style */
-  /* Align text to the left */
+.table th,
+.table td {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .table2 {
@@ -390,10 +383,9 @@ a:hover {
   table-layout: fixed;
 }
 
-
 .pill {
   pointer-events: none;
- background-color: #fcbdbd;
+  background-color: #fcbdbd;
 
   color: #020303;
   padding: 5px 15px;
@@ -402,12 +394,10 @@ a:hover {
   display: inline-block;
   margin-right: -20px;
 
-
   border-radius: 100px;
 }
 .pill2 {
   pointer-events: none;
-
 
   color: #020303;
   padding: 5px 15px;
@@ -416,12 +406,11 @@ a:hover {
   display: inline-block;
   margin-right: -20px;
 
-
   border-radius: 100px;
 }
-.pill-report1{
+.pill-report1 {
   pointer-events: none;
- font-weight: bold;
+  font-weight: bold;
 
   color: #020303;
   padding: 5px 15px;
@@ -430,12 +419,11 @@ a:hover {
   display: inline-block;
   margin-right: -20px;
 
-
   border-radius: 100px;
 }
-.pill-report2{
+.pill-report2 {
   pointer-events: none;
- font-weight: bold;
+  font-weight: bold;
 
   color: #020303;
   padding: 5px 15px;
@@ -444,12 +432,11 @@ a:hover {
   display: inline-block;
   margin-right: -20px;
 
-
   border-radius: 100px;
 }
-.pill-report3{
+.pill-report3 {
   pointer-events: none;
- font-weight: bold;
+  font-weight: bold;
 
   color: #020303;
   padding: 5px 15px;
@@ -458,6 +445,31 @@ a:hover {
   display: inline-block;
   margin-right: -20px;
 
-
   border-radius: 100px;
+}
+
+.title {
+  font-weight: bold;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.column1 {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.pLoc {
+  width: 160px;
+}
+
+.stat {
+  width: 80px;
 }
