@@ -20,13 +20,13 @@ export default function Navbar() {
         <Link to={`/client`}>Clients</Link>
 
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="notification-dropdown">
+          <Dropdown.Toggle id="notif">
             <FaBell />
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
+          <Dropdown.Menu id="notif-menu">
             <Dropdown.Item href="#/notification-1">
-              Notification 1
+              BAHO NI ALIAH SOBRANG ASIM DI NALILIGO
             </Dropdown.Item>
             <Dropdown.Item href="#/notification-2">
               Notification 2
