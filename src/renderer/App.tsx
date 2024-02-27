@@ -32,10 +32,19 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Layout onLogout={handleLogout} /> : <Login onLogin={handleLogin} />}>
-          {/* account components */}
-          <Route path="/changepass" element={<ChangePass />} />
-          <Route path="/forgotpass" element={<ForgotPass />} />
+        {/* account components no need for authentication */}
+        <Route path="/changepass" element={<ChangePass />} />
+        <Route path="/forgotpass" element={<ForgotPass />} />
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? (
+              <Layout onLogout={handleLogout} />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        >
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
           {/* MEDJ PROBLEMATIC ATA TO */}
