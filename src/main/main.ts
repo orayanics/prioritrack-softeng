@@ -20,6 +20,7 @@ const cors = require('cors');
 const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
+const bcrypt = require('bcrypt');
 
 // MIDDLEWARE
 myApp.use(cors());
@@ -39,48 +40,29 @@ db.connect();
 
 //LOGIN
 myApp.post('/login', (req: Request, res: Response) => {
-  const bcrypt = require('bcrypt');
-
-  // assuming req.body contains username and password
   const { username, password } = req.body;
+  const query = 'SELECT password from users where username = ?';
+  db.query(query, username, (err, data) => {
+    if (err) return res.json(err);
 
-  // retrieve hashed password from the database
-  db.query(
-    'SELECT password FROM users WHERE username = ?',
-    [username],
-    (err: Error, results: any[]) => {
-      if (err) {
-        console.error('Error executing MySQL query:', err);
-        return res.status(500).send('Internal Server Error');
+    if (!data || data.length === 0) {
+      return res.send(false);
+    }
+
+    const hash = data[0].password;
+    bcrypt.compare(password, hash, function(err, result){
+      if(err) return res.status(500).send('Internal Server Error')
+
+      if(result){
+        console.log('Success');
+        res.send(result);
       }
-
-      if (results.length === 0) {
-        return res.send('User not found');
+      else {
+        res.send(result);
       }
-
-      const dbHashedPassword = results[0].password;
-
-      // used for comparing the test123 password with the hashed password from the database
-      bcrypt.compare(
-        password,
-        dbHashedPassword,
-        (bcryptErr: Error, match: boolean) => {
-          if (bcryptErr) {
-            console.error('Error comparing passwords:', bcryptErr);
-            return res.status(500).send('Internal Server Error');
-          }
-
-          if (match) {
-            // set session flag to indicate user is authenticated
-            // req.session.isAuthenticated = true;
-            res.send('Login successful');
-          } else {
-            res.send('Invalid password');
-          }
-        },
-      );
-    },
-  );
+      console.log(hash);
+    })
+  });
 });
 
 // ADD CLIENT

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from '../styles/login.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, Outlet } from 'react-router-dom';
 
-function Login() {
+export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,22 +13,24 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     try {
       const response = await axios.post('http://localhost:3001/login', {
         username,
         password,
       });
-      console.log(response.data); // Success message from server
-      // Redirect user or perform necessary action upon successful login
-      navigate('/home');
-      
+      console.log(response.data);
+      if (response.data) {
+        navigate('/home');
+      }
     } catch (error) {
-      setError('Invalid username or password');
-      console.error('Login failed:', error.response.data);
+      console.error('Error occurred during login:', error);
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div className={styles.cardContainer}>
@@ -65,13 +67,12 @@ function Login() {
           {error && <p className={styles.error}>{error}</p>}
         </form>
         <p className={styles.forgotPassword}>
-          <a href="/forgotpass" className={styles.forgotLink}>
-            Forgot your password?
-          </a>
+          <Link to="/forgotpass" className={styles.forgotLink}>
+            Link to forgot
+          </Link>
         </p>
       </div>
+      <Outlet/>
     </div>
   );
 }
-
-export default Login;

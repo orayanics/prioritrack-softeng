@@ -22,7 +22,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />}>
+        <Route path="/" element={<Layout />}>
           {/* account components */}
           <Route path="/changepass" element={<ChangePass />} />
           <Route path="/forgotpass" element={<ForgotPass />} />

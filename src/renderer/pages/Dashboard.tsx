@@ -207,6 +207,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      <Outlet />
     </div>
   );
 }
