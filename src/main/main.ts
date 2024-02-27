@@ -37,6 +37,52 @@ const db = mysql.createConnection({
 
 db.connect();
 
+//LOGIN
+myApp.post('/login', (req: Request, res: Response) => {
+  const bcrypt = require('bcrypt');
+
+  // assuming req.body contains username and password
+  const { username, password } = req.body;
+
+  // retrieve hashed password from the database
+  db.query(
+    'SELECT password FROM users WHERE username = ?',
+    [username],
+    (err: Error, results: any[]) => {
+      if (err) {
+        console.error('Error executing MySQL query:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      if (results.length === 0) {
+        return res.send('User not found');
+      }
+
+      const dbHashedPassword = results[0].password;
+
+      // used for comparing the test123 password with the hashed password from the database
+      bcrypt.compare(
+        password,
+        dbHashedPassword,
+        (bcryptErr: Error, match: boolean) => {
+          if (bcryptErr) {
+            console.error('Error comparing passwords:', bcryptErr);
+            return res.status(500).send('Internal Server Error');
+          }
+
+          if (match) {
+            // set session flag to indicate user is authenticated
+            // req.session.isAuthenticated = true;
+            res.send('Login successful');
+          } else {
+            res.send('Invalid password');
+          }
+        },
+      );
+    },
+  );
+});
+
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
   const name = req.body.name;
@@ -218,39 +264,6 @@ myApp.delete('/client/delete/:id', (req, res) => {
       res.status(200).send('User deleted successfully');
     }
   });
-});
-
-// LOGIN
-myApp.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Check if username and password match
-  if (username === 'egoreta') {
-    // Perform MySQL query to retrieve password for 'egoreta' from the 'login' table
-    db.query(
-      'SELECT password FROM users WHERE username = ?',
-      [username],
-      (err, results) => {
-        if (err) {
-          console.error('Error executing MySQL query:', err);
-          return res.status(500).send('Internal Server Error');
-        }
-
-        if (results.length === 0) {
-          return res.send('User not found');
-        }
-
-        const dbPassword = results[0].password;
-        if (password === dbPassword) {
-          res.send('Login successful');
-        } else {
-          res.send('Invalid password');
-        }
-      },
-    );
-  } else {
-    res.send('Invalid username');
-  }
 });
 
 // TEST SERVER CONNECTION
