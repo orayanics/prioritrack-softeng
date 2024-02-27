@@ -20,6 +20,7 @@ const cors = require('cors');
 const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
+const bcrypt = require('bcrypt');
 
 // MIDDLEWARE
 myApp.use(cors());
@@ -31,11 +32,38 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: '',
+  password: 'admin123',
   database: 'prioritrack',
 });
 
 db.connect();
+
+//LOGIN
+myApp.post('/login', (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  const query = 'SELECT password from users where username = ?';
+  db.query(query, username, (err, data) => {
+    if (err) return res.json(err);
+
+    if (!data || data.length === 0) {
+      return res.send(false);
+    }
+
+    const hash = data[0].password;
+    bcrypt.compare(password, hash, function(err, result){
+      if(err) return res.status(500).send('Internal Server Error')
+
+      if(result){
+        console.log('Success');
+        res.send(result);
+      }
+      else {
+        res.send(result);
+      }
+      console.log(hash);
+    })
+  });
+});
 
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
@@ -94,6 +122,26 @@ myApp.post('/client/document/add/:id', (req, res) => {
 // GET ALL USERS
 myApp.get('/client/list', (req, res) => {
   const query = 'SELECT * FROM clients';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
+// GET ALL USERS
+myApp.get('/dashboard/list', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
