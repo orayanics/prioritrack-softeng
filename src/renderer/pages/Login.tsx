@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import styles from '../styles/login.module.scss';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Make sure axios is imported
+import styles from '../styles/login.module.scss';
 
-export default function Login() {
+function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,8 +21,8 @@ export default function Login() {
       });
       console.log(response.data);
       if (response.data) {
-        // Set authentication status to true upon successful login
         localStorage.setItem('authenticated', 'true');
+        onLogin(); // Notify parent component that login is successful
         navigate('/home');
       }
     } catch (error) {
@@ -71,3 +71,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

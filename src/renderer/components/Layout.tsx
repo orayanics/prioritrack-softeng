@@ -1,23 +1,27 @@
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
-import Login from '../pages/Login';
 
-function Layout() {
-  const [authenticated, setAuthenticated] = useState(false);
+function Layout({onLogout}) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('authenticated') === 'true';
-    setAuthenticated(isLoggedIn);
-  }, [location.pathname]);
-
+  const handleLogout = () => {
+    // Perform logout action
+    localStorage.removeItem('authenticated');
+    onLogout(); // Notify parent component that logout is performed
+    navigate('/login');
+  };
+  
   return (
-    <>
-      {location.pathname !== '/login' && authenticated && <Navbar />}
-      <Outlet />
-    </>
+    // <>
+    //   {location.pathname !== '/login' && <Navbar />}
+    //   <Outlet />
+    // </>
+    <div>
+    {location.pathname !== '/login' && <Navbar onLogout={handleLogout} />}
+    <Outlet/>
+  </div>
   );
 }
 
