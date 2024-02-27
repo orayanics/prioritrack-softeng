@@ -21,7 +21,7 @@ function Login({ onLogin }) {
       console.log(response.data);
       if (response.data) {
         localStorage.setItem('authenticated', 'true');
-        onLogin(); // Notify parent component that login is successful
+        onLogin();
         navigate('/home');
       }
     } catch (error) {

@@ -5,7 +5,6 @@ import { Outlet, Link } from 'react-router-dom';
 
 export default function Navbar({onLogout}) {
   const handleLogout = () => {
-    // Call the onLogout function passed from Layout
     onLogout();
   };
   return (

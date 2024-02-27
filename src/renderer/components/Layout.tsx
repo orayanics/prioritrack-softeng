@@ -9,10 +9,10 @@ function Layout({onLogout}) {
   const handleLogout = () => {
     // Perform logout action
     localStorage.removeItem('authenticated');
-    onLogout(); // Notify parent component that logout is performed
+    onLogout();
     navigate('/login');
   };
-  
+
   return (
     // <>
     //   {location.pathname !== '/login' && <Navbar />}
