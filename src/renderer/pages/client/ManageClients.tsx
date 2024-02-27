@@ -97,7 +97,7 @@ export default function ManageClients() {
                     {val.client_bank_address}
                   </div>
                   <div className={`${styles.status} ${styles.info}`}>
-                    Missed
+                    {val.doc_status}
                   </div>
                 </div>
               </Link>

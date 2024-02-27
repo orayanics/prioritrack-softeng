@@ -34,25 +34,27 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     fetchData();
+
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3001/client/list');
+
+      const response = await Axios.get('http://localhost:3001/dashboard/list');
+
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  const deleteData = async (id: string | null) => {
-    if (id) {
-      try {
-        await Axios.delete(`http://localhost:3001/client/delete/${id}`);
-        fetchData();
-      } catch (error) {
-        console.error('Error deleting data:', error);
-      }
+
+  const deleteData = async (id) => {
+    try {
+      await Axios.delete(`http://localhost:3001/client/delete/${id}`);
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting data:', error);
     }
   };
 
@@ -61,18 +63,17 @@ export default function Home(): JSX.Element {
     setIsModalOpen(false);
   };
 
-  const openDeleteModal = async (id: string) => {
+  const openDeleteModal = async (id) => {
     setClientIdToDelete(id);
     try {
-      const response = await Axios.get(`http://localhost:3001/client/update/${id}`);
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
       setClientDetails(response.data);
       setIsModalOpen(true);
     } catch (error) {
       console.error('Error fetching client details:', error);
     }
-  };
-  const handleClientCardClick = (clientName: string) => {
-    setSelectedClientName(clientName);
   };
 
   const handleGenerateReport = () => {
@@ -81,10 +82,15 @@ export default function Home(): JSX.Element {
       const data = users.map((client: Client) => [
         client.client_name,
         client.client_property_location,
+        client.doc_no, // Include document number
+        client.doc_type, // Include document type
+        client.doc_date_submission, // Include document date of submission
+        client.doc_status, // Include status
       ]);
 
+
       // Add header row
-      const headers = ['Client Name', 'Property Location'];
+      const headers = ['Client Name', 'Property Location','Document No.', 'Most Recent Document','Date of Submission','Status'];
       const excelData = [headers, ...data];
 
       // Create a new workbook
@@ -97,7 +103,7 @@ export default function Home(): JSX.Element {
       // Format Excel sheet
       const wscols = [
         { wch: 20 }, // Width of column A (Client Name)
-        { wch: 30 }, // Width of column B (Property Location)
+        { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }
       ];
 
       worksheet['!cols'] = wscols;
@@ -168,51 +174,87 @@ export default function Home(): JSX.Element {
                 </td>
                 <td colSpan={2}>0</td>
                 <td colSpan={2}>0</td>
-                <td colSpan={2}><div className='pill-report1'>1</div></td>
-                <td colSpan={2}><div className='pill-report2'>1</div></td>
+                <td colSpan={2}><div className='pill-report1'></div></td>
+                <td colSpan={2}><div className='pill-report2'></div></td>
                 <td colSpan={2}><div className='pill-report3'>1</div></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
+      <br></br>
       <div className={styles.column1}>
         <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
         <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
         <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
-        <p className={`${styles.title} ${styles.title_mrd}`}>Most Recent Document</p>
+        <p className={`${styles.title} ${styles.title_mrd}`}>
+          Most Recent Document
+        </p>
         <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
         <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
-
+        <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
       </div>
-
       {users.length > 0 ? (
-        users.map((val: Client) => (
+        users.map((val) => (
           <div key={val.client_id} className={styles.card}>
             <div className={styles.column1}>
-              <div className={`${styles.cardCapsule} ${styles.statusMissed}`}></div>
-              <Link className={styles.export} to={`/client/detail/${val.client_id}`} onClick={() => handleClientCardClick(val.client_name)}>
+              <div
+                className={`${styles.cardCapsule}  ${styles.statusMissed}`}
+              ></div>
+
+              <Link
+                className={styles.export}
+                to={`/client/detail/${val.client_id}`}
+              >
                 <div className={styles.column2}>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {val.client_name}
+                  </p>
+                  <p className={`${styles.info} ${styles.pLoc}`}>
+                    {val.client_property_location}
+                  </p>
+                  <p className={`${styles.info} ${styles.pLoc}`}>
+                    {/* document number */}
+                    {val.doc_no}
+                  </p>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {/* Most Recent Document */}
+                    {val.doc_type}
+                  </p>
+                  <p className={`${styles.info} ${styles.cName}`}>
+                    {/*  Date of Submission */}
+                    {val.doc_date_submission}
+                  </p>
 
-                  <p className={`${styles.info} ${styles.cName}`}>{val.client_name}</p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>{val.client_property_location}</p>
-
-                  <p className={`${styles.info} ${styles.pLoc}`}>Document Number</p>
-                  <p className={`${styles.info} ${styles.cName}`}>Most Recent Document</p>
-                  <p className={`${styles.info} ${styles.cName}`}>Date of Submission</p>
-                  <div className={`${styles.status} ${styles.info}`}>Missed</div>
+                  <div className={`${styles.status} ${styles.info}`}>
+                    {val.doc_status}
+                  </div>
                 </div>
               </Link>
               <div className={`${styles.cursor}`}>
                 <button className={`${styles.edit}`}>
-                  <Link to={`/client/edit/${val.client_id}`} className={styles.edit}>
+                  <Link
+                    to={`/client/edit/${val.client_id}`}
+                    className={styles.edit}
+                  >
                     <FaEdit className={`${styles.green}`} />
                   </Link>
                 </button>
               </div>
               <div className={`${styles.cursor}`}>
-                <button className={`${styles.delete}`} onClick={() => openDeleteModal(val.client_id)}>
+                {/* <button
+                  className={`${styles.delete}`}
+                  onClick={() => deleteData(val.client_id)}
+                >
+                  <FaTrashAlt className={`${styles.deletered}`} />
+                </button> */}
+                <button
+                  className={`${styles.delete}`}
+                  onClick={() => {
+                    setClientIdToDelete(val.client_id);
+                    setIsModalOpen(true);
+                  }}
+                >
                   <FaTrashAlt className={`${styles.deletered}`} />
                 </button>
               </div>
@@ -222,7 +264,7 @@ export default function Home(): JSX.Element {
       ) : (
         <div className={styles.card}>
           <div className={styles.column1}>
-            <div className={`${styles['card-capsule']}`}></div>
+            <div className={styles['card-capsule']}></div>
             <div className={styles.column2}>
               <p className={`${styles.info} ${styles.cName}`}>No data</p>
               <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
