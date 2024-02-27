@@ -15,13 +15,14 @@ import ForgotPass from './pages/client/ForgotPass';
 // DOCUMENT SIDE
 import ManageDocuments from './pages/client/ManageDocuments';
 import AddDocument from './pages/document/AddDocument';
-import Login from './pages/client/Login';
+import Login from './pages/Login';
 import EditDoc from './pages/document/EditDocument';
+
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Login />}>
           {/* account components */}
           <Route path="/changepass" element={<ChangePass />} />
           <Route path="/forgotpass" element={<ForgotPass />} />

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import styles from '../../styles/login.module.scss';
+import styles from '../styles/login.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +20,8 @@ function Login() {
       });
       console.log(response.data); // Success message from server
       // Redirect user or perform necessary action upon successful login
+      navigate('/home');
+      
     } catch (error) {
       setError('Invalid username or password');
       console.error('Login failed:', error.response.data);
