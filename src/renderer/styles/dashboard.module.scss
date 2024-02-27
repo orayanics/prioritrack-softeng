@@ -288,6 +288,11 @@ body {
   border-style: none;
   cursor: pointer;
 }
+.containerSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .logoSuccess {
   display: flex;
   flex-direction: row;

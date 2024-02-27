@@ -56,7 +56,8 @@ export default function Home() {
     try {
       await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
-      setSuccessMessage('Client deleted successfully');
+      setSuccessMessage('Client Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
       console.error('Error deleting data:', error);
     }
@@ -83,10 +84,9 @@ export default function Home() {
       {successMessage && (
         <div className={styles.containerSuccess}>
           <div className={styles.logoSuccess}>
-            <FaPlus />
+            <FaTrashAlt />
           </div>{' '}
           <div className={styles.successMessage}>{successMessage}</div>
-          {/* The rest of your component's JSX... */}
         </div>
       )}
 
