@@ -3,11 +3,35 @@ import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
 import styles from '../../styles/manage_docs.module.scss';
+import { useLocation } from 'react-router-dom';
 
 function ManageDocuments() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const location = useLocation(); // Use the useLocation hook
+  const [successMessage, setSuccessMessage] = useState('');
+  const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+
+  const successDeleteLogo = (
+    <div className={styles.logoSuccess}>
+      <FaTrashAlt />
+    </div>
+  );
+
+  const successEditLogo = (
+    <div className={styles.logoSuccess}>
+      <FaEdit />
+    </div>
+  );
+
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      setIconToShow(successEditLogo);
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+    }
+  }, [location]);
 
   useEffect(() => {
     fetchData();
@@ -28,6 +52,9 @@ function ManageDocuments() {
   const deleteData = async (id) => {
     try {
       await Axios.delete(`http://localhost:3001/doc/delete/${id}`);
+      setSuccessMessage('Document Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -36,6 +63,13 @@ function ManageDocuments() {
 
   return (
     <div className={styles.container}>
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          {iconToShow}
+          <div className={styles.successMessage}>{successMessage}</div>
+        </div>
+      )}
+
       {loading ? (
         <p>Loading...</p>
       ) : (
