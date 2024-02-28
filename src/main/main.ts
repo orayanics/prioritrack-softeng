@@ -83,6 +83,38 @@ myApp.post('/login', (req: Request, res: Response) => {
   );
 });
 
+//VERIFICATION QUESTIONS
+myApp.post('/forgotpass', (req, res) => {
+  const { birthday, dog, mother } = req.body;
+  console.log('Request body:', req.body);
+
+  // SQL query to check answers
+  const sql = `
+    SELECT
+      CASE
+        WHEN (correct_answer = ? AND question = 'When is your birthday?')
+             OR (correct_answer = ? AND question = 'What is the name of your dog?')
+             OR (correct_answer = ? AND question = 'What is your mother''s maiden name?')
+        THEN 'Correct'
+        ELSE 'Incorrect'
+      END AS verification_result
+    FROM VerificationQuestions`;
+
+  db.query(sql, [birthday, dog, mother], (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (results.length === 0) {
+      return res.send('Invalid answers');
+    }
+
+    const verificationResult = results[0].verification_result;
+    res.send(verificationResult);
+  });
+});
+
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
   const name = req.body.name;

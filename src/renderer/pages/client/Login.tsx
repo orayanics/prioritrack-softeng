@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from '../../styles/login.module.scss';
+import { Outlet, Link } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -61,9 +62,12 @@ function Login() {
           {error && <p className={styles.error}>{error}</p>}
         </form>
         <p className={styles.forgotPassword}>
-          <a href="/forgotpass" className={styles.forgotLink}>
+          {/* <a href="/forgotpass" className={styles.forgotLink}> */}
+          <Link to={`/forgotpass`} className={styles.forgotLink}>
+            {' '}
             Forgot your password?
-          </a>
+          </Link>
+          {/* </a> */}
         </p>
       </div>
     </div>
