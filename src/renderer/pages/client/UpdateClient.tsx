@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Update() {
   const [users, setUsers] = useState([]);
   const { id } = useParams();
-  const client_id = parseInt(id,10);
+  const client_id = parseInt(id, 10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function Update() {
       client_property_location,
       client_bank_name,
       client_bank_address,
-      client_id
+      client_id,
     })
       .then(() => {
         console.log(
@@ -62,7 +62,9 @@ export default function Update() {
           client_bank_name,
           client_bank_address,
         );
-        navigate('/home');
+        navigate('/home', {
+          state: { successMessage: 'Client Edited' },
+        });
       })
       .catch((err) => {
         console.log(err);
