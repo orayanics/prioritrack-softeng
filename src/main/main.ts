@@ -20,6 +20,7 @@ const cors = require('cors');
 const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
+const bcrypt = require('bcrypt');
 
 // MIDDLEWARE
 myApp.use(cors());
@@ -36,6 +37,33 @@ const db = mysql.createConnection({
 });
 
 db.connect();
+
+//LOGIN
+myApp.post('/login', (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  const query = 'SELECT password from users where username = ?';
+  db.query(query, username, (err, data) => {
+    if (err) return res.json(err);
+
+    if (!data || data.length === 0) {
+      return res.send(false);
+    }
+
+    const hash = data[0].password;
+    bcrypt.compare(password, hash, function(err, result){
+      if(err) return res.status(500).send('Internal Server Error')
+
+      if(result){
+        console.log('Success');
+        res.send(result);
+      }
+      else {
+        res.send(result);
+      }
+      console.log(hash);
+    })
+  });
+});
 
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
@@ -94,6 +122,26 @@ myApp.post('/client/document/add/:id', (req, res) => {
 // GET ALL USERS
 myApp.get('/client/list', (req, res) => {
   const query = 'SELECT * FROM clients';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
+// GET ALL USERS
+myApp.get('/dashboard/list', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -190,58 +238,6 @@ myApp.delete('/client/delete/:id', (req, res) => {
     LEFT JOIN documents ON clients.client_id = documents.client_id
     WHERE clients.client_id = ?`;
   db.query(sql, [userId], (err, result) => {
-    if (err) {
-      console.error('Error deleting user:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
-    }
-  });
-});
-
-// GET CLIENT:ID
-myApp.get('/document/get/:id', (req, res) => {
-  const docId = req.params.id;
-  const query = 'SELECT * FROM documents WHERE doc_id = ?';
-  db.query(query, [docId], (err, data) => {
-    if (err) return res.json(err);
-    return res.send(data);
-  });
-});
-
-// EDIT OR UPDATE DOCUMENT
-myApp.post(`/document/edited/:id`, (req, res) => {
-  const id = req.params.id;
-  const doc_no = req.body.doc_no;
-
-  const doc_date_submission = req.body.doc_date_submission;
-
-  const doc_type = req.body.doc_type;
-
-  const doc_status = req.body.doc_status;
-
-  const query =
-    'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
-  const values = [
-    doc_no, 
-    doc_date_submission,
-    doc_type,
-    doc_status,
-    id,
-  ];
-  db.query(query, values, (err, result) => {
-    if (err) res.json({ message: 'Server error' });
-    return res.json(result);
-  });
-});
-
-// DELETE DOCUMENT:ID
-myApp.delete('/doc/delete/:id', (req, res) => {
-  const docId = req.params.id;
-  const sql = `DELETE FROM documents
-    WHERE doc_id = ?`;
-  db.query(sql, [docId], (err, result) => {
     if (err) {
       console.error('Error deleting user:', err);
       res.status(500).send('Internal Server Error');

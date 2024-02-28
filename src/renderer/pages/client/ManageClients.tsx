@@ -43,20 +43,12 @@ export default function ManageClients() {
   return (
     <div className={styles.container}>
       {/* Display the success message if it exists */}
-      {/* {successMessage && (
-           <div className={styles.logoSuccess}>
-           <FaPlus />
-         </div>
-          <div className={styles.successMessage}>{successMessage}</div>
-        )}
-        {/* The rest of your component's JSX... */}
       {successMessage && (
         <div className={styles.containerSuccess}>
           <div className={styles.logoSuccess}>
             <FaPlus />
           </div>{' '}
           <div className={styles.successMessage}>Client Added</div>
-          {/* The rest of your component's JSX... */}
         </div>
       )}
       <div className={styles.column1}>
