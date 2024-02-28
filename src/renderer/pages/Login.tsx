@@ -1,26 +1,32 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import styles from '../../styles/login.module.scss';
-
-function Login() {
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios'; // Make sure axios is imported
+import styles from '../styles/login.module.scss';
+function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await axios.post('http://localhost:3001/login', {
         username,
         password,
       });
-      console.log(response.data); // Success message from server
-      // Redirect user or perform necessary action upon successful login
+      console.log(response.data);
+      if (response.data) {
+        localStorage.setItem('authenticated', 'true');
+        onLogin();
+        navigate('/home');
+      }
     } catch (error) {
+      console.error('Error occurred during login:', error);
       setError('Invalid username or password');
-      console.error('Login failed:', error.response.data);
     } finally {
       setLoading(false);
     }
@@ -61,9 +67,9 @@ function Login() {
           {error && <p className={styles.error}>{error}</p>}
         </form>
         <p className={styles.forgotPassword}>
-          <a href="/forgotpass" className={styles.forgotLink}>
+          <Link to="/forgotpass" className={styles.forgotLink}>
             Forgot your password?
-          </a>
+          </Link>
         </p>
       </div>
     </div>

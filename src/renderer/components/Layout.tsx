@@ -1,24 +1,27 @@
-import { Outlet, Link } from 'react-router-dom';
-import Home from '../App';
-
+import React from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
-function Layout() {
-  return (
-    <>
-      <Navbar />
-      {/* <div>This is the layout. Put Navigation here</div>
-      <button>
-        <Link to={`/`}>Root</Link>
-      </button>
 
-      <button>
-        <Link to={`/home`}>Dashboard</Link>
-      </button>
-      <button>
-        <Link to={`/add`}>Add</Link>
-      </button> */}
-      <Outlet />
-    </>
+function Layout({onLogout}) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Perform logout action
+    localStorage.removeItem('authenticated');
+    onLogout();
+    navigate('/login');
+  };
+
+  return (
+    // <>
+    //   {location.pathname !== '/login' && <Navbar />}
+    //   <Outlet />
+    // </>
+    <div>
+    {location.pathname !== '/login' && <Navbar onLogout={handleLogout} />}
+    <Outlet/>
+  </div>
   );
 }
 

@@ -5,21 +5,21 @@ import { Outlet, Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Navbar() {
+export default function Navbar({onLogout}) {
+  const handleLogout = () => {
+    onLogout();
+  };
   return (
     <nav className="navbar">
       <div className="navbar-logo">
         <img src={navlogo} alt="Prioritrack " />
       </div>
       <div className="navbar-links">
-        {/* <Link to={`/client/add`}>Add Client</Link> */}
-        {/* <Link to={`/`}>Root</Link> */}
-        <Link to={`/login`}>Login</Link>
         <Link to="/reports">Reports</Link>
-        {/* <Link to={`/client`}>Manage Clients</Link> */}
         <Link to={`/home`}>Dashboard</Link>
         <Link to="/reports">Reports</Link>
         <Link to={`/client`}>Clients</Link>
+<<<<<<< HEAD
 
         <Dropdown>
           <Dropdown.Toggle id="notif">
@@ -46,6 +46,9 @@ export default function Navbar() {
         <Link to={`/forgotpass`}>forgot</Link> */}
 
         <a href="#">Logout</a>
+=======
+        <a href="#" onClick={handleLogout}>Logout</a>
+>>>>>>> main
       </div>
     </nav>
   );
