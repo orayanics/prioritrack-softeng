@@ -16,9 +16,9 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
+
 import styles from '../styles/dashboard.module.scss';
-import { FaTrashAlt } from 'react-icons/fa';
-import { FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
@@ -26,6 +26,8 @@ export default function Home() {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+
   // const [clientDetails, setClientDetails] = useState({});
   interface Client {
     client_name: string;
@@ -44,7 +46,8 @@ export default function Home() {
     try {
       const response = await Axios.get('http://localhost:3001/dashboard/list');
       setUsers(response.data);
-      console.log(response)
+      console.log(response);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -54,12 +57,14 @@ export default function Home() {
     try {
       await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
+      setSuccessMessage('Client Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
       console.error('Error deleting data:', error);
     }
   };
 
- const handleDeleteConfirmation = async () => {
+  const handleDeleteConfirmation = async () => {
     await deleteData(clientIdToDelete);
     setIsModalOpen(false);
   };
@@ -77,6 +82,15 @@ export default function Home() {
   };
   return (
     <div className={styles.container}>
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          <div className={styles.logoSuccess}>
+            <FaTrashAlt />
+          </div>{' '}
+          <div className={styles.successMessage}>{successMessage}</div>
+        </div>
+      )}
+
       {isModalOpen && (
         // {users.map((val) => (
         <div className={styles.modal}>
