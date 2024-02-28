@@ -16,10 +16,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
+
 import styles from '../styles/dashboard.module.scss';
 import '../styles/global_styles.css';
-import { FaTrashAlt } from 'react-icons/fa';
-import { FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
@@ -34,11 +34,36 @@ interface SortIcons {
   dateOfSubmission: 'asc' | 'desc';
   status: 'asc' | 'desc';
 }
+import { useLocation } from 'react-router-dom';
 
 export default function Home() {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  const location = useLocation(); // Use the useLocation hook
+  const [successMessage, setSuccessMessage] = useState('');
+  const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+
+  const successDeleteLogo = (
+    <div className={styles.logoSuccess}>
+      <FaTrashAlt />
+    </div>
+  );
+
+  const successEditLogo = (
+    <div className={styles.logoSuccess}>
+      <FaEdit />
+    </div>
+  );
+
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      setIconToShow(successEditLogo);
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+    }
+  }, [location]);
+
   // const [clientDetails, setClientDetails] = useState({});
 
   const [sortIcons, setSortIcons] = useState<SortIcons>({
@@ -103,7 +128,7 @@ export default function Home() {
         }`,
       );
       setUsers(response.data);
-      //console.log(response);
+      //console.log(response);;
       console.log(
         `http://localhost:3001/dashboard/list/${activeSortIcon}/${
           sortIcons[activeSortIcon as keyof SortIcons]
@@ -118,12 +143,15 @@ export default function Home() {
     try {
       await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
+      setIconToShow(successDeleteLogo);
+      setSuccessMessage('Client Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
       console.error('Error deleting data:', error);
     }
   };
 
-  const handleDeleteConfirmation = async () => {
+   const handleDeleteConfirmation = async () => {
     await deleteData(clientIdToDelete);
     setIsModalOpen(false);
   };
@@ -139,9 +167,35 @@ export default function Home() {
       console.error('Error fetching client details:', error);
     }
   };
+  type StatusType = 'Missed' | 'Ongoing' | 'Upcoming' | 'Complete' | 'OnHold';
+
+  const getStatusClass = (status: StatusType) => {
+    switch (status) {
+      case 'Missed':
+        return styles.statusMissed;
+      case 'Ongoing':
+        return styles.statusOngoing;
+      case 'Upcoming':
+        return styles.statusUpcoming;
+      case 'Complete':
+        return styles.statusComplete;
+      case 'OnHold':
+        return styles.statusOnHold;
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className={styles.container}>
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          {iconToShow}
+
+          <div className={styles.successMessage}>{successMessage}</div>
+        </div>
+      )}
+
       {isModalOpen && (
         // {users.map((val) => (
         <div className={styles.modal}>
@@ -284,7 +338,9 @@ export default function Home() {
                   </p>
 
                   <div
+
                     className={`${styles.status} ${
+
                       val.doc_status == 'Missed'
                         ? styles.red
                         : val.doc_status == 'Upcoming'
@@ -296,7 +352,7 @@ export default function Home() {
                         : val.doc_status == 'On Hold'
                         ? styles.orange
                         : ''
-                    }`}
+                    } {\*${getStatusClass(val.doc_status)}*\}`}
                   >
                     {val.doc_status}
                   </div>
@@ -346,6 +402,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      <Outlet />
     </div>
   );
 }

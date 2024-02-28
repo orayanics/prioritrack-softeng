@@ -2,9 +2,14 @@ import React, { FC, useState } from 'react';
 import '../styles/navbar.css';
 import navlogo from '../assets/navlogo.png';
 import { Outlet, Link } from 'react-router-dom';
+import { FaBell } from 'react-icons/fa';
+import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Navbar() {
+export default function Navbar({ onLogout }) {
   const [activePage, setActivePage] = useState('Dashboard');
+  const handleLogout = () => {
+    onLogout();
+  };
   return (
     <nav className="navbar">
       <Link
@@ -46,6 +51,23 @@ export default function Navbar() {
         >
           Clients
         </Link>
+        <Dropdown>
+          <Dropdown.Toggle id="notif">
+            <FaBell />
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu id="notif-menu">
+            <Dropdown.Item href="#/notification-1">
+              BAHO NI ALIAH SOBRANG ASIM DI NALILIGO
+            </Dropdown.Item>
+            <Dropdown.Item href="#/notification-2">
+              Notification 2
+            </Dropdown.Item>
+            <Dropdown.Item href="#/notification-3">
+              Notification 3
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         {/* <Link to={`/document/edit/:id`}>Edit Document</Link> */}
         {/* <Link to={`/client/document/:id`}>Add Document</Link> */}
         {/* <Link to={`/`}>Logout</Link> */}
@@ -53,6 +75,9 @@ export default function Navbar() {
         <Link to={`/forgotpass`}>forgot</Link> */}
 
         <a href="#" className="link">
+          Logout
+        </a>
+        <a href="#" onClick={handleLogout}>
           Logout
         </a>
       </div>

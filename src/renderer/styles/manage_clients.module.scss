@@ -132,7 +132,7 @@ body {
 }
 .tStatus {
   // margin-left: -30px !important;
-  width: 70px;
+  width: 90px;
   text-align: center;
 }
 .cba {
@@ -157,10 +157,11 @@ body {
 .edit {
   padding-left: 1px !important;
   padding-right: 4px !important;
-  padding-top: 3px;
+  padding-top: 0px;
+  padding-bottom: 2px;
   background-color: var(--complete);
 
-  margin: 18px 0px 0px 10px;
+  margin: 12px 0px 0px 10px;
   border: none;
   border-radius: 10px;
 }
@@ -178,10 +179,8 @@ body {
   border: none;
   border-radius: 10px;
   /* top right bottom left */
-  margin: 18px 0px 0px 10px;
-  padding-left: 8px !important;
-  padding-right: 8px !important;
-  padding-top: 3px;
+  margin: 12px 0px 0px 10px;
+  padding: 0px 8px 3px 8px !important;
 }
 // .cName {
 //   padding-top: 0px;
@@ -211,7 +210,7 @@ body {
   background-color: var(--missed);
   width: 80px;
   border-radius: 35px;
-  padding: 3px 2px 2px 0px;
+  padding: 1px 2px 2px 0px;
   /* top right bottom left */
   height: 20px;
   // margin: 2px 0px 0px 30px;

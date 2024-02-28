@@ -20,6 +20,7 @@ const cors = require('cors');
 const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
+const bcrypt = require('bcrypt');
 
 // MIDDLEWARE
 myApp.use(cors());
@@ -36,6 +37,33 @@ const db = mysql.createConnection({
 });
 
 db.connect();
+
+//LOGIN
+myApp.post('/login', (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  const query = 'SELECT password from users where username = ?';
+  db.query(query, username, (err, data) => {
+    if (err) return res.json(err);
+
+    if (!data || data.length === 0) {
+      return res.send(false);
+    }
+
+    const hash = data[0].password;
+    bcrypt.compare(password, hash, function(err, result){
+      if(err) return res.status(500).send('Internal Server Error')
+
+      if(result){
+        console.log('Success');
+        res.send(result);
+      }
+      else {
+        res.send(result);
+      }
+      console.log(hash);
+    })
+  });
+});
 
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
@@ -857,39 +885,6 @@ myApp.delete('/client/delete/:id', (req, res) => {
       res.status(200).send('User deleted successfully');
     }
   });
-});
-
-// LOGIN
-myApp.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Check if username and password match
-  if (username === 'egoreta') {
-    // Perform MySQL query to retrieve password for 'egoreta' from the 'login' table
-    db.query(
-      'SELECT password FROM users WHERE username = ?',
-      [username],
-      (err, results) => {
-        if (err) {
-          console.error('Error executing MySQL query:', err);
-          return res.status(500).send('Internal Server Error');
-        }
-
-        if (results.length === 0) {
-          return res.send('User not found');
-        }
-
-        const dbPassword = results[0].password;
-        if (password === dbPassword) {
-          res.send('Login successful');
-        } else {
-          res.send('Invalid password');
-        }
-      },
-    );
-  } else {
-    res.send('Invalid username');
-  }
 });
 
 // TEST SERVER CONNECTION
