@@ -270,16 +270,36 @@ export default function Home() {
                     {/* document number */}
                     {val.doc_no}
                   </p>
-                  <p className={`${styles.info} ${styles.cName}`}>
-                    {/* Most Recent Document */}
-                    {val.doc_type}
-                  </p>
+                  <div className={styles.mrdWidth}>
+                    <div
+                      className={`${styles.info} ${styles.mrd} ${styles.cName}`}
+                    >
+                      {/* Most Recent Document */}
+                      {val.doc_type}
+                    </div>
+                  </div>
                   <p className={`${styles.info} ${styles.dateSub}`}>
                     {/*  Date of Submission */}
                     {val.doc_date_submission}
                   </p>
 
-                  <div className={`${styles.status}`}>{val.doc_status}</div>
+                  <div
+                    className={`${styles.status} ${
+                      val.doc_status == 'Missed'
+                        ? styles.red
+                        : val.doc_status == 'Upcoming'
+                        ? styles.blue
+                        : val.doc_status == 'Ongoing'
+                        ? styles.yellow
+                        : val.doc_status == 'Complete'
+                        ? styles.green
+                        : val.doc_status == 'On Hold'
+                        ? styles.orange
+                        : ''
+                    }`}
+                  >
+                    {val.doc_status}
+                  </div>
                 </div>
               </Link>
               <div className={`${styles.cursor}`}>

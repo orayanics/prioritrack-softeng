@@ -705,7 +705,7 @@ myApp.get(`/list/:id/status/desc`, (req, res) => {
 });
 
 // GET ALL USERS (REPORT)
-myApp.get('reports/list/:month/:year', (req, res) => {
+myApp.get('/reports/:month/:year', (req, res) => {
   const year = req.params.year;
   const month = req.params.month;
   const yearMonth = `${year}-${month.padStart(2, '0')}`;
@@ -729,6 +729,65 @@ myApp.get('reports/list/:month/:year', (req, res) => {
       res.status(500).json({ message: 'Server error' });
     } else {
       if (result.length === 0) {
+        console.log('No records found for the selected month and year');
+        return res.status(404).json({ message: 'No records found' });
+      }
+
+      const userData = result.map((row) => ({
+        client_id: row.client_id,
+        client_name: row.client_name,
+        client_property_location: row.client_property_location,
+        doc_no: row.doc_no,
+        doc_type: row.doc_type,
+        doc_status: row.doc_status,
+        doc_date_submission: row.doc_date_submission,
+      }));
+
+      res.json(userData);
+    }
+  });
+});
+// sort reports
+myApp.get('/reports/:month/:year/:column/:order', (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+  const yearMonth = `${year}-${month.padStart(2, '0')}`;
+  var column = '';
+  var order = req.params.order.toUpperCase();
+  if (req.params.column == 'clientName') {
+    column = 'c.client_name';
+  } else if (req.params.column == 'propertyLocation') {
+    column = 'c.client_property_location';
+  } else if (req.params.column == 'mostRecentDocument') {
+    column = 'd.doc_type';
+  } else if (req.params.column == 'dateOfSubmission') {
+    column = 'd.doc_date_submission';
+  } else if (req.params.column == 'status') {
+    column = 'd.doc_status';
+  }
+  const sort = `${column} ${order}`;
+
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    WHERE LEFT(d.doc_date_submission, 7) = ?
+    ORDER BY ${sort}, c.client_name ASC`;
+  db.query(query, [yearMonth], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        console.log('No records found for the selected month and year');
         return res.status(404).json({ message: 'No records found' });
       }
 

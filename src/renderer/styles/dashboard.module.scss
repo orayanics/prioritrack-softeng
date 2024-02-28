@@ -25,16 +25,16 @@ body {
 }
 .button {
   background-color: #f2f2f2; /* Green */
-  border: none;
+  border: 1px solid #dbdbdb;
   color: black;
-  padding: 15px 32px;
+  padding: 15px 30px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 1px 5px #ababab;
 
   width: 150px;
   margin: 20px 20px 20px 0px;
@@ -126,7 +126,7 @@ body {
   width: 160px;
 }
 .title_mrd {
-  width: 110px;
+  width: 130px;
   display: flex;
   text-align: center !important;
 }
@@ -142,26 +142,33 @@ body {
 }
 
 .tStatus {
-  width: 100px;
+  width: 70px;
   text-align: center !important;
-  // margin-left: 10px;
-  // margin-left: -10px !important;
+  margin-left: 5px;
 }
 .tAction {
-  width: 100px;
+  width: 90px;
   margin-right: 0 !important;
 }
 .mrd {
-  font-size: 14px;
-  background-color: var(--mrd-blue);
-  width: 150px !important;
+  font-size: 14px !important;
+  background-color: #fcbdbd;
   border-radius: 35px;
-  // padding: 0px 0px 1px 25px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   /* top right bottom left */
   height: 25px;
-  // margin: 1px 0px 0px 0px;
-
+  align-items: center;
+  display: flex;
+  text-align: center;
   text-align: center !important;
+  justify-content: center;
+}
+.mrdWidth {
+  display: flex;
+  justify-content: center;
 }
 .edit {
   padding-left: 1px !important;
@@ -206,11 +213,10 @@ body {
 }
 .dateSub {
   text-align: center !important;
-  margin-left: -10px;
   margin-right: 10px;
 }
 .info {
-  font-size: 14px;
+  font-size: 16px;
 
   text-align: left;
 
@@ -220,7 +226,8 @@ body {
 }
 .status {
   font-size: 14px;
-  width: 110px;
+  background-color: #fcbdbd;
+  width: 90px;
   border-radius: 35px;
   padding: 3px 2px 2px 0px;
   /* top right bottom left */
@@ -256,6 +263,7 @@ body {
   max-width: 840px;
   margin: 0 auto;
   padding: 15px 30px 0 30px;
+  margin-top: 10px;
 }
 
 // MODAL
@@ -315,6 +323,21 @@ body {
   height: 30px;
   border-style: none;
   cursor: pointer;
+}
+.red {
+  background-color: #f8bdb0; /*#db8074*/
+}
+.blue {
+  background-color: #aad2e9; /*#7dade8*/
+}
+.yellow {
+  background-color: #efe368; /*#fcd04c*/
+}
+.green {
+  background-color: #9cd58f; /*#73bf67*/
+}
+.orange {
+  background-color: #ffc383; /*#fca14c*/
 }
 @media (max-width: 840px) {
 }

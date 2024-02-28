@@ -7,7 +7,11 @@ export default function Navbar() {
   const [activePage, setActivePage] = useState('Dashboard');
   return (
     <nav className="navbar">
-      <Link to={`/home`} className="navbar-logo">
+      <Link
+        to={`/home`}
+        onClick={() => setActivePage('Dashboard')}
+        className="navbar-logo"
+      >
         <img src={navlogo} alt="Prioritrack " />
       </Link>
       <div className="navbar-links">

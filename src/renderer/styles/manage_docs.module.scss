@@ -19,14 +19,14 @@
 
 .button {
   background-color: #f2f2f2;
-  border: none;
+  border: 1px solid #dbdbdb;
   color: black;
   padding: 15px 0px;
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 1px 5px #ababab;
   width: 280px;
   margin: 20px 20px 20px 20px;
 }
@@ -39,14 +39,15 @@
 
 .rec {
   background-color: #f2f2f2;
-  border: none;
+  border: 1px solid #dbdbdb;
   padding: 20px 25px;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 1px 5px #ababab;
   line-height: 2rem;
+  width: 228px;
 }
 
 h3 {
@@ -132,16 +133,23 @@ h3 {
 .mrd {
   font-size: 14px;
   background-color: #fcbdbd;
-  width: 240px;
   border-radius: 35px;
-  padding: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   /* top right bottom left */
   height: 25px;
-  margin: 0px 0px 0px 0px;
   align-items: center;
   display: flex;
-  justify-content: center;
   text-align: center;
+  margin: auto !important;
+  text-align: center;
+}
+.mrdWidth {
+  width: 240px;
+  display: flex;
+  justify-content: center;
 }
 .status {
   font-size: 14px;
@@ -215,4 +223,20 @@ h3 {
 .cbn {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.red {
+  background-color: #f8bdb0; /*#db8074*/
+}
+.blue {
+  background-color: #aad2e9; /*#7dade8*/
+}
+.yellow {
+  background-color: #efe368; /*#fcd04c*/
+}
+.green {
+  background-color: #9cd58f; /*#73bf67*/
+}
+.orange {
+  background-color: #ffc383; /*#fca14c*/
 }

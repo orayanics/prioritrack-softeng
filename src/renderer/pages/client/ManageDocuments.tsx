@@ -176,9 +176,27 @@ function ManageDocuments() {
                   <div className={styles.cardCapsule}></div>
                   <div className={styles.row2} key={doc.doc_id}>
                     <p className={styles.docNo}>{doc.doc_no}</p>
-                    <div className={styles.mrd}>{doc.doc_type}</div>
+                    <div className={styles.mrdWidth}>
+                      <div className={styles.mrd}>{doc.doc_type}</div>
+                    </div>
                     <p className={styles.dateSub}>{doc.doc_date_submission}</p>
-                    <div className={styles.status}>{doc.doc_status}</div>
+                    <div
+                      className={`${styles.status} ${
+                        doc.doc_status == 'Missed'
+                          ? styles.red
+                          : doc.doc_status == 'Upcoming'
+                          ? styles.blue
+                          : doc.doc_status == 'Ongoing'
+                          ? styles.yellow
+                          : doc.doc_status == 'Complete'
+                          ? styles.green
+                          : doc.doc_status == 'On Hold'
+                          ? styles.orange
+                          : ''
+                      }`}
+                    >
+                      {doc.doc_status}
+                    </div>
                     <div className={styles.cursor}>
                       <button className={styles.edit}>
                         <Link to={`/document/edit/${doc.doc_id}`}>
