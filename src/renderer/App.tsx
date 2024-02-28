@@ -2,6 +2,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import Layout from './components/Layout';
 import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import Home from './pages/Home';
 
 // CLIENT SIDE

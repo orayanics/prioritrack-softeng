@@ -66,6 +66,7 @@ body {
 
   padding-top: 40px;
   padding-bottom: 20px;
+  font-weight: bold;
 }
 .input {
   padding: 0;
@@ -84,6 +85,8 @@ body {
 
   text-align: left;
   font-size: 15px;
+
+  font-weight: bold !important;
 }
 .btn {
   border-radius: 15px;

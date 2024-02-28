@@ -61,7 +61,7 @@ h3 {
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .card {
@@ -72,6 +72,7 @@ h3 {
   border-radius: 5px;
   padding: 2px 16px;
   padding-left: 0px;
+  box-shadow: 0 8px 3px -6px #9e9d9d;
 }
 .card-capsule {
   background-color: #fcbdbd;
@@ -102,6 +103,10 @@ h3 {
 .title1 {
   padding-left: 15px;
 }
+.cbn {
+  padding-left: 40px;
+  padding-right: 0px;
+}
 .t-status {
   margin-left: -10px !important;
 }
@@ -122,19 +127,19 @@ h3 {
   background-color: #fcbdbd;
   width: 80px;
   border-radius: 35px;
-  padding: 3px 2px 2px 0px;
+  padding: 0px 2px 2px 0px;
   /* top right bottom left */
   height: 20px;
   margin: 0px 10px 0px 50px;
   text-align: center;
 }
 .docNo {
-  width: 150px;
-  text-align: center;
-  padding-right: 15px;
+  width: 160px;
+  text-align: left;
+  padding-left: 15px;
 }
 .dateSub {
-  width: 120px;
+  width: 150px;
   text-align: center;
   padding-left: 50px;
 }
@@ -143,9 +148,9 @@ h3 {
   cursor: pointer;
 }
 .edit {
-  padding-left: 1px !important;
-  padding-right: 4px !important;
-  padding-top: 3px;
+  padding: 0px 8px 4px 11px !important;
+  /* top right bottom left */
+
   background-color: var(--complete);
 
   margin: 0px 0px 0px 10px;
@@ -167,7 +172,6 @@ h3 {
   border-radius: 10px;
   /* top right bottom left */
   margin: 0px 0px 0px 10px;
-  padding-left: 8px !important;
-  padding-right: 8px !important;
-  padding-top: 3px;
+
+  padding: 0px 8px 4px 8px !important;
 }
