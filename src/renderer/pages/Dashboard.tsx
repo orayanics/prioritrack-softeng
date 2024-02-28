@@ -21,12 +21,35 @@ import styles from '../styles/dashboard.module.scss';
 import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
+import { useLocation } from 'react-router-dom';
 
 export default function Home() {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState('');
+  const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+
+  const successDeleteLogo = (
+    <div className={styles.logoSuccess}>
+      <FaTrashAlt />
+    </div>
+  );
+
+  const successEditLogo = (
+    <div className={styles.logoSuccess}>
+      <FaEdit />
+    </div>
+  );
+
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      setIconToShow(successEditLogo);
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+    }
+  }, [location]);
 
   // const [clientDetails, setClientDetails] = useState({});
   interface Client {
@@ -47,7 +70,6 @@ export default function Home() {
       const response = await Axios.get('http://localhost:3001/dashboard/list');
       setUsers(response.data);
       console.log(response);
-
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -57,6 +79,7 @@ export default function Home() {
     try {
       await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
+      setIconToShow(successDeleteLogo);
       setSuccessMessage('Client Deleted');
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
@@ -80,13 +103,31 @@ export default function Home() {
       console.error('Error fetching client details:', error);
     }
   };
+  type StatusType = 'Missed' | 'Ongoing' | 'Upcoming' | 'Complete' | 'OnHold';
+
+  const getStatusClass = (status: StatusType) => {
+    switch (status) {
+      case 'Missed':
+        return styles.statusMissed;
+      case 'Ongoing':
+        return styles.statusOngoing;
+      case 'Upcoming':
+        return styles.statusUpcoming;
+      case 'Complete':
+        return styles.statusComplete;
+      case 'OnHold':
+        return styles.statusOnHold;
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className={styles.container}>
       {successMessage && (
         <div className={styles.containerSuccess}>
-          <div className={styles.logoSuccess}>
-            <FaTrashAlt />
-          </div>{' '}
+          {iconToShow}
+
           <div className={styles.successMessage}>{successMessage}</div>
         </div>
       )}
@@ -172,7 +213,11 @@ export default function Home() {
                     {val.doc_date_submission}
                   </p>
 
-                  <div className={`${styles.status} ${styles.info}`}>
+                  <div
+                    className={`${styles.status} ${
+                      styles.info
+                    } ${getStatusClass(val.doc_status)}`}
+                  >
                     {val.doc_status}
                   </div>
                 </div>
