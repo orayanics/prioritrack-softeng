@@ -50,18 +50,17 @@ myApp.post('/login', (req: Request, res: Response) => {
     }
 
     const hash = data[0].password;
-    bcrypt.compare(password, hash, function(err, result){
-      if(err) return res.status(500).send('Internal Server Error')
+    bcrypt.compare(password, hash, function (err, result) {
+      if (err) return res.status(500).send('Internal Server Error');
 
-      if(result){
+      if (result) {
         console.log('Success');
         res.send(result);
-      }
-      else {
+      } else {
         res.send(result);
       }
       console.log(hash);
-    })
+    });
   });
 });
 
@@ -127,6 +126,77 @@ myApp.get('/client/list', (req, res) => {
     return res.send(data);
   });
 });
+//SORT FOR CLIENTS
+//sort by clientName in ascending order
+myApp.get('/client/list/clientName/asc', (req, res) => {
+  const query = 'SELECT * FROM clients ORDER BY client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientName in descending order
+myApp.get('/client/list/clientName/desc', (req, res) => {
+  const query = 'SELECT * FROM clients ORDER BY client_name DESC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by propertyLocation in ascending order
+myApp.get('/client/list/propertyLocation/asc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_property_location ASC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by propertyLocation in descending order
+myApp.get('/client/list/propertyLocation/desc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_property_location DESC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientBankName in ascending order
+myApp.get('/client/list/clientBankName/asc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_bank_name ASC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientBankName in descending order
+myApp.get('/client/list/clientBankName/desc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_bank_name DESC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientBankAddress in ascending order
+myApp.get('/client/list/clientBankAddress/asc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_bank_address ASC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientBankAddress in descending order
+myApp.get('/client/list/clientBankAddress/desc', (req, res) => {
+  const query =
+    'SELECT * FROM clients ORDER BY client_bank_address DESC, client_name ASC';
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
 
 // GET ALL USERS
 myApp.get('/dashboard/list', (req, res) => {
@@ -142,6 +212,207 @@ myApp.get('/dashboard/list', (req, res) => {
   JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
     FROM documents
     GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//SORT FOR DASHBOARD
+//sort by clientName in ascending order
+myApp.get('/dashboard/list/clientName/asc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by clientName in descending order
+myApp.get('/dashboard/list/clientName/desc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY c.client_name DESC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by propertyLocation in ascending order
+myApp.get('/dashboard/list/propertyLocation/asc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY c.client_property_location ASC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by propertyLocation in descending order
+myApp.get('/dashboard/list/propertyLocation/desc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY c.client_property_location DESC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by mostRecentDocument in ascending order
+myApp.get('/dashboard/list/mostRecentDocument/asc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_type ASC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by mostRecentDocument in descending order
+myApp.get('/dashboard/list/mostRecentDocument/desc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_type DESC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by dateOfSubmission in ascending order
+myApp.get('/dashboard/list/dateOfSubmission/asc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_date_submission ASC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by dateOfSubmission in descending order
+myApp.get('/dashboard/list/dateOfSubmission/desc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_date_submission DESC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by status in ascending order
+myApp.get('/dashboard/list/status/asc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_status ASC, c.client_name ASC`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+//sort by status in descending order
+myApp.get('/dashboard/list/status/desc', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    ORDER BY d.doc_status DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -191,6 +462,373 @@ myApp.get(`/list/:id`, (req, res) => {
 
       res.json(userData);
       console.log(userData);
+    }
+  });
+});
+//SORT FOR DOCUMENTS
+//sort by documentType in ascending order
+myApp.get(`/list/:id/documentType/asc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_type ASC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by documentType in descending order
+myApp.get(`/list/:id/documentType/desc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_type DESC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by dateOfSubmission in ascending order
+myApp.get(`/list/:id/dateOfSubmission/asc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_date_submission ASC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by dateOfSubmission in descending order
+myApp.get(`/list/:id/dateOfSubmission/desc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_date_submission DESC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by status in ascending order
+myApp.get(`/list/:id/status/asc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_status ASC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by status in descending order
+myApp.get(`/list/:id/status/desc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_status DESC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+
+// GET ALL USERS (REPORT)
+myApp.get('/reports/:month/:year', (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+  const yearMonth = `${year}-${month.padStart(2, '0')}`;
+
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    WHERE LEFT(d.doc_date_submission, 7) = ?`;
+  db.query(query, [yearMonth], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        console.log('No records found for the selected month and year');
+        return res.status(404).json({ message: 'No records found' });
+      }
+
+      const userData = result.map((row) => ({
+        client_id: row.client_id,
+        client_name: row.client_name,
+        client_property_location: row.client_property_location,
+        doc_no: row.doc_no,
+        doc_type: row.doc_type,
+        doc_status: row.doc_status,
+        doc_date_submission: row.doc_date_submission,
+      }));
+
+      res.json(userData);
+    }
+  });
+});
+// sort reports
+myApp.get('/reports/:month/:year/:column/:order', (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+  const yearMonth = `${year}-${month.padStart(2, '0')}`;
+  var column = '';
+  var order = req.params.order.toUpperCase();
+  if (req.params.column == 'clientName') {
+    column = 'c.client_name';
+  } else if (req.params.column == 'propertyLocation') {
+    column = 'c.client_property_location';
+  } else if (req.params.column == 'mostRecentDocument') {
+    column = 'd.doc_type';
+  } else if (req.params.column == 'dateOfSubmission') {
+    column = 'd.doc_date_submission';
+  } else if (req.params.column == 'status') {
+    column = 'd.doc_status';
+  }
+  const sort = `${column} ${order}`;
+
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
+    WHERE LEFT(d.doc_date_submission, 7) = ?
+    ORDER BY ${sort}, c.client_name ASC`;
+  db.query(query, [yearMonth], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        console.log('No records found for the selected month and year');
+        return res.status(404).json({ message: 'No records found' });
+      }
+
+      const userData = result.map((row) => ({
+        client_id: row.client_id,
+        client_name: row.client_name,
+        client_property_location: row.client_property_location,
+        doc_no: row.doc_no,
+        doc_type: row.doc_type,
+        doc_status: row.doc_status,
+        doc_date_submission: row.doc_date_submission,
+      }));
+
+      res.json(userData);
     }
   });
 });
@@ -294,6 +932,14 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+export const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -311,7 +957,7 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('circlelogo.png'),
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

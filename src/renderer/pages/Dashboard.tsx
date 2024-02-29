@@ -13,14 +13,27 @@
 //   )
 // }
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
 
 import styles from '../styles/dashboard.module.scss';
+import '../styles/global_styles.css';
 import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
+import icSortUp from '../assets/icons/ic-sort-up.svg';
+import icSortDown from '../assets/icons/ic-sort-down.svg';
+
 Modal.setAppElement('#root');
+
+interface SortIcons {
+  clientName: 'asc' | 'desc';
+  propertyLocation: 'asc' | 'desc';
+  documentNo: 'asc' | 'desc';
+  mostRecentDocument: 'asc' | 'desc';
+  dateOfSubmission: 'asc' | 'desc';
+  status: 'asc' | 'desc';
+}
 import { useLocation } from 'react-router-dom';
 
 export default function Home() {
@@ -52,6 +65,38 @@ export default function Home() {
   }, [location]);
 
   // const [clientDetails, setClientDetails] = useState({});
+
+  const [sortIcons, setSortIcons] = useState<SortIcons>({
+    clientName: 'asc',
+    propertyLocation: 'asc',
+    documentNo: 'asc',
+    mostRecentDocument: 'asc',
+    dateOfSubmission: 'asc',
+    status: 'asc',
+  });
+  const [activeSortIcon, setActiveSortIcon] = useState('');
+  const isInitialSortMount = useRef(true);
+  const handleSortIcon = (field: keyof SortIcons) => {
+    if (activeSortIcon == field) {
+      setSortIcons((prevSortIcons) => ({
+        ...prevSortIcons,
+        [field]: prevSortIcons[field] === 'asc' ? 'desc' : 'asc',
+      }));
+    }
+    setActiveSortIcon(field);
+    console.log(
+      activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
+    );
+  };
+  useEffect(() => {
+    //call if sortIcons, activeSortIcon changes
+    if (isInitialSortMount.current) {
+      isInitialSortMount.current = false;
+    } else {
+      fetchSortedData();
+    }
+  }, [sortIcons, activeSortIcon]);
+
   interface Client {
     client_name: string;
     client_property_location: string;
@@ -67,9 +112,28 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3001/dashboard/list');
+      const response = await Axios.get(`http://localhost:3001/dashboard/list`);
       setUsers(response.data);
       console.log(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchSortedData = async () => {
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/dashboard/list/${activeSortIcon}/${
+          sortIcons[activeSortIcon as keyof SortIcons]
+        }`,
+      );
+      setUsers(response.data);
+      //console.log(response);;
+      console.log(
+        `http://localhost:3001/dashboard/list/${activeSortIcon}/${
+          sortIcons[activeSortIcon as keyof SortIcons]
+        }`,
+      );
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -87,7 +151,7 @@ export default function Home() {
     }
   };
 
-  const handleDeleteConfirmation = async () => {
+   const handleDeleteConfirmation = async () => {
     await deleteData(clientIdToDelete);
     setIsModalOpen(false);
   };
@@ -161,25 +225,81 @@ export default function Home() {
         </div>
       )}
       <div className={styles.column1}>
-        <button className={styles.button}>
-          <Link to={`/AddClient`} className={styles.export}>
-            Export Data
-          </Link>
-        </button>
-        <Link to="/reports">
+        <Link to={`/AddClient`} className={styles.export}>
+          <button className={styles.button}>Export Data</button>
+        </Link>
+        <Link to="/reports" className={styles.export}>
           <button className={styles.button}>Reports</button>
         </Link>
       </div>
       <div className={styles.column1}>
-        <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
-        <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
-        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
-        <p className={`${styles.title} ${styles.title_mrd}`}>
-          Most Recent Document
+        <p
+          className={`${styles.title} ${styles.title1} sortableColumn`}
+          onClick={() => handleSortIcon('clientName')}
+        >
+          Client Name
+          <img
+            src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
+            alt="Sort"
+            className={`headerIcon ${
+              activeSortIcon === 'clientName' && 'activeHeaderIcon'
+            }`}
+          ></img>
         </p>
-        <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
-        <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
-        <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
+        <p
+          className={`${styles.title} ${styles.pl} sortableColumn`}
+          onClick={() => handleSortIcon('propertyLocation')}
+        >
+          Property Location
+          <img
+            src={sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown}
+            alt="Sort"
+            className={`headerIcon ${
+              activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
+            }`}
+          ></img>
+        </p>
+        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
+        <p
+          className={`${styles.title} ${styles.title_mrd} ${styles.sortableColumn}`}
+          onClick={() => handleSortIcon('mostRecentDocument')}
+        >
+          Most Recent Document
+          <img
+            src={sortIcons.mostRecentDocument === 'asc' ? icSortUp : icSortDown}
+            alt="Sort"
+            className={`headerIcon ${
+              activeSortIcon === 'mostRecentDocument' && 'activeHeaderIcon'
+            }`}
+          ></img>
+        </p>
+        <p
+          className={`${styles.title} ${styles.ds} ${styles.sortableColumn}`}
+          onClick={() => handleSortIcon('dateOfSubmission')}
+        >
+          Date of Submission
+          <img
+            src={sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown}
+            alt="Sort"
+            className={`headerIcon ${
+              activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
+            }`}
+          ></img>
+        </p>
+        <p
+          className={`${styles.title} ${styles.tStatus} ${styles.sortableColumn}`}
+          onClick={() => handleSortIcon('status')}
+        >
+          Status
+          <img
+            src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
+            alt="Sort"
+            className={`headerIcon ${
+              activeSortIcon === 'status' && 'activeHeaderIcon'
+            }`}
+          ></img>
+        </p>
+        <p className={`${styles.title} ${styles.tAction}`}>Action</p>
       </div>
       {users.length > 0 ? (
         users.map((val) => (
@@ -200,23 +320,39 @@ export default function Home() {
                   <p className={`${styles.info} ${styles.pLoc}`}>
                     {val.client_property_location}
                   </p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>
+                  <p className={`${styles.info} ${styles.docNo}`}>
                     {/* document number */}
                     {val.doc_no}
                   </p>
-                  <p className={`${styles.info} ${styles.cName}`}>
-                    {/* Most Recent Document */}
-                    {val.doc_type}
-                  </p>
-                  <p className={`${styles.info} ${styles.cName}`}>
+                  <div className={styles.mrdWidth}>
+                    <div
+                      className={`${styles.info} ${styles.mrd} ${styles.cName}`}
+                    >
+                      {/* Most Recent Document */}
+                      {val.doc_type}
+                    </div>
+                  </div>
+                  <p className={`${styles.info} ${styles.dateSub}`}>
                     {/*  Date of Submission */}
                     {val.doc_date_submission}
                   </p>
 
                   <div
+
                     className={`${styles.status} ${
-                      styles.info
-                    } ${getStatusClass(val.doc_status)}`}
+
+                      val.doc_status == 'Missed'
+                        ? styles.red
+                        : val.doc_status == 'Upcoming'
+                        ? styles.blue
+                        : val.doc_status == 'Ongoing'
+                        ? styles.yellow
+                        : val.doc_status == 'Complete'
+                        ? styles.green
+                        : val.doc_status == 'On Hold'
+                        ? styles.orange
+                        : ''
+                    } {\*${getStatusClass(val.doc_status)}*\}`}
                   >
                     {val.doc_status}
                   </div>
