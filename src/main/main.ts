@@ -923,6 +923,22 @@ myApp.delete('/client/delete/:id', (req, res) => {
   });
 });
 
+// DELETE DOCUMENT:ID
+myApp.delete('/doc/delete/:id', (req, res) => {
+  const docId = req.params.id;
+  const sql = `DELETE FROM documents
+    WHERE doc_id = ?`;
+  db.query(sql, [docId], (err, result) => {
+    if (err) {
+      console.error('Error deleting user:', err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      console.log('User deleted successfully');
+      res.status(200).send('User deleted successfully');
+    }
+  });
+});
+
 // TEST SERVER CONNECTION
 myApp.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
