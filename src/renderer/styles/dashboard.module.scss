@@ -339,6 +339,56 @@ body {
 .orange {
   background-color: #ffc383; /*#fca14c*/
 }
+.containerSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.logoSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background-color: #c0f0b5;
+  color: #13481d;
+
+  padding: 20px;
+  padding-right: 25px;
+
+  margin-bottom: 10px;
+  margin-right: -10px;
+  margin-top: 20px;
+
+  border-radius: 15px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+.successMessage {
+  background-color: #c0f0b5;
+  color: #13481d;
+  padding: 20px;
+
+  border-radius: 15px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  font-size: 20px;
+  font-weight: bold;
+}
 @media (max-width: 840px) {
 }
 

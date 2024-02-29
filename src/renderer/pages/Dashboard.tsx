@@ -23,6 +23,7 @@ import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
+import { useLocation } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -34,7 +35,6 @@ interface SortIcons {
   dateOfSubmission: 'asc' | 'desc';
   status: 'asc' | 'desc';
 }
-import { useLocation } from 'react-router-dom';
 
 export default function Home() {
   const [users, setUsers] = useState([]);
@@ -151,7 +151,7 @@ export default function Home() {
     }
   };
 
-   const handleDeleteConfirmation = async () => {
+  const handleDeleteConfirmation = async () => {
     await deleteData(clientIdToDelete);
     setIsModalOpen(false);
   };
@@ -338,9 +338,7 @@ export default function Home() {
                   </p>
 
                   <div
-
                     className={`${styles.status} ${
-
                       val.doc_status == 'Missed'
                         ? styles.red
                         : val.doc_status == 'Upcoming'
