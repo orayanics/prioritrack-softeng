@@ -22,13 +22,13 @@ export default function Navbar({ onLogout }) {
       <div className="navbar-links">
         {/* <Link to={`/client/add`}>Add Client</Link> */}
         {/* <Link to={`/`}>Root</Link> */}
-        <Link
+        {/* <Link
           to={`/login`}
           onClick={() => setActivePage('Login')}
           className={`link ${activePage == 'Login' && 'active'}`}
         >
           Login
-        </Link>
+        </Link> */}
         {/* <Link to={`/client`}>Manage Clients</Link> */}
         <Link
           to={`/home`}
