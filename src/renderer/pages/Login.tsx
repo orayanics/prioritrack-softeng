@@ -14,7 +14,6 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const response = axios.get(`http://localhost:3001/home`);
     try {
       const response = await axios.post('http://localhost:3001/login', {
         username,

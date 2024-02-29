@@ -370,7 +370,7 @@ export default function Home() {
                       to={`/client/edit/${val.client_id}`}
                       className={styles.edit}
                     >
-                      <FaEdit className={`${styles.green}`} />
+                      <FaEdit className={`${styles.green_icon}`} />
                     </Link>
                   </button>
                 </div>
