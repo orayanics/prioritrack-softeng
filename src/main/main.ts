@@ -83,23 +83,24 @@ myApp.post('/login', (req: Request, res: Response) => {
   );
 });
 
-//VERIFICATION QUESTIONS
+// VERIFICATION QUES
 myApp.post('/forgotpass', (req, res) => {
   const { birthday, dog, mother } = req.body;
-  console.log('Request body:', req.body);
 
   // SQL query to check answers
   const sql = `
-    SELECT
-      CASE
-        WHEN (correct_answer = ? AND question = 'When is your birthday?')
-             OR (correct_answer = ? AND question = 'What is the name of your dog?')
-             OR (correct_answer = ? AND question = 'What is your mother''s maiden name?')
-        THEN 'Correct'
-        ELSE 'Incorrect'
-      END AS verification_result
-    FROM VerificationQuestions`;
+  SELECT
+  CASE
+    WHEN (correct_answer = 'January 1, 2024' AND question = 'When is your birthday?')
+         OR (correct_answer = 'Steusernameve' AND question = 'What is the name of your dog?')
+         OR (correct_answer = 'Cruz' AND question = 'What is your mother''s maiden name?')
+    THEN 'Correct'
+    ELSE 'Incorrect'
+  END AS verification_result
+FROM VerificationQuestions;
+  `;
 
+  // Execute SQL query
   db.query(sql, [birthday, dog, mother], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
@@ -110,6 +111,7 @@ myApp.post('/forgotpass', (req, res) => {
       return res.send('Invalid answers');
     }
 
+    // Get the verification result from the query results
     const verificationResult = results[0].verification_result;
     res.send(verificationResult);
   });
