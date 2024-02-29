@@ -16,6 +16,16 @@ body {
   background-color: #2f3241;
 }
 
+.bgLogo {
+  position: fixed;
+  bottom: -70px;
+  right: -35px;
+  display: block;
+  opacity: 0.2;
+  width: 850px;
+  height: auto;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -47,6 +57,11 @@ body {
   display: flex;
   align-items: flex-start;
   flex-direction: row;
+  margin-bottom: -10px;
+  font-size: 15px;
+}
+.statuses {
+  margin-top: 20px;
 }
 .column2 {
   display: flex;
@@ -66,20 +81,21 @@ body {
 }
 
 .button2 {
-  box-shadow: 1px 5px #ababab;
-  background-color: #f2f2f2;
+  box-shadow: 1px 5px #00042c;
+  background-color: #043572;
   border-radius: 5px !important;
-  border: 1px solid #dbdbdb;
-  color: black;
+  border: 1px solid #043572;
+  color: white;
   padding: 15px 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 5px;
 
-  width: 150px;
+  width: 170px;
   margin: 20px 20px 20px 0px;
   /* top right bottom left */
 }
@@ -108,7 +124,7 @@ select[name='year'] {
     0 2px 2px rgba(0, 0, 0, 0.12),
     0 4px 4px rgba(0, 0, 0, 0.12);
 
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   width: 100%;
   border-radius: 15px;
   font-size: 16px;
@@ -116,6 +132,14 @@ select[name='year'] {
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.card:hover {
+  background-color: #e8e6e6;
+}
+
+.noDataCard {
+  margin-top: 20px;
 }
 
 .card-capsule {
@@ -223,7 +247,7 @@ a:hover {
   max-width: 870px;
   margin: 0 auto;
   margin-top: 10px;
-  padding: 15px 30px 0px 30px;
+  padding: 15px 30px 50px 30px;
 }
 
 .versions {
@@ -525,7 +549,7 @@ a:hover {
 .dropdown {
   margin-top: 5px;
   box-shadow: 1px 5px #ababab;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   border-radius: 5px !important;
   border: 1px solid #dbdbdb !important;
 }

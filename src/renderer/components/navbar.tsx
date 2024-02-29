@@ -77,6 +77,24 @@ export default function Navbar({ onLogout }) {
         <a href="#" onClick={handleLogout} className="link">
           Logout
         </a>
+
+        <div className="dropdownNav link">
+          <button className="dropbtn">
+            <FaBell />
+          </button>
+          <div className="dropdown-content">
+            <a href="#">
+              Notification 1
+              <div className="description">
+                Description Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                aliqua.
+              </div>
+            </a>
+            <a href="#">Notification 2</a>
+            <a href="#">Notification 3</a>
+          </div>
+        </div>
       </div>
     </nav>
   );

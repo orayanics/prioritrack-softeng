@@ -16,6 +16,17 @@ body {
   color: black !important;
 }
 
+.bgLogo {
+  position: fixed;
+  bottom: -70px;
+  right: -35px;
+  display: block;
+  opacity: 0.2;
+  width: 850px;
+  height: auto;
+  z-index: -1;
+}
+
 .container_main {
   width: 100% !important;
 }
@@ -48,8 +59,9 @@ body {
   margin-top: 2rem;
 }
 .card {
-  background-color: var(--crud-blue);
-  color: var(--crud-fc);
+  //background-color: var(--crud-blue);
+  background-color: #00042c;
+  color: white;
   width: 500px;
   height: 100%;
   text-align: center;
@@ -58,10 +70,10 @@ body {
   margin-top: 20px;
   margin-bottom: 30px;
 
-  padding-bottom: 60px;
+  padding-bottom: 50px;
 }
 .title {
-  color: #00042c;
+  color: white;
   font-size: 22px;
 
   padding-top: 40px;
@@ -103,14 +115,21 @@ body {
 }
 .cancel {
   margin-left: 20px;
-  background-color: #740000;
+  background-color: #be3a3a;
 }
 .cancel_text {
   color: white;
   text-decoration: none;
+  padding: 8px 60px 7px 55px;
+  border-radius: 100px;
+}
+.cancel_text:hover,
+.cancel_text:focus {
+  border: 0;
 }
 .submit {
-  background-color: #00042c;
+  color: #00042c;
+  background-color: #44ade8;
 }
 :export {
   white: #ffffff;

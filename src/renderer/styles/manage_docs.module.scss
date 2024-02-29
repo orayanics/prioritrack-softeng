@@ -1,7 +1,19 @@
+.bgLogo {
+  position: fixed;
+  bottom: -70px;
+  right: -35px;
+  display: block;
+  opacity: 0.2;
+  width: 850px;
+  height: auto;
+  z-index: -1;
+}
+
 .container {
   display: flex;
   justify-content: center;
   margin: 5rem;
+  padding-bottom: 50px;
 }
 
 .col1,
@@ -12,23 +24,35 @@
   align-items: center;
 }
 
+.col1 {
+  margin-right: 50px;
+}
+
 .export:hover {
   text-decoration: none !important;
   outline: none !important;
 }
 
 .button {
-  background-color: #f2f2f2;
-  border: 1px solid #dbdbdb;
-  color: black;
-  padding: 15px 0px;
+  background-color: #043572; /* Green */
+  border: 1px solid #043572;
+  color: white;
+  padding: 15px 32px;
+  text-align: left;
   text-decoration: none;
+  display: flex;
+  align-items: center;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #ababab;
+  box-shadow: 0.5px 5px #00042c;
+
   width: 280px;
-  margin: 20px 20px 20px 20px;
+  margin: 20px 20px 20px 0px;
+  /* top right bottom left */
+  display: flex;
+  justify-content: space-between;
 }
 
 .button:focus,
@@ -38,7 +62,7 @@
 }
 
 .rec {
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   border: 1px solid #dbdbdb;
   padding: 20px 25px;
   text-decoration: none;
@@ -48,11 +72,13 @@
   box-shadow: 1px 5px #ababab;
   line-height: 2rem;
   width: 228px;
+  margin-top: 20px;
+  margin-right: 20px;
 }
 
 h3 {
   border-radius: 25px;
-  padding-left: 0.5rem;
+  //padding-left: 0.5rem;
   padding-right: 1rem;
 }
 
@@ -83,16 +109,21 @@ h3 {
 .card {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   width: 100%;
   height: 60px;
   border-radius: 5px;
   padding: 2px 5px;
   padding-left: 0px;
+  padding-right: 20px;
   box-shadow:
     0 1px 1px rgba(0, 0, 0, 0.12),
     0 2px 2px rgba(0, 0, 0, 0.12),
     0 4px 4px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover {
+  background-color: #e8e6e6;
 }
 
 .cardCapsule {
@@ -175,11 +206,13 @@ h3 {
   padding-left: 15px;
 }
 .dateSub {
-  width: 178px;
+  width: 165px;
   text-align: center;
   padding-left: 20px;
   padding-right: 20px;
   flex: 1;
+  margin-left: -10px;
+  margin-right: 10px;
 }
 .action {
   padding-left: 25px;
@@ -198,7 +231,7 @@ h3 {
   border: none;
   border-radius: 10px;
 }
-.green {
+.green_icon {
   color: var(--success-green);
   width: 15px;
 }

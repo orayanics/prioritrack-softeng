@@ -869,6 +869,36 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   });
 });
 
+// GET DOCUMENT:ID
+myApp.get('/document/get/:id', (req, res) => {
+  const docId = req.params.id;
+  const query = 'SELECT * FROM documents WHERE doc_id = ?';
+  db.query(query, [docId], (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
+// EDIT OR UPDATE DOCUMENT
+myApp.post(`/document/edited/:id`, (req, res) => {
+  const id = req.params.id;
+  const doc_no = req.body.doc_no;
+
+  const doc_date_submission = req.body.doc_date_submission;
+
+  const doc_type = req.body.doc_type;
+
+  const doc_status = req.body.doc_status;
+
+  const query =
+    'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
+  const values = [doc_no, doc_date_submission, doc_type, doc_status, id];
+  db.query(query, values, (err, result) => {
+    if (err) res.json({ message: 'Server error' });
+    return res.json(result);
+  });
+});
+
 // DELETE USER AND ALL DOCUMENTS
 myApp.delete('/client/delete/:id', (req, res) => {
   const userId = req.params.id;

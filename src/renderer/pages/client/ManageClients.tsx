@@ -7,6 +7,7 @@ import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
+import logo from '../../assets/prioritrack-logo.svg';
 
 interface SortIcons {
   clientName: 'asc' | 'desc';
@@ -94,143 +95,152 @@ export default function ManageClients() {
   };
 
   return (
-    <div className={styles.container}>
-      {/* Display the success message if it exists */}
-      {successMessage && (
-        <div className={styles.containerSuccess}>
-          <div className={styles.logoSuccess}>
-            <FaPlus />
-          </div>{' '}
-          <div className={styles.successMessage}>Client Added</div>
-        </div>
-      )}
-      <div className={styles.column1}>
-        <Link to="/client/add" className={styles.export}>
-          <button className={styles.button}>
-            Add a Client <FaPlus />
-          </button>
-        </Link>
+    <div>
+      <div className={styles.bgLogo}>
+        <img src={logo} />
       </div>
-      <div className={styles.column1}>
-        <p
-          className={`${styles.title} ${styles.title1} sortableColumn`}
-          onClick={() => handleSortIcon('clientName')}
-        >
-          Client Name
-          <img
-            src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
-            alt="Sort"
-            className={`headerIcon ${
-              activeSortIcon === 'clientName' && 'activeHeaderIcon'
-            }`}
-          ></img>
-        </p>
-        <p
-          className={`${styles.title} sortableColumn`}
-          onClick={() => handleSortIcon('propertyLocation')}
-        >
-          Property Location
-          <img
-            src={sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown}
-            alt="Sort"
-            className={`headerIcon ${
-              activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
-            }`}
-          ></img>
-        </p>
-        <p
-          className={`${styles.title} ${styles.cbn} sortableColumn`}
-          onClick={() => handleSortIcon('clientBankName')}
-        >
-          Client Bank Name
-          <img
-            src={sortIcons.clientBankName === 'asc' ? icSortUp : icSortDown}
-            alt="Sort"
-            className={`headerIcon ${
-              activeSortIcon === 'clientBankName' && 'activeHeaderIcon'
-            }`}
-          ></img>
-        </p>
-        <p
-          className={`${styles.title} ${styles.cba} sortableColumn`}
-          onClick={() => handleSortIcon('clientBankAddress')}
-        >
-          Client Bank Address
-          <img
-            src={sortIcons.clientBankAddress === 'asc' ? icSortUp : icSortDown}
-            alt="Sort"
-            className={`headerIcon ${
-              activeSortIcon === 'clientBankAddress' && 'activeHeaderIcon'
-            }`}
-          ></img>
-        </p>
-        {/* <p className={`${styles.title} ${styles.tStatus} sortableColumn`}>
+      <div className={styles.container}>
+        {/* Display the success message if it exists */}
+        {successMessage && (
+          <div className={styles.containerSuccess}>
+            <div className={styles.logoSuccess}>
+              <FaPlus />
+            </div>{' '}
+            <div className={styles.successMessage}>Client Added</div>
+          </div>
+        )}
+        <div className={styles.column1}>
+          <Link to="/client/add" className={styles.export}>
+            <button className={styles.button}>
+              Add a Client <FaPlus />
+            </button>
+          </Link>
+        </div>
+        <div className={`${styles.column1} ${styles.columnHeader}`}>
+          <p
+            className={`${styles.title} ${styles.title1} sortableColumn`}
+            onClick={() => handleSortIcon('clientName')}
+          >
+            Client Name
+            <img
+              src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
+              alt="Sort"
+              className={`headerIcon ${
+                activeSortIcon === 'clientName' && 'activeHeaderIcon'
+              }`}
+            ></img>
+          </p>
+          <p
+            className={`${styles.title} sortableColumn`}
+            onClick={() => handleSortIcon('propertyLocation')}
+          >
+            Property Location
+            <img
+              src={sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown}
+              alt="Sort"
+              className={`headerIcon ${
+                activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
+              }`}
+            ></img>
+          </p>
+          <p
+            className={`${styles.title} ${styles.cbn} sortableColumn`}
+            onClick={() => handleSortIcon('clientBankName')}
+          >
+            Client Bank Name
+            <img
+              src={sortIcons.clientBankName === 'asc' ? icSortUp : icSortDown}
+              alt="Sort"
+              className={`headerIcon ${
+                activeSortIcon === 'clientBankName' && 'activeHeaderIcon'
+              }`}
+            ></img>
+          </p>
+          <p
+            className={`${styles.title} ${styles.cba} sortableColumn`}
+            onClick={() => handleSortIcon('clientBankAddress')}
+          >
+            Client Bank Address
+            <img
+              src={
+                sortIcons.clientBankAddress === 'asc' ? icSortUp : icSortDown
+              }
+              alt="Sort"
+              className={`headerIcon ${
+                activeSortIcon === 'clientBankAddress' && 'activeHeaderIcon'
+              }`}
+            ></img>
+          </p>
+          {/* <p className={`${styles.title} ${styles.tStatus} sortableColumn`}>
           Status
         </p> */}
-        <p className={`${styles.title} ${styles.action}`}>Action</p>
-      </div>
-      {users.length > 0 ? (
-        users.map((val) => (
-          <div key={val.client_id} className={styles.card}>
-            <div className={styles.column1}>
-              <div className={styles['card-capsule']}></div>
-              <Link
-                className={styles.export}
-                to={`/client/detail/${val.client_id}`}
-              >
-                <div className={styles.column2}>
-                  <p className={`${styles.info} ${styles.cName}`}>
-                    {val.client_name}
-                  </p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>
-                    {val.client_property_location}
-                  </p>
-                  <p className={`${styles.info} ${styles.clientBN}`}>
-                    {val.client_bank_name}
-                  </p>
-                  <div className={`${styles.clientBA} ${styles.info}`}>
-                    {val.client_bank_address}
-                  </div>
-                  {/* <div className={`${styles.status} ${styles.info}`}>
+          <p className={`${styles.title} ${styles.action}`}>Action</p>
+        </div>
+        {users.length > 0 ? (
+          users.map((val) => (
+            <div key={val.client_id} className={styles.card}>
+              <div className={styles.column1}>
+                <div className={styles['card-capsule']}></div>
+                <Link
+                  className={styles.export}
+                  to={`/client/detail/${val.client_id}`}
+                >
+                  <div className={styles.column2}>
+                    <p className={`${styles.info} ${styles.cName}`}>
+                      {val.client_name}
+                    </p>
+                    <p className={`${styles.info} ${styles.pLoc}`}>
+                      {val.client_property_location}
+                    </p>
+                    <p className={`${styles.info} ${styles.clientBN}`}>
+                      {val.client_bank_name}
+                    </p>
+                    <div className={`${styles.clientBA} ${styles.info}`}>
+                      {val.client_bank_address}
+                    </div>
+                    {/* <div className={`${styles.status} ${styles.info}`}>
                     Missed
                   </div> */}
+                  </div>
+                </Link>
+                <div className={`${styles.cursor}`}>
+                  <button className={`${styles.edit}`}>
+                    <Link
+                      to={`/client/edit/${val.client_id}`}
+                      className={styles.edit}
+                    >
+                      <FaEdit className={`${styles.green}`} />
+                    </Link>
+                  </button>
                 </div>
-              </Link>
-              <div className={`${styles.cursor}`}>
-                <button className={`${styles.edit}`}>
-                  <Link
-                    to={`/client/edit/${val.client_id}`}
-                    className={styles.edit}
+                <div className={`${styles.cursor}`}>
+                  <button
+                    className={`${styles.delete}`}
+                    onClick={() => deleteData(val.client_id)}
                   >
-                    <FaEdit className={`${styles.green}`} />
-                  </Link>
-                </button>
+                    <FaTrashAlt className={`${styles.deletered}`} />
+                  </button>
+                </div>
               </div>
-              <div className={`${styles.cursor}`}>
-                <button
-                  className={`${styles.delete}`}
-                  onClick={() => deleteData(val.client_id)}
-                >
-                  <FaTrashAlt className={`${styles.deletered}`} />
-                </button>
+            </div>
+          ))
+        ) : (
+          <div className={styles.card}>
+            <div className={styles.column1}>
+              <div className={styles['card-capsule']}></div>
+              <div className={styles.column2}>
+                <p className={`${styles.info} ${styles.cName}`}>No data</p>
+                <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
+                <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
+                <div className={`${styles.clientBA} ${styles.info}`}>
+                  No data
+                </div>
+                <div className={`${styles.status} ${styles.info}`}>No data</div>
               </div>
             </div>
           </div>
-        ))
-      ) : (
-        <div className={styles.card}>
-          <div className={styles.column1}>
-            <div className={styles['card-capsule']}></div>
-            <div className={styles.column2}>
-              <p className={`${styles.info} ${styles.cName}`}>No data</p>
-              <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
-              <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-              <div className={`${styles.clientBA} ${styles.info}`}>No data</div>
-              <div className={`${styles.status} ${styles.info}`}>No data</div>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
