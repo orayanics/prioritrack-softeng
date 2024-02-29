@@ -51,7 +51,7 @@ export default function Navbar({ onLogout }) {
         >
           Clients
         </Link>
-        <Dropdown>
+        {/* <Dropdown>
           <Dropdown.Toggle id="notif">
             <FaBell />
           </Dropdown.Toggle>
@@ -67,17 +67,14 @@ export default function Navbar({ onLogout }) {
               Notification 3
             </Dropdown.Item>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
         {/* <Link to={`/document/edit/:id`}>Edit Document</Link> */}
         {/* <Link to={`/client/document/:id`}>Add Document</Link> */}
         {/* <Link to={`/`}>Logout</Link> */}
         {/* <Link to={`/changepass`}>Change Pass</Link>
         <Link to={`/forgotpass`}>forgot</Link> */}
 
-        <a href="#" className="link">
-          Logout
-        </a>
-        <a href="#" onClick={handleLogout}>
+        <a href="#" onClick={handleLogout} className="link">
           Logout
         </a>
       </div>

@@ -50,18 +50,17 @@ myApp.post('/login', (req: Request, res: Response) => {
     }
 
     const hash = data[0].password;
-    bcrypt.compare(password, hash, function(err, result){
-      if(err) return res.status(500).send('Internal Server Error')
+    bcrypt.compare(password, hash, function (err, result) {
+      if (err) return res.status(500).send('Internal Server Error');
 
-      if(result){
+      if (result) {
         console.log('Success');
         res.send(result);
-      }
-      else {
+      } else {
         res.send(result);
       }
       console.log(hash);
-    })
+    });
   });
 });
 
