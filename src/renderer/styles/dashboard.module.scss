@@ -25,16 +25,16 @@ body {
 }
 .button {
   background-color: #f2f2f2; /* Green */
-  border: none;
+  border: 1px solid #dbdbdb;
   color: black;
-  padding: 15px 32px;
+  padding: 15px 30px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 1px 5px #ababab;
 
   width: 150px;
   margin: 20px 20px 20px 0px;
@@ -46,18 +46,27 @@ body {
   border: none !important;
   font-weight: normal;
 }
+.export:focus,
+.export:hover,
+.export:active,
+.export:visited {
+  text-decoration: none !important;
+  outline: none !important;
+}
 
 .column1 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 .column2 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
-
-  padding-top: 10px;
+  margin-top: -5px;
 }
 
 .card {
@@ -68,6 +77,11 @@ body {
   border-radius: 5px;
   padding: 2px 16px;
   padding-left: 0px;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.12),
+    0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.12);
+  margin-bottom: 10px;
 }
 
 .cardCapsule {
@@ -93,58 +107,76 @@ body {
   padding-left: 35px;
 }
 .title {
-  font-size: 15px;
+  font-size: 14px;
   // padding-right: 20px;
   // padding-left: 10px;
   font-weight: bold;
-  width: 100px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  text-align: center;
 }
 
 .title1 {
-  padding-left: 25px;
+  padding-left: 20px;
 }
 .pl {
-  width: 140px;
+  width: 160px;
 }
 .title_mrd {
-  width: 150px;
+  width: 130px;
   display: flex;
   text-align: center !important;
 }
 .dn {
   width: 110px;
-  text-align: center !important;
+  padding-left: 5px;
 }
 .ds {
-  width: 120px;
+  width: 100px;
   text-align: center !important;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .tStatus {
-  width: 100px;
+  width: 70px;
   text-align: center !important;
-  // margin-left: 10px;
-  // margin-left: -10px !important;
+  margin-left: 5px;
+}
+.tAction {
+  width: 90px;
+  margin-right: 0 !important;
 }
 .mrd {
-  font-size: 14px;
-  background-color: var(--mrd-blue);
-  width: 150px !important;
+  font-size: 14px !important;
+  background-color: #fcbdbd;
   border-radius: 35px;
-  // padding: 0px 0px 1px 25px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   /* top right bottom left */
   height: 25px;
-  // margin: 1px 0px 0px 0px;
-
+  align-items: center;
+  display: flex;
+  text-align: center;
   text-align: center !important;
+  justify-content: center;
+}
+.mrdWidth {
+  display: flex;
+  justify-content: center;
 }
 .edit {
-  padding-left: 1px !important;
-  padding-right: 4px !important;
-  padding-top: 3px;
+  padding: 0px 4px 4px 0px !important;
+  /* top right bottom left */
+  padding-top: 0px;
   background-color: var(--complete);
 
-  margin: 13px 0px 0px 10px;
+  margin: 0px 0px 0px 10px;
   border: none;
   border-radius: 10px;
 }
@@ -162,27 +194,29 @@ body {
   border: none;
   border-radius: 10px;
   /* top right bottom left */
-  margin: 13px 0px 0px 10px;
+  margin: 0px 0px 0px 10px;
   padding-left: 8px !important;
   padding-right: 8px !important;
   padding-top: 3px;
 }
 .cName {
   // padding-top: 5px;
-  width: 100px !important;
+  width: 105px !important;
   margin-left: 15px !important;
+  margin-right: 10px;
 }
 .pLoc {
-  width: 135px !important;
+  width: 160px !important;
 }
 .docNo {
-  padding-right: 15px;
+  //padding-right: 15px;
 }
 .dateSub {
   text-align: center !important;
+  margin-right: 10px;
 }
 .info {
-  font-size: 14px;
+  font-size: 16px;
 
   text-align: left;
 
@@ -192,12 +226,13 @@ body {
 }
 .status {
   font-size: 14px;
-  width: 80px;
+  background-color: #fcbdbd;
+  width: 90px;
   border-radius: 35px;
-  padding: 3px 2px 2px 0px;
+  padding: 0px 2px 2px 0px;
   /* top right bottom left */
   height: 20px;
-  margin: 2px 0px 0px 30px;
+  margin: 2px 0px 0px 0px;
 
   text-align: center;
 }
@@ -228,6 +263,7 @@ body {
   max-width: 840px;
   margin: 0 auto;
   padding: 15px 30px 0 30px;
+  margin-top: 10px;
 }
 
 // MODAL
@@ -287,6 +323,71 @@ body {
   height: 30px;
   border-style: none;
   cursor: pointer;
+}
+.red {
+  background-color: #f8bdb0; /*#db8074*/
+}
+.blue {
+  background-color: #aad2e9; /*#7dade8*/
+}
+.yellow {
+  background-color: #efe368; /*#fcd04c*/
+}
+.green {
+  background-color: #9cd58f; /*#73bf67*/
+}
+.orange {
+  background-color: #ffc383; /*#fca14c*/
+}
+.containerSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.logoSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background-color: #c0f0b5;
+  color: #13481d;
+
+  padding: 20px;
+  padding-right: 25px;
+
+  margin-bottom: 10px;
+  margin-right: -10px;
+  margin-top: 20px;
+
+  border-radius: 15px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+.successMessage {
+  background-color: #c0f0b5;
+  color: #13481d;
+  padding: 20px;
+
+  border-radius: 15px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  font-size: 20px;
+  font-weight: bold;
 }
 @media (max-width: 840px) {
 }

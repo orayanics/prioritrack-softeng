@@ -8,6 +8,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,11 +18,15 @@ function Login() {
         username,
         password,
       });
-      console.log(response.data); // Success message from server
-      // Redirect user or perform necessary action upon successful login
+      console.log(response.data);
+      if (response.data) {
+        localStorage.setItem('authenticated', 'true');
+        onLogin();
+        navigate('/home');
+      }
     } catch (error) {
+      console.error('Error occurred during login:', error);
       setError('Invalid username or password');
-      console.error('Login failed:', error.response.data);
     } finally {
       setLoading(false);
     }

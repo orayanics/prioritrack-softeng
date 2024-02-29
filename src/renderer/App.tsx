@@ -1,6 +1,8 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import Layout from './components/Layout';
+import { useState } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import Home from './pages/Home';
 
 // CLIENT SIDE
@@ -15,17 +17,36 @@ import ForgotPass from './pages/client/ForgotPass';
 // DOCUMENT SIDE
 import ManageDocuments from './pages/client/ManageDocuments';
 import AddDocument from './pages/document/AddDocument';
-import Login from './pages/client/Login';
+import Login from './pages/Login';
 import EditDoc from './pages/document/EditDocument';
+
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* account components */}
-          <Route path="/changepass" element={<ChangePass />} />
-          <Route path="/forgotpass" element={<ForgotPass />} />
-          <Route path="/login" element={<Login />} />
+        {/* account components no need for authentication */}
+        <Route path="/changepass" element={<ChangePass />} />
+        <Route path="/forgotpass" element={<ForgotPass />} />
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? (
+              <Layout onLogout={handleLogout} />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        >
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
           {/* MEDJ PROBLEMATIC ATA TO */}
           <Route path="/home" element={<Dashboard />} />
