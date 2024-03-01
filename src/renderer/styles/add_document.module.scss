@@ -16,8 +16,21 @@ body {
     'Open Sans',
     sans-serif;
 }
+
+.bgLogo {
+  position: fixed;
+  bottom: -70px;
+  right: -35px;
+  display: block;
+  opacity: 0.2;
+  width: 850px;
+  height: auto;
+  z-index: -1;
+}
+
 .card {
-  background-color: var(--crud-blue);
+  //background-color: var(--crud-blue);
+  background-color: #00042c;
   color: var(--crud-fc);
   width: 500px;
   height: 450px;
@@ -27,7 +40,7 @@ body {
   margin-top: 50px;
 }
 .title {
-  color: #00042c;
+  color: white;
   font-size: 22px;
 
   padding-top: 40px;
@@ -76,10 +89,10 @@ body {
 }
 .cancel {
   margin-left: 20px;
-  background-color: #740000;
+  background-color: #be3a3a;
 }
 .submit {
-  background-color: #00042c;
+  background-color: #0052b1;
 }
 .selectStatus {
   width: 85%;

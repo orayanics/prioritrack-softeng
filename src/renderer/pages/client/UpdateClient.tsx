@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styles from '../../styles/add_client.module.scss';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/prioritrack-logo.svg';
 
 export default function Update() {
   const [users, setUsers] = useState([]);
@@ -73,6 +74,9 @@ export default function Update() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.bgLogo}>
+        <img src={logo} />
+      </div>
       {users.map((val) => (
         <div className={styles.card} key={val.client_id}>
           <h1 className={styles.title}>Edit a Client</h1>
@@ -114,7 +118,7 @@ export default function Update() {
                 Submit
               </button>
               <button className={styles.btn + ' ' + styles.cancel}>
-                <Link className={styles.cancel_text} to={`/home`}>
+                <Link className={styles.cancel_text} to={`/client`}>
                   Cancel
                 </Link>
               </button>

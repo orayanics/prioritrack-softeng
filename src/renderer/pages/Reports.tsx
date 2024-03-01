@@ -4,6 +4,7 @@ import '../styles/reports.css';
 import '../styles/global_styles.css';
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
+import logo from '../assets/prioritrack-logo.svg';
 
 interface SortIcons {
   clientName: 'asc' | 'desc';
@@ -207,225 +208,236 @@ function Reports(): JSX.Element {
   }, [users]);
 
   return (
-    <div className="container">
-      {/* Table */}
-      <div className="row">
-        <div className="column1">
-          {/* Use Link for Reports button */}
-          <button className="button2">Generate Reports</button>
-        </div>
+    <div>
+      <div className="bgLogo">
+        <img src={logo} />
       </div>
-      <div className="row2">
-        <div className="column1">
-          <table className="tablerow1">
+      <div className="container">
+        {/* Table */}
+        <div className="row">
+          <div className="column1">
+            {/* Use Link for Reports button */}
+            <button className="button2">Generate Reports</button>
+          </div>
+        </div>
+        <div className="row2">
+          <div className="column1 statuses">
+            <table className="tablerow1">
+              <thead>
+                <tr>
+                  <th colSpan={2}>Month:</th>
+                  <th colSpan={2}>Year:</th>
+                  <th colSpan={2}>Missed</th>
+                  <th colSpan={2}>Upcoming</th>
+                  <th colSpan={2}>Ongoing</th>
+                  <th colSpan={2}>Complete</th>
+                  <th colSpan={2}>On Hold</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {/* Month dropdown */}
+                  <td colSpan={2}>
+                    <select
+                      name="month"
+                      id="month"
+                      className="dropdown"
+                      defaultValue={currMonth}
+                      onChange={(e) => setMonth(e.target.value)}
+                    >
+                      {months.map((month) => (
+                        <option key={month.number} value={month.number}>
+                          {month.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  {/* Year dropdown */}
+                  <td colSpan={2}>
+                    <select
+                      name="year"
+                      id="year"
+                      className="dropdown"
+                      defaultValue={currYear}
+                      onChange={(e) => setYear(e.target.value)}
+                    >
+                      {years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  {/* Other data cells */}
+                  <td colSpan={2}>
+                    <div className="pill-report red">{missed}</div>
+                  </td>
+                  <td colSpan={2}>
+                    <div className="pill-report blue">{upcoming}</div>
+                  </td>
+                  <td colSpan={2}>
+                    <div className="pill-report yellow">{ongoing}</div>
+                  </td>
+                  <td colSpan={2}>
+                    <div className="pill-report green">{complete}</div>
+                  </td>
+                  <td colSpan={2}>
+                    <div className="pill-report orange">{onHold}</div>
+                  </td>
+                </tr>
+                {/* Add more rows as needed */}
+              </tbody>
+            </table>
+          </div>
+          <br></br>
+          <br></br>
+          <table className="table">
             <thead>
-              <tr>
-                <th colSpan={2}>Month:</th>
-                <th colSpan={2}>Year:</th>
-                <th colSpan={2}>Missed</th>
-                <th colSpan={2}>Upcoming</th>
-                <th colSpan={2}>Ongoing</th>
-                <th colSpan={2}>Complete</th>
-                <th colSpan={2}>On Hold</th>
+              <tr className="column1">
+                <th
+                  className="title cName sortableColumn"
+                  onClick={() => handleSortIcon('clientName')}
+                >
+                  Client Name
+                  <img
+                    src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'clientName' && 'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </th>
+                <th
+                  className="title pLoc sortableColumn"
+                  onClick={() => handleSortIcon('propertyLocation')}
+                >
+                  Property Location
+                  <img
+                    src={
+                      sortIcons.propertyLocation === 'asc'
+                        ? icSortUp
+                        : icSortDown
+                    }
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'propertyLocation' &&
+                      'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </th>
+                <th className="docNo">Document No.</th>
+                <th
+                  className="title mostRecentDoc sortableColumn"
+                  onClick={() => handleSortIcon('mostRecentDocument')}
+                >
+                  Most Recent Document
+                  <img
+                    src={
+                      sortIcons.mostRecentDocument === 'asc'
+                        ? icSortUp
+                        : icSortDown
+                    }
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'mostRecentDocument' &&
+                      'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </th>
+                <th
+                  className="title dateOfSub sortableColumn"
+                  onClick={() => handleSortIcon('dateOfSubmission')}
+                >
+                  Date of Submission
+                  <img
+                    src={
+                      sortIcons.dateOfSubmission === 'asc'
+                        ? icSortUp
+                        : icSortDown
+                    }
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'dateOfSubmission' &&
+                      'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </th>
+                <th
+                  className="title stat sortableColumn"
+                  onClick={() => handleSortIcon('status')}
+                >
+                  Status
+                  <img
+                    src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'status' && 'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                {/* Month dropdown */}
-                <td colSpan={2}>
-                  <select
-                    name="month"
-                    id="month"
-                    className="dropdown"
-                    defaultValue={currMonth}
-                    onChange={(e) => setMonth(e.target.value)}
-                  >
-                    {months.map((month) => (
-                      <option key={month.number} value={month.number}>
-                        {month.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                {/* Year dropdown */}
-                <td colSpan={2}>
-                  <select
-                    name="year"
-                    id="year"
-                    className="dropdown"
-                    defaultValue={currYear}
-                    onChange={(e) => setYear(e.target.value)}
-                  >
-                    {years.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                {/* Other data cells */}
-                <td colSpan={2}>
-                  <div className="pill-report red">{missed}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report blue">{upcoming}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report yellow">{ongoing}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report green">{complete}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report orange">{onHold}</div>
-                </td>
-              </tr>
-              {/* Add more rows as needed */}
-            </tbody>
           </table>
-        </div>
-        <br></br>
-        <br></br>
-        <table className="table">
-          <thead>
-            <tr className="column1">
-              <th
-                className="title cName sortableColumn"
-                onClick={() => handleSortIcon('clientName')}
-              >
-                Client Name
-                <img
-                  src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
-                  alt="Sort"
-                  className={`headerIcon ${
-                    activeSortIcon === 'clientName' && 'activeHeaderIcon'
-                  }`}
-                ></img>
-              </th>
-              <th
-                className="title pLoc sortableColumn"
-                onClick={() => handleSortIcon('propertyLocation')}
-              >
-                Property Location
-                <img
-                  src={
-                    sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown
-                  }
-                  alt="Sort"
-                  className={`headerIcon ${
-                    activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
-                  }`}
-                ></img>
-              </th>
-              <th className="docNo">Document No.</th>
-              <th
-                className="title mostRecentDoc sortableColumn"
-                onClick={() => handleSortIcon('mostRecentDocument')}
-              >
-                Most Recent Document
-                <img
-                  src={
-                    sortIcons.mostRecentDocument === 'asc'
-                      ? icSortUp
-                      : icSortDown
-                  }
-                  alt="Sort"
-                  className={`headerIcon ${
-                    activeSortIcon === 'mostRecentDocument' &&
-                    'activeHeaderIcon'
-                  }`}
-                ></img>
-              </th>
-              <th
-                className="title dateOfSub sortableColumn"
-                onClick={() => handleSortIcon('dateOfSubmission')}
-              >
-                Date of Submission
-                <img
-                  src={
-                    sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown
-                  }
-                  alt="Sort"
-                  className={`headerIcon ${
-                    activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
-                  }`}
-                ></img>
-              </th>
-              <th
-                className="title stat sortableColumn"
-                onClick={() => handleSortIcon('status')}
-              >
-                Status
-                <img
-                  src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
-                  alt="Sort"
-                  className={`headerIcon ${
-                    activeSortIcon === 'status' && 'activeHeaderIcon'
-                  }`}
-                ></img>
-              </th>
-            </tr>
-          </thead>
-        </table>
-        {users.length > 0 ? (
-          users.map((val: any) => (
-            <div key={val.client_id}>
-              <div className="card-capsule"></div>
-              <div className="card">
+          {users.length > 0 ? (
+            users.map((val: any) => (
+              <div key={val.client_id}>
+                <div className="card-capsule"></div>
+                <div className="card">
+                  <table className="table2">
+                    <tbody>
+                      <tr>
+                        <td className="client-name align-left">
+                          {val.client_name}
+                        </td>
+                        <td className="align-left pLoc-row">
+                          {val.client_property_location}
+                        </td>
+                        <td className="align-left docNo-row">{val.doc_no}</td>
+                        <td>
+                          <div className="pill2">{val.doc_type}</div>
+                        </td>
+                        <td className="date">{val.doc_date_submission}</td>
+                        <td className="status-align">
+                          <div
+                            className={`pill ${
+                              val.doc_status == 'Missed'
+                                ? 'red'
+                                : val.doc_status == 'Upcoming'
+                                ? 'blue'
+                                : val.doc_status == 'Ongoing'
+                                ? 'yellow'
+                                : val.doc_status == 'Complete'
+                                ? 'green'
+                                : val.doc_status == 'On Hold'
+                                ? 'orange'
+                                : ''
+                            }`}
+                          >
+                            {val.doc_status}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>
+              <div className="card noDataCard">
                 <table className="table2">
-                  <tbody>
+                  <thead>
                     <tr>
-                      <td className="client-name align-left">
-                        {val.client_name}
-                      </td>
-                      <td className="align-left pLoc-row">
-                        {val.client_property_location}
-                      </td>
-                      <td className="align-left docNo-row">{val.doc_no}</td>
-                      <td>
-                        <div className="pill2">{val.doc_type}</div>
-                      </td>
-                      <td className="date">{val.doc_date_submission}</td>
-                      <td className="status-align">
-                        <div
-                          className={`pill ${
-                            val.doc_status == 'Missed'
-                              ? 'red'
-                              : val.doc_status == 'Upcoming'
-                              ? 'blue'
-                              : val.doc_status == 'Ongoing'
-                              ? 'yellow'
-                              : val.doc_status == 'Complete'
-                              ? 'green'
-                              : val.doc_status == 'On Hold'
-                              ? 'orange'
-                              : ''
-                          }`}
-                        >
-                          {val.doc_status}
-                        </div>
-                      </td>
+                      <td>{`There is no data for ${getMonthName(
+                        month,
+                      )} ${year}.`}</td>
                     </tr>
-                  </tbody>
+                  </thead>
                 </table>
               </div>
             </div>
-          ))
-        ) : (
-          <div>
-            <div className="card">
-              <table className="table2">
-                <thead>
-                  <tr>
-                    <td>{`There is no data for ${getMonthName(
-                      month,
-                    )} ${year}.`}</td>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
