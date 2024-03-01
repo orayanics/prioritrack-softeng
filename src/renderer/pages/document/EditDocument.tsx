@@ -3,6 +3,7 @@ import Axios from 'axios';
 import styles from '../../styles/add_client.module.scss';
 import { Outlet, Link } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
+import logo from '../../assets/prioritrack-logo.svg';
 
 export default function EditDoc() {
   const [doc, setDoc] = useState([]);
@@ -15,7 +16,7 @@ export default function EditDoc() {
       .then((res) => {
         setDoc(res.data);
         console.log(doc_id);
-        console.log(doc);
+        console.log(`Document: ${doc}`);
       })
       .catch((err) => console.log(err));
   }, [id]);
@@ -26,15 +27,15 @@ export default function EditDoc() {
   const [doc_type, setType] = useState('');
   const [isValid, setIsValid] = useState(true);
 
-    useEffect(() => {
-      if (doc.length > 0) {
-        const docu = doc[0];
-        setNumber(docu.doc_no || '');
-        setDate(docu.doc_date_submission || '');
-        setType(docu.doc_type || '');
-        setStatus(docu.doc_status || '');
-      }
-    }, [doc]);
+  useEffect(() => {
+    if (doc.length > 0) {
+      const docu = doc[0];
+      setNumber(docu.doc_no || '');
+      setDate(docu.doc_date_submission || '');
+      setType(docu.doc_type || '');
+      setStatus(docu.doc_status || '');
+    }
+  }, [doc]);
 
   const updateDb = async (e) => {
     e.preventDefault();
@@ -59,6 +60,9 @@ export default function EditDoc() {
   };
   return (
     <div className={styles.containermain}>
+      <div className={styles.bgLogo}>
+        <img src={logo} />
+      </div>
       <div className={styles.container}>
         {doc.map((val) => (
           <div key={val.doc_id} className={styles.card}>
@@ -110,7 +114,10 @@ export default function EditDoc() {
                     Submit
                   </button>
                   <button className={styles.btn + ' ' + styles.cancel}>
-                    <Link className={styles.cancel_text} to={`/home`}>
+                    <Link
+                      className={styles.cancel_text}
+                      to={`/client/detail/${doc[0].client_id}`}
+                    >
                       Cancel
                     </Link>
                   </button>

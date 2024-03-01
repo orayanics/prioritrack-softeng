@@ -26,7 +26,7 @@
 
 .link {
   color: white;
-  margin-right: 5rem;
+  margin-right: 3rem;
   text-decoration: none;
   font-size: 18px;
   font-weight: 600;
@@ -100,4 +100,57 @@
 #notif-menu a:hover {
   background-color: #c2d2e4;
   border: none;
+}
+
+.dropdownNav {
+  position: relative;
+  display: inline-block;
+  border: none;
+  height: 31px;
+  margin-right: 3rem;
+  margin-top: -4px;
+}
+
+.dropbtn {
+  background-color: #00042c;
+  color: white;
+  padding: 7px;
+  padding-bottom: 33px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  right: -47px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+}
+
+.dropdown-content a:hover {
+  background-color: #e8e6e6;
+  border: none;
+}
+
+.dropdownNav:hover .dropdown-content {
+  display: block;
+}
+
+.description {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: justify;
 }
