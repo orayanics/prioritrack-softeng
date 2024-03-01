@@ -24,6 +24,9 @@ function Login({ onLogin }) {
         localStorage.setItem('authenticated', 'true');
         onLogin();
         navigate('/home');
+      } else {
+        console.error('Error occurred during login:', error);
+        setError('Invalid username or password');
       }
     } catch (error) {
       console.error('Error occurred during login:', error);
