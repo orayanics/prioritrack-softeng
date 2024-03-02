@@ -5,6 +5,7 @@ import '../styles/global_styles.css';
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
 import logo from '../assets/prioritrack-logo.svg';
+import * as XLSX from 'xlsx';
 
 interface SortIcons {
   clientName: 'asc' | 'desc';
@@ -207,6 +208,82 @@ function Reports(): JSX.Element {
     setOnHold(onHoldCount);
   }, [users]);
 
+  const handleGenerateReport = () => {
+    if (users.length > 0) {
+      // Prepare data for Excel
+      const data = users.map((val: any) => [
+        val.client_name,
+        val.client_property_location,
+        val.doc_no,
+        val.doc_type,
+        val.doc_date_submission,
+        val.doc_status,
+      ]);
+
+      // Add header row
+      const headers = [
+        'Client Name',
+        'Property Location',
+        'Document No.',
+        'Most Recent Document',
+        'Date of Submission',
+        'Status',
+      ];
+      const excelData = [headers, ...data];
+
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Client Data');
+
+      // Format Excel sheet
+      const wscols = [
+        { wch: 20 }, // width of columns
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+      ];
+
+      worksheet['!cols'] = wscols;
+
+      // Save workbook as Excel file
+      var order = '';
+      if (sortIcons.hasOwnProperty(activeSortIcon)) {
+        if (sortIcons[activeSortIcon] === 'asc') {
+          order = 'ascending';
+        } else {
+          order = 'descending';
+        }
+      }
+      var sortColumnName = '';
+      if (activeSortIcon == 'clientName') {
+        sortColumnName = 'client name';
+      } else if (activeSortIcon == 'propertyLocation') {
+        sortColumnName = 'property location';
+      } else if (activeSortIcon == 'documentNo') {
+        sortColumnName = 'document no.';
+      } else if (activeSortIcon == 'mostRecentDocument') {
+        sortColumnName = 'most recent document';
+      } else if (activeSortIcon == 'dateOfSubmission') {
+        sortColumnName = 'date of submission';
+      } else if (activeSortIcon == 'status') {
+        sortColumnName = 'status';
+      }
+      XLSX.writeFile(
+        workbook,
+        `Report for ${getMonthName(
+          month,
+        )} ${year} (${`sorted by ${sortColumnName} in ${order} order `}).xlsx`,
+      );
+    } else {
+      console.log('No clients available to generate report.');
+    }
+  };
+
   return (
     <div>
       <div className="bgLogo">
@@ -217,7 +294,9 @@ function Reports(): JSX.Element {
         <div className="row">
           <div className="column1">
             {/* Use Link for Reports button */}
-            <button className="button2">Generate Reports</button>
+            <button className="button2" onClick={handleGenerateReport}>
+              Generate Reports
+            </button>
           </div>
         </div>
         <div className="row2">
