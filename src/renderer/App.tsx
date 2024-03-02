@@ -34,7 +34,7 @@ export default function App() {
     <Router>
       <Routes>
         {/* account components no need for authentication */}
-        <Route path="/changepass" element={<ChangePass />} />
+        <Route path="/changepass/:id" element={<ChangePass />} />
         <Route path="/forgotpass" element={<ForgotPass />} />
         <Route
           path="/"

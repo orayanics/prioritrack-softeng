@@ -1,9 +1,28 @@
 import React from 'react';
+import Axios from 'axios';
 import styles from '../../styles/forgot_pass.module.scss';
 import logo from '../../assets/prioritrack-logo-with-text.svg';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 function ForgotPass(): JSX.Element {
+  const [username, setUsername] = useState('egoreta');
+  const [id, setID] = useState(null);
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/user/get/${username}`)
+      .then((res) => {
+        setID(res.data);
+        if (res.data.length > 0) {
+          setID(res.data[0].user_id);
+          console.log(id);
+        } else {
+          console.log('User not found');
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [username]);
+
   return (
     <div className={styles.bg}>
       <div className={styles.bgImage}></div>
@@ -53,7 +72,10 @@ function ForgotPass(): JSX.Element {
               <div className={`${styles.buttonContainer}`}>
                 <center>
                   <button type="button" className={`${styles.verifyButton}`}>
-                    <Link to={`/changepass`} className={styles.cancel_text}>
+                    <Link
+                      to={`/changepass/${id}`}
+                      className={styles.cancel_text}
+                    >
                       Verify
                     </Link>
                   </button>

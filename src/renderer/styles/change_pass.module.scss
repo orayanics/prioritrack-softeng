@@ -99,9 +99,16 @@ label {
   margin-bottom: 8px;
 }
 
+.error {
+  color: var(--delete-red);
+  text-align: center;
+  font-size: 14px;
+}
+
 .input {
-  width: 420px;
+  width: 300px;
   padding: 8px;
+  padding-right: 35px;
   margin-bottom: 12px;
   border: 1px solid #ffffff;
   border-radius: 4px;
@@ -138,6 +145,27 @@ label {
 .cancel_text:hover,
 .cancel_text:focus {
   border: 0;
+}
+
+.inputPassContainer {
+  position: relative;
+}
+
+.passToggle {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  right: 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b8b8b8;
+}
+
+.passToggle:hover {
+  color: #828282;
 }
 
 /* Media query for responsiveness */

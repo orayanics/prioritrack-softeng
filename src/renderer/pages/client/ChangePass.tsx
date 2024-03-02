@@ -2,56 +2,49 @@ import React from 'react';
 import Axios from 'axios';
 import styles from '../../styles/change_pass.module.scss';
 import logo from '../../assets/prioritrack-logo-with-text.svg';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { IoEyeSharp, IoEyeOffSharp } from 'react-icons/io5';
 
 function ChangePass(): JSX.Element {
-  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
   const { id } = useParams();
-  const user_id = parseInt(id, 10);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const [newPassword, setNewPassword] = useState([]);
-  const [confirmNewPassword, setConfirmNewPassword] = useState([]);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
-  const [isValid, setIsValid] = useState(false);
+  const toggleNewPassVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+  const toggleConfirmNewPassVisibility = () => {
+    setShowConfirmNewPassword(!showConfirmNewPassword);
+  };
 
-  // useEffect(() => {
-  //   Axios.get(`http://localhost:3001/user/get/${id}`)
-  //     .then((res) => {
-  //       setUsers(res.data);
-  //       console.log(user_id);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, [id]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmNewPassword) {
+      setError('Passwords do not match');
+      return;
+    }
 
-  // useEffect(() => {
-  //   if (users.length > 0) {
-  //     const user = users[0];
-  //     setNewPassword(user.password || '');
-  //     //setConfirmNewPassword(user.password || '');
-  //   }
-  // }, [users]);
-
-  // const updateDb = async (e) => {
-  //   e.preventDefault();
-  //   if (!password) {
-  //     setIsValid(false);
-  //     return;
-  //   }
-  //   setIsValid(true);
-  //   await Axios.post(`http://localhost:3001/user/edit/${id}`, {
-  //     password,
-  //   })
-  //     .then(() => {
-  //       console.log('Success', password);
-  //       navigate('/login', {
-  //         state: { successMessage: 'Password Changed' },
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+    try {
+      setError('');
+      const response = await Axios.post(
+        `http://localhost:3001/user/edit/${id}`,
+        {
+          password: newPassword,
+        },
+      );
+      console.log('Password updated successfully');
+      navigate('/login');
+    } catch (error) {
+      setError(`Error updating password: ${error}`);
+      console.error('Error updating password:', error);
+    }
+  };
 
   return (
     <div className={styles.bg}>
@@ -65,28 +58,52 @@ function ChangePass(): JSX.Element {
             <center>
               <h2 className={styles.title}>Change Password</h2>
             </center>
-            <form>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="newpass" className={styles.label}>
                 New Password
               </label>
-              <input
-                type="password"
-                id="newpass"
-                name="newpass"
-                required
-                className={styles.input}
-              />
+              <div className={styles.inputPassContainer}>
+                <input
+                  type={showNewPassword ? 'text' : 'password'}
+                  id="newpass"
+                  name="newpass"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  className={styles.passToggle}
+                  onClick={toggleNewPassVisibility}
+                >
+                  {showNewPassword ? <IoEyeOffSharp /> : <IoEyeSharp />}
+                </button>
+              </div>
 
               <label htmlFor="confirmpass" className={styles.label}>
                 Confirm New Password
               </label>
-              <input
-                type="password"
-                id="confirmpass"
-                name="confirmpass"
-                required
-                className={styles.input}
-              />
+              <div className={styles.inputPassContainer}>
+                <input
+                  type={showConfirmNewPassword ? 'text' : 'password'}
+                  id="confirmpass"
+                  name="confirmpass"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  className={styles.passToggle}
+                  onClick={toggleConfirmNewPassVisibility}
+                >
+                  {showConfirmNewPassword ? <IoEyeOffSharp /> : <IoEyeSharp />}
+                </button>
+              </div>
+
+              {error && <p className={styles.error}>{error}</p>}
 
               <div className={styles.buttonContainer}>
                 <center>

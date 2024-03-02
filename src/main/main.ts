@@ -879,7 +879,6 @@ myApp.get('/document/get/:id', (req, res) => {
   });
 });
 
-
 // EDIT OR UPDATE DOCUMENT
 myApp.post(`/document/edited/:id`, (req, res) => {
   const id = req.params.id;
@@ -893,13 +892,7 @@ myApp.post(`/document/edited/:id`, (req, res) => {
 
   const query =
     'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
-  const values = [
-    doc_no, 
-    doc_date_submission,
-    doc_type,
-    doc_status,
-    id,
-  ];
+  const values = [doc_no, doc_date_submission, doc_type, doc_status, id];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
@@ -936,6 +929,37 @@ myApp.delete('/doc/delete/:id', (req, res) => {
       console.log('User deleted successfully');
       res.status(200).send('User deleted successfully');
     }
+  });
+});
+
+//GET ID OF USERNAME
+myApp.get('/user/get/:username', (req, res) => {
+  const username = req.params.username;
+  const query = 'SELECT * FROM users WHERE username = ?';
+  db.query(query, [username], (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
+//CHANGE PASSWORD
+myApp.post(`/user/edit/:id`, (req, res) => {
+  const id = req.params.id;
+  const newPassword = req.body.password;
+
+  bcrypt.hash(newPassword, 10, (err, hash) => {
+    if (err) {
+      return res.status(500).json({ message: 'Server error' });
+    }
+    // Update in the database
+    const query = 'UPDATE users SET password = ? WHERE user_id = ?';
+    const values = [hash, id];
+    db.query(query, values, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: 'Server error' });
+      }
+      return res.json({ message: 'Password updated successfully' });
+    });
   });
 });
 
