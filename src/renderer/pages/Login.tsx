@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Outlet, Link } from 'react-router-dom';
 import axios from 'axios'; // Make sure axios is imported
 import styles from '../styles/login.module.scss';
 import logo from '../assets/prioritrack-logo-with-text.svg';

@@ -129,6 +129,13 @@ label {
   border: 0;
 }
 
+.error {
+  color: var(--delete-red);
+  text-align: center;
+  font-size: 14px;
+  padding-bottom: 15px;
+}
+
 /* Media query for responsiveness */
 @media only screen and (max-width: 720px) {
   .card {
