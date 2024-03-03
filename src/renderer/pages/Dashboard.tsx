@@ -19,8 +19,9 @@ import { Outlet, Link } from 'react-router-dom';
 
 import styles from '../styles/dashboard.module.scss';
 import '../styles/global_styles.css';
-import { FaTrashAlt, FaPlus, FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaEdit, FaUser } from 'react-icons/fa';
 import Modal from 'react-modal';
+Modal.setAppElement('#root');
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
 import logo from '../assets/prioritrack-logo.svg';
@@ -44,6 +45,7 @@ export default function Home() {
   const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState('');
   const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+  const [successMessageLogin, setSuccessMessageLogin] = useState('');
 
   const successDeleteLogo = (
     <div className={styles.logoSuccess}>
@@ -57,6 +59,12 @@ export default function Home() {
     </div>
   );
 
+  const successLogin = (
+    <div className={styles.logoSuccess}>
+      <FaUser />
+    </div>
+  );
+
   useEffect(() => {
     if (location.state?.successMessage) {
       setSuccessMessage(location.state.successMessage);
@@ -64,8 +72,13 @@ export default function Home() {
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
   }, [location]);
-
-  // const [clientDetails, setClientDetails] = useState({});
+  useEffect(() => {
+    if (location.state?.successMessageLogin) {
+      setSuccessMessage(location.state.successMessageLogin);
+      setIconToShow(successLogin);
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+    }
+  }, [location]);
 
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
@@ -313,7 +326,19 @@ export default function Home() {
             <div key={val.client_id} className={styles.card}>
               <div className={styles.column1}>
                 <div
-                  className={`${styles.cardCapsule}  ${styles.statusMissed}`}
+                  className={`${styles.cardCapsule} ${
+                    val.doc_status == 'Missed'
+                      ? styles.statusMissed
+                      : val.doc_status == 'Upcoming'
+                      ? styles.statusUpcoming
+                      : val.doc_status == 'Ongoing'
+                      ? styles.statusOngoing
+                      : val.doc_status == 'Complete'
+                      ? styles.statusComplete
+                      : val.doc_status == 'On Hold'
+                      ? styles.statusOnHold
+                      : ''
+                  } {\*${getStatusClass(val.doc_status)}*\}`}
                 ></div>
 
                 <Link
@@ -333,7 +358,20 @@ export default function Home() {
                     </p>
                     <div className={styles.mrdWidth}>
                       <div
-                        className={`${styles.info} ${styles.mrd} ${styles.cName}`}
+                        className={`${styles.info} ${styles.mrd} ${styles.cName}
+ ${
+   val.doc_status == 'Missed'
+     ? styles.statusMissed
+     : val.doc_status == 'Upcoming'
+     ? styles.statusUpcoming
+     : val.doc_status == 'Ongoing'
+     ? styles.statusOngoing
+     : val.doc_status == 'Complete'
+     ? styles.statusComplete
+     : val.doc_status == 'On Hold'
+     ? styles.statusOnHold
+     : ''
+ } {\*${getStatusClass(val.doc_status)}*\} `}
                       >
                         {/* Most Recent Document */}
                         {val.doc_type}
@@ -347,15 +385,15 @@ export default function Home() {
                     <div
                       className={`${styles.status} ${
                         val.doc_status == 'Missed'
-                          ? styles.red
+                          ? styles.statusMissed
                           : val.doc_status == 'Upcoming'
-                          ? styles.blue
+                          ? styles.statusUpcoming
                           : val.doc_status == 'Ongoing'
-                          ? styles.yellow
+                          ? styles.statusOngoing
                           : val.doc_status == 'Complete'
-                          ? styles.green
+                          ? styles.statusComplete
                           : val.doc_status == 'On Hold'
-                          ? styles.orange
+                          ? styles.statusOnHold
                           : ''
                       } {\*${getStatusClass(val.doc_status)}*\}`}
                     >

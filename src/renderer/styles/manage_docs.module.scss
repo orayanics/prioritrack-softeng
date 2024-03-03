@@ -277,3 +277,22 @@ h3 {
 .orange {
   background-color: #ffc383; /*#fca14c*/
 }
+.statusMissed {
+  background-color: var(--missed);
+}
+
+.statusOngoing {
+  background-color: var(--on-going);
+}
+
+.statusUpcoming {
+  background-color: var(--upcoming);
+}
+
+.statusComplete {
+  background-color: var(--complete);
+}
+
+.statusOnHold {
+  background-color: var(--on-hold);
+}

@@ -30,8 +30,10 @@ body {
   padding: 0;
   margin: 0;
 }
+
 .button {
-  background-color: #f2f2f2; /* Green */
+  background-color: #f2f2f2;
+  /* Green */
   border: none;
   color: black;
   padding: 15px 30px;
@@ -60,9 +62,11 @@ body {
   margin-bottom: -10px;
   font-size: 15px;
 }
+
 .statuses {
   margin-top: 20px;
 }
+
 .column2 {
   display: flex;
   align-items: flex-start;
@@ -70,6 +74,7 @@ body {
 
   padding-top: 10px;
 }
+
 .tablerow1 {
   border-collapse: collapse;
   width: 100%;
@@ -99,6 +104,7 @@ body {
   margin: 20px 20px 20px 0px;
   /* top right bottom left */
 }
+
 select[name='month'] {
   /* Your styles go here */
   /* For example: */
@@ -107,6 +113,7 @@ select[name='month'] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 select[name='year'] {
   /* Your styles go here */
   /* For example: */
@@ -115,6 +122,7 @@ select[name='year'] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .card {
   margin-top: -43px;
   color: black;
@@ -154,23 +162,29 @@ select[name='year'] {
   left: 0px;
   z-index: 10;
 }
+
 .info {
   font-size: 17px;
 
   color: black;
 }
+
 .c-name {
   padding-left: 10px;
 }
+
 .p-loc {
   padding-left: 10px;
 }
+
 .doc-no {
   padding-left: 5px;
 }
+
 .date-sub {
   padding-left: 35px;
 }
+
 .title {
   font-size: 15px;
   padding-right: 20px;
@@ -181,9 +195,11 @@ select[name='year'] {
 .title1 {
   padding-left: 25px;
 }
+
 .t-status {
   margin-left: -10px !important;
 }
+
 .mrd {
   font-size: 14px;
   background-color: #fcbdbd;
@@ -196,6 +212,7 @@ select[name='year'] {
 
   text-align: center;
 }
+
 .status {
   font-size: 14px;
   background-color: #fcbdbd;
@@ -208,6 +225,7 @@ select[name='year'] {
 
   text-align: center;
 }
+
 ul {
   list-style: none;
 }
@@ -459,6 +477,7 @@ a:hover {
   font-size: 14px;
   border-radius: 100px;
 }
+
 .pill2 {
   pointer-events: none;
   color: #020303;
@@ -472,19 +491,28 @@ a:hover {
 }
 
 .red {
-  background-color: #f8bdb0; /*#db8074*/
+  background-color: #f8bdb0;
+  /*#db8074*/
 }
+
 .blue {
-  background-color: #aad2e9; /*#7dade8*/
+  background-color: #aad2e9;
+  /*#7dade8*/
 }
+
 .yellow {
-  background-color: #efe368; /*#fcd04c*/
+  background-color: #efe368;
+  /*#fcd04c*/
 }
+
 .green {
-  background-color: #9cd58f; /*#73bf67*/
+  background-color: #9cd58f;
+  /*#73bf67*/
 }
+
 .orange {
-  background-color: #ffc383; /*#fca14c*/
+  background-color: #ffc383;
+  /*#fca14c*/
 }
 
 .pill-report {
@@ -514,9 +542,12 @@ a:hover {
   display: flex;
   align-items: center;
   flex-direction: row;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }
 
 .pLoc {
@@ -538,6 +569,7 @@ a:hover {
   /* margin-right: 30px; */
   width: 130px;
 }
+
 .dateOfSub {
   margin-left: -20px;
 }
@@ -556,4 +588,24 @@ a:hover {
 
 .dropdown:focus {
   outline: none;
+}
+
+.statusMissed {
+  background-color: var(--missed);
+}
+
+.statusOngoing {
+  background-color: var(--on-going);
+}
+
+.statusUpcoming {
+  background-color: var(--upcoming);
+}
+
+.statusComplete {
+  background-color: var(--complete);
+}
+
+.statusOnHold {
+  background-color: var(--on-hold);
 }

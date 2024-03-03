@@ -334,6 +334,24 @@ export default function Reports(): JSX.Element {
       console.log('No clients available to generate report.');
     }
   };
+  type StatusType = 'Missed' | 'Ongoing' | 'Upcoming' | 'Complete' | 'OnHold';
+
+  const getStatusClass = (status: StatusType) => {
+    switch (status) {
+      case 'Missed':
+        return styles.statusMissed;
+      case 'Ongoing':
+        return styles.statusOngoing;
+      case 'Upcoming':
+        return styles.statusUpcoming;
+      case 'Complete':
+        return styles.statusComplete;
+      case 'OnHold':
+        return styles.statusOnHold;
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -532,66 +550,96 @@ export default function Reports(): JSX.Element {
       </table>
 
       {users.length > 0 ? (
-            users.map((val: any) => (
-              <div key={val.client_id}>
-                <div className="card-capsule"></div>
-                <div className="card">
-                  <table className="table2">
-                    <tbody>
-                      <tr>
-                        <td className="client-name align-left">
-                          {val.client_name}
-                        </td>
-                        <td className="align-left pLoc-row">
-                          {val.client_property_location}
-                        </td>
-                        <td className="align-left docNo-row">{val.doc_no}</td>
-                        <td>
-                          <div className="pill2">{val.doc_type}</div>
-                        </td>
-                        <td className="date">{val.doc_date_submission}</td>
-                        <td className="status-align">
-                          <div
-                            className={`pill ${
-                              val.doc_status == 'Missed'
-                                ? 'red'
-                                : val.doc_status == 'Upcoming'
-                                ? 'blue'
-                                : val.doc_status == 'Ongoing'
-                                ? 'yellow'
-                                : val.doc_status == 'Complete'
-                                ? 'green'
-                                : val.doc_status == 'On Hold'
-                                ? 'orange'
-                                : ''
-                            }`}
-                          >
-                            {val.doc_status}
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div>
-              <div className="card noDataCard">
-                <table className="table2">
-                  <thead>
-                    <tr>
-                      <td>{`There is no data for ${getMonthName(
-                        month,
-                      )} ${year}.`}</td>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
+        users.map((val: any) => (
+          <div key={val.client_id}>
+            <div
+              className={`card-capsule ${
+                val.doc_status == 'Missed'
+                  ? styles.statusMissed
+                  : val.doc_status == 'Upcoming'
+                  ? styles.statusUpcoming
+                  : val.doc_status == 'Ongoing'
+                  ? styles.statusOngoing
+                  : val.doc_status == 'Complete'
+                  ? styles.statusComplete
+                  : val.doc_status == 'On Hold'
+                  ? styles.statusOnHold
+                  : ''
+              } {\*${getStatusClass(val.doc_status)}*\}`}
+            ></div>
+            <div className="card">
+              <table className="table2">
+                <tbody>
+                  <tr>
+                    <td className="client-name align-left">
+                      {val.client_name}
+                    </td>
+                    <td className="align-left pLoc-row">
+                      {val.client_property_location}
+                    </td>
+                    <td className="align-left docNo-row">{val.doc_no}</td>
+                    <td>
+                      <div
+                        className={`pill2 ${
+                          val.doc_status == 'Missed'
+                            ? styles.statusMissed
+                            : val.doc_status == 'Upcoming'
+                            ? styles.statusUpcoming
+                            : val.doc_status == 'Ongoing'
+                            ? styles.statusOngoing
+                            : val.doc_status == 'Complete'
+                            ? styles.statusComplete
+                            : val.doc_status == 'On Hold'
+                            ? styles.statusOnHold
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                      >
+                        {val.doc_type}
+                      </div>
+                    </td>
+                    <td className="date">{val.doc_date_submission}</td>
+                    <td className="status-align">
+                      <div
+                        className={`pill ${
+                          val.doc_status == 'Missed'
+                            ? styles.statusMissed
+                            : val.doc_status == 'Upcoming'
+                            ? styles.statusUpcoming
+                            : val.doc_status == 'Ongoing'
+                            ? styles.statusOngoing
+                            : val.doc_status == 'Complete'
+                            ? styles.statusComplete
+                            : val.doc_status == 'On Hold'
+                            ? styles.statusOnHold
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                      >
+                        {val.doc_status}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+        ))
+      ) : (
+        <div>
+          <div className="card noDataCard">
+            <table className="table2">
+              <thead>
+                <tr>
+                  <td>{`There is no data for ${getMonthName(
+                    month,
+                  )} ${year}.`}</td>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
+      )}
+    </div>
   );
 }
 
-export default Reports;
+// export default Reports;

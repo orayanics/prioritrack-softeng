@@ -32,7 +32,7 @@ myApp.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'admin123',
+  password: '',
   database: 'prioritrack',
 });
 

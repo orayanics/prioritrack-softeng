@@ -221,11 +221,47 @@ function ManageDocuments() {
               {userData.documents.map((doc) => (
                 <div className={styles.card}>
                   <div className={styles.row1}>
-                    <div className={styles.cardCapsule}></div>
+                    <div
+                      className={`${styles.cardCapsule} ${
+                        doc.doc_status == 'Missed'
+                          ? styles.statusMissed
+                          : doc.doc_status == 'Upcoming'
+                          ? styles.statusUpcoming
+                          : doc.doc_status == 'Ongoing'
+                          ? styles.statusOngoing
+                          : doc.doc_status == 'Complete'
+                          ? styles.statusComplete
+                          : doc.doc_status == 'On Hold'
+                          ? styles.statusOnHold
+                          : ''
+                      }`}
+                    >
+                      {' '}
+                    </div>
                     <div className={styles.row2} key={doc.doc_id}>
                       <p className={styles.docNo}>{doc.doc_no}</p>
                       <div className={styles.mrdWidth}>
-                        <div className={styles.mrd}>{doc.doc_type}</div>
+                        <div
+                          className={`${styles.info} ${styles.mrd} ${
+                            styles.cName
+                          }
+                        ${
+                          doc.doc_status == 'Missed'
+                            ? styles.statusMissed
+                            : doc.doc_status == 'Upcoming'
+                            ? styles.statusUpcoming
+                            : doc.doc_status == 'Ongoing'
+                            ? styles.statusOngoing
+                            : doc.doc_status == 'Complete'
+                            ? styles.statusComplete
+                            : doc.doc_status == 'On Hold'
+                            ? styles.statusOnHold
+                            : ''
+                        }`}
+                        >
+                          {' '}
+                          {doc.doc_type}
+                        </div>
                       </div>
                       <p className={styles.dateSub}>
                         {doc.doc_date_submission}
@@ -233,15 +269,15 @@ function ManageDocuments() {
                       <div
                         className={`${styles.status} ${
                           doc.doc_status == 'Missed'
-                            ? styles.red
+                            ? styles.statusMissed
                             : doc.doc_status == 'Upcoming'
-                            ? styles.blue
+                            ? styles.statusUpcoming
                             : doc.doc_status == 'Ongoing'
-                            ? styles.yellow
+                            ? styles.statusOngoing
                             : doc.doc_status == 'Complete'
-                            ? styles.green
+                            ? styles.statusComplete
                             : doc.doc_status == 'On Hold'
-                            ? styles.orange
+                            ? styles.statusOnHold
                             : ''
                         }`}
                       >

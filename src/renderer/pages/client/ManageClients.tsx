@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
 import logo from '../../assets/prioritrack-logo.svg';
+import Modal from 'react-modal';
 
 interface SortIcons {
   clientName: 'asc' | 'desc';
@@ -20,6 +21,24 @@ export default function ManageClients() {
   const [users, setUsers] = useState([]);
   const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState(''); // State for the success message
+  //Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState(null);
+
+  const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+  interface Client {
+    client_name: string;
+    client_property_location: string;
+    client_bank_name: string;
+    client_bank_address: string;
+  }
+  const [clientDetails, setClientDetails] = useState<Client | null>(null);
+
+  const successDeleteLogo = (
+    <div className={styles.logoSuccess}>
+      <FaTrashAlt />
+    </div>
+  );
 
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
@@ -89,8 +108,28 @@ export default function ManageClients() {
     try {
       await Axios.delete(`http://localhost:3001/client/delete/${id}`);
       fetchData();
+      setIconToShow(successDeleteLogo);
+      setSuccessMessage('Client Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
       console.error('Error deleting data:', error);
+    }
+  };
+
+  const handleDeleteConfirmation = async () => {
+    await deleteData(clientIdToDelete);
+    setIsModalOpen(false);
+  };
+  const openDeleteModal = async (id) => {
+    setClientIdToDelete(id);
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
+      setClientDetails(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching client details:', error);
     }
   };
 
@@ -103,10 +142,36 @@ export default function ManageClients() {
         {/* Display the success message if it exists */}
         {successMessage && (
           <div className={styles.containerSuccess}>
-            <div className={styles.logoSuccess}>
-              <FaPlus />
-            </div>{' '}
-            <div className={styles.successMessage}>Client Added</div>
+            {iconToShow}
+            <div className={styles.successMessage}>{successMessage}</div>
+          </div>
+        )}
+        {isModalOpen && (
+          // {users.map((val) => (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h3 className={styles.titleDelete}>
+                Are you sure you want to delete this client?
+              </h3>
+              {/* <p>Client Name: {clientDetails.client_name}</p>
+            <p>Property Location: {clientDetails.client_property_location}</p>
+            <p>Bank Name: {clientDetails.client_bank_name}</p>
+            <p>Bank Address: {clientDetails.client_bank_address}</p> */}
+              <div className={styles.midDelete}>
+                <button
+                  onClick={handleDeleteConfirmation}
+                  className={styles.btn + ' ' + styles.cancel}
+                >
+                  Confirm
+                </button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className={styles.btn + ' ' + styles.submit}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         )}
         <div className={styles.column1}>
@@ -216,7 +281,12 @@ export default function ManageClients() {
                 <div className={`${styles.cursor}`}>
                   <button
                     className={`${styles.delete}`}
-                    onClick={() => deleteData(val.client_id)}
+                    // onClick={() => deleteData(val.client_id)
+                    // }
+                    onClick={() => {
+                      setClientIdToDelete(val.client_id);
+                      setIsModalOpen(true);
+                    }}
                   >
                     <FaTrashAlt className={`${styles.deletered}`} />
                   </button>
