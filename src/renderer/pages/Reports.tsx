@@ -437,19 +437,19 @@ export default function Reports(): JSX.Element {
                 </td>
                 {/* Other data cells */}
                 <td colSpan={2}>
-                  <div className="pill-report red">{missed}</div>
+                  <div className="pill-report statusMissed">{missed}</div>
                 </td>
                 <td colSpan={2}>
-                  <div className="pill-report blue">{upcoming}</div>
+                  <div className="pill-report statusUpcoming">{upcoming}</div>
                 </td>
                 <td colSpan={2}>
-                  <div className="pill-report yellow">{ongoing}</div>
+                  <div className="pill-report statusOngoing ">{ongoing}</div>
                 </td>
                 <td colSpan={2}>
-                  <div className="pill-report green">{complete}</div>
+                  <div className="pill-report statusComplete">{complete}</div>
                 </td>
                 <td colSpan={2}>
-                  <div className="pill-report orange">{onHold}</div>
+                  <div className="pill-report statusOnHold">{onHold}</div>
                 </td>
               </tr>
               {/* Add more rows as needed */}
