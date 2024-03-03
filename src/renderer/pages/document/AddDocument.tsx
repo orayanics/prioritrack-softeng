@@ -1,10 +1,11 @@
 import { useState, FormEvent } from 'react';
 import Axios from 'axios';
-import Navbar from '../../components/navbar';
+import Navbar from '../../components/Navbar';
 import styles from '../../styles/add_client.module.scss';
 import { Outlet, Link } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import { cli } from 'webpack';
+import logo from '../../assets/prioritrack-logo.svg';
 
 export default function AddDocument() {
   const navigate = useNavigate();
@@ -57,6 +58,9 @@ export default function AddDocument() {
   console.log(styles);
   return (
     <div className={styles.containermain}>
+      <div className={styles.bgLogo}>
+        <img src={logo} />
+      </div>
       <div className={styles.container}>
         {!isValid && (
           <div className={styles.alert}>
@@ -111,7 +115,10 @@ export default function AddDocument() {
                   Submit
                 </button>
                 <button className={styles.btn + ' ' + styles.cancel}>
-                  <Link className={styles.cancel_text} to={`/home`}>
+                  <Link
+                    className={styles.cancel_text}
+                    to={`/client/detail/${client_id}`}
+                  >
                     Cancel
                   </Link>
                 </button>
