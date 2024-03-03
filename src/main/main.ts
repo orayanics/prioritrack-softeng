@@ -970,8 +970,8 @@ myApp.delete('/doc/delete/:id', (req, res) => {
       console.error('Error deleting user:', err);
       res.status(500).send('Internal Server Error');
     } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
+      console.log('Document deleted successfully');
+      res.status(200).send('Document deleted successfully');
     }
   });
 });

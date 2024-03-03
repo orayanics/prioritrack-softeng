@@ -4,12 +4,20 @@ import navlogo from '../assets/navlogo.png';
 import { Outlet, Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import Dropdown from 'react-bootstrap/Dropdown';
+import ConfirmLogoutModal from './ConfirmLogoutModal';
 
 export default function Navbar({ onLogout }) {
   const [activePage, setActivePage] = useState('Dashboard');
   const handleLogout = () => {
     onLogout();
+    setIsModalOpen(false); // Close the modal after logout
   };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <nav className="navbar">
       <Link
@@ -74,7 +82,12 @@ export default function Navbar({ onLogout }) {
         {/* <Link to={`/changepass`}>Change Pass</Link>
         <Link to={`/forgotpass`}>forgot</Link> */}
 
-        <a href="#" onClick={handleLogout} className="link">
+        <a
+          href="#"
+          // onClick={handleLogout}
+          onClick={() => setIsModalOpen(true)}
+          className="link"
+        >
           Logout
         </a>
 
@@ -96,6 +109,11 @@ export default function Navbar({ onLogout }) {
           </div>
         </div>
       </div>
+      <ConfirmLogoutModal
+        show={isModalOpen}
+        handleClose={handleCloseModal}
+        handleLogout={handleLogout}
+      />
     </nav>
   );
 }

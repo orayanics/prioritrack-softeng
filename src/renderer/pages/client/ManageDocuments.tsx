@@ -7,6 +7,7 @@ import styles from '../../styles/manage_docs.module.scss';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
 import logo from '../../assets/prioritrack-logo.svg';
+import Modal from 'react-modal';
 
 interface SortIcons {
   documentType: 'asc' | 'desc';
@@ -40,13 +41,20 @@ function ManageDocuments() {
       activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
     );
   };
-  // useEffect(() => {
-  //   //call if sortIcons, activeSortIcon changes
-  //   fetchSortedData();
-  // }, [id, sortIcons, activeSortIcon]);
   const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState('');
   const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
+  // MODAL
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [DocumentIdToDelete, setDocumentIdToDelete] = useState(null);
+  // interface Client {
+  //   client_name: string;
+  //   client_property_location: string;
+  //   client_bank_name: string;
+  //   client_bank_address: string;
+  // }
+
+  // const [clientDetails, setClientDetails] = useState<Client | null>(null);
 
   const successDeleteLogo = (
     <div className={styles.logoSuccess}>
@@ -97,15 +105,42 @@ function ManageDocuments() {
     }
   };
 
+  // const deleteData = async (id) => {
+  //   try {
+  //     await Axios.delete(`http://localhost:3001/doc/delete/${id}`);
+  //     setIconToShow(successDeleteLogo);
+  //     setSuccessMessage('Document Deleted');
+  //     fetchData();
+  //   } catch (error) {
+  //     console.error('Error deleting data:', error);
+  //   }
+  // };
   const deleteData = async (id) => {
     try {
       await Axios.delete(`http://localhost:3001/doc/delete/${id}`);
+      fetchData();
+      setIconToShow(successDeleteLogo);
       setSuccessMessage('Document Deleted');
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
-
-      fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
+    }
+  };
+
+  const handleDeleteConfirmation = async () => {
+    await deleteData(DocumentIdToDelete);
+    setIsModalOpen(false);
+  };
+  const openDeleteModal = async (id) => {
+    setDocumentIdToDelete(id);
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
+      // setClientDetails(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching client details:', error);
     }
   };
 
@@ -114,14 +149,42 @@ function ManageDocuments() {
       <div className={styles.bgLogo}>
         <img src={logo} />
       </div>
-      <div className={styles.container}>
-        {successMessage && (
-          <div className={styles.containerSuccess}>
-            {iconToShow}
-            <div className={styles.successMessage}>{successMessage}</div>
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          {iconToShow}
+          <div className={styles.successMessage}>{successMessage}</div>
+        </div>
+      )}
+      {isModalOpen && (
+        // {users.map((val) => (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.titleDelete}>
+              Are you sure you want to delete this Document?
+            </h3>
+            {/* <p>Client Name: {clientDetails.client_name}</p>
+            <p>Property Location: {clientDetails.client_property_location}</p>
+            <p>Bank Name: {clientDetails.client_bank_name}</p>
+            <p>Bank Address: {clientDetails.client_bank_address}</p> */}
+            <div className={styles.midDelete}>
+              <button
+                onClick={handleDeleteConfirmation}
+                className={styles.btn + ' ' + styles.cancel}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className={styles.btn + ' ' + styles.submit}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
 
+      <div className={styles.container}>
         {loading ? (
           <p>Loading...</p>
         ) : (
@@ -293,7 +356,11 @@ function ManageDocuments() {
                       <div className={styles.cursor}>
                         <button
                           className={styles.delete}
-                          onClick={() => deleteData(doc.doc_id)}
+                          // onClick={() => deleteData(doc.doc_id)}
+                          onClick={() => {
+                            setDocumentIdToDelete(doc.doc_id);
+                            setIsModalOpen(true);
+                          }}
                         >
                           <FaTrashAlt className={styles.deletered} />
                         </button>

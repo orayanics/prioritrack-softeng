@@ -296,3 +296,121 @@ h3 {
 .statusOnHold {
   background-color: var(--on-hold);
 }
+
+.containerSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.logoSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background-color: #c0f0b5;
+  color: #13481d;
+
+  padding: 20px;
+  padding-right: 25px;
+
+  margin-bottom: 0px;
+  margin-right: -10px;
+  margin-top: 20px;
+
+  border-radius: 15px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+.successMessage {
+  background-color: #c0f0b5;
+  color: #13481d;
+  padding: 20px;
+
+  border-radius: 15px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8ebd83;
+
+  margin-top: 20px;
+  margin-bottom: 0px;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+// MODAL
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+.modalContent {
+  background-color: #c1d7e0;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%; /* Adjust as needed */
+  max-width: 400px; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.titleDelete {
+  text-align: center;
+}
+.midDelete {
+  display: flex;
+  justify-content: center;
+}
+.btn {
+  // margin: 10px 0px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.cancel {
+  margin-left: 20px;
+  background-color: #740000;
+
+  margin-left: 20px;
+}
+.submit {
+  background-color: #00042c;
+}
+.btn {
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+
+  width: 160px;
+  height: 30px;
+  border-style: none;
+  cursor: pointer;
+}
+.content {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0aa89;
+}

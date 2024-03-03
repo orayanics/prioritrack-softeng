@@ -53,7 +53,9 @@ export default function EditDoc() {
         doc_type,
       });
       console.log('Success');
-      navigate('/home');
+      navigate('/home', {
+        state: { successMessage: 'Document Edited' },
+      });
     } catch (err) {
       console.log(err);
     }
