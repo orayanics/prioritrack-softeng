@@ -113,6 +113,7 @@
   margin-bottom: 12px;
   border: 1px solid #ffffff;
   border-radius: 4px;
+  flex: 1;
 }
 
 .button {
@@ -124,6 +125,44 @@
   align-self: center;
   border-radius: 20px;
   cursor: pointer;
+}
+
+.error {
+  color: var(--delete-red);
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.passInput {
+  padding-right: 35px;
+}
+
+.inputPassContainer {
+  position: relative;
+}
+
+.passToggle {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  right: 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b8b8b8;
+}
+
+.passToggle:hover {
+  color: #828282;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Media query for responsiveness */

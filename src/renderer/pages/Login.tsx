@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Outlet, Link } from 'react-router-dom';
 import axios from 'axios'; // Make sure axios is imported
 import styles from '../styles/login.module.scss';
 import logo from '../assets/prioritrack-logo-with-text.svg';
+import { IoEyeSharp, IoEyeOffSharp } from 'react-icons/io5';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -10,6 +11,12 @@ function Login({ onLogin }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassVisibility = () => {
+    setShowPassword(!showPassword);
+    console.log(showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +31,9 @@ function Login({ onLogin }) {
         localStorage.setItem('authenticated', 'true');
         onLogin();
         navigate('/home');
+      } else {
+        console.error('Error occurred during login:', error);
+        setError('Invalid username or password');
       }
     } catch (error) {
       console.error('Error occurred during login:', error);
@@ -57,20 +67,30 @@ function Login({ onLogin }) {
             />
 
             <label htmlFor="password">Password</label>
-            <input
-              className={styles.input}
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className={`${styles.inputPassContainer} ${styles.flex}`}>
+              <input
+                className={`${styles.input} ${styles.passInput}`}
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className={styles.passToggle}
+                onClick={togglePassVisibility}
+              >
+                {showPassword ? <IoEyeOffSharp /> : <IoEyeSharp />}
+              </button>
+            </div>
+
+            {error && <p className={styles.error}>{error}</p>}
 
             <button type="submit" className={styles.button} disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
-            {error && <p className={styles.error}>{error}</p>}
           </form>
           <p className={styles.forgotPassword}>
             <Link to="/forgotpass" className={styles.forgotLink}>

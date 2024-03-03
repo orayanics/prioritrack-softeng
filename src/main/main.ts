@@ -64,6 +64,50 @@ myApp.post('/login', (req: Request, res: Response) => {
   });
 });
 
+// VERIFICATION QUES
+myApp.post('/forgotpass', (req, res) => {
+  const { birthday, dog, mother } = req.body;
+  console.log('Request Body:', req.body);
+
+  // SQL query to check answers
+  const sql = `
+    SELECT
+    CASE
+      WHEN (sec_question = 'When is your birthday' AND sec_answer = ?)
+           OR (sec_question = 'What is the name of your dog' AND sec_answer = ?)
+           OR (sec_question = 'What is your mother''s maiden name' AND sec_answer = ?)
+      THEN 'Correct'
+      ELSE 'Incorrect'
+    END AS verification_result
+    FROM security`;
+  console.log('SQL Query:', sql);
+
+  // Execute SQL query
+  db.query(sql, [birthday, dog, mother], (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+    console.log('Query Results:', results);
+
+    if (results.length === 0) {
+      return res.send('Invalid answers');
+    }
+
+    // Get the verification result from the query results
+    var verificationResult = '';
+    const result1 = results[0].verification_result;
+    const result2 = results[1].verification_result;
+    const result3 = results[2].verification_result;
+    if (result1 == 'Correct' && result2 == 'Correct' && result3 == 'Correct') {
+      verificationResult = 'Correct';
+    } else {
+      verificationResult = 'Incorrect';
+    }
+    res.send(verificationResult);
+  });
+});
+
 // ADD CLIENT
 myApp.post('/client/add_submit', (req, res) => {
   const name = req.body.name;
@@ -413,26 +457,6 @@ myApp.get('/dashboard/list/status/desc', (req, res) => {
     FROM documents
     GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
     ORDER BY d.doc_status DESC, c.client_name ASC`;
-  db.query(query, (err, data) => {
-    if (err) return res.json(err);
-    return res.send(data);
-  });
-});
-
-// GET ALL USERS
-myApp.get('/dashboard/list', (req, res) => {
-  const query = `SELECT c.client_id,
-    c.client_name,
-    c.client_property_location,
-    d.doc_no,
-    d.doc_type,
-    d.doc_status,
-    d.doc_date_submission
-  FROM clients c
-  JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -929,13 +953,7 @@ myApp.post(`/document/edited/:id`, (req, res) => {
 
   const query =
     'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
-  const values = [
-    doc_no, 
-    doc_date_submission,
-    doc_type,
-    doc_status,
-    id,
-  ];
+  const values = [doc_no, doc_date_submission, doc_type, doc_status, id];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
@@ -955,6 +973,37 @@ myApp.delete('/doc/delete/:id', (req, res) => {
       console.log('User deleted successfully');
       res.status(200).send('User deleted successfully');
     }
+  });
+});
+
+//GET ID OF USERNAME
+myApp.get('/user/get/:username', (req, res) => {
+  const username = req.params.username;
+  const query = 'SELECT * FROM users WHERE username = ?';
+  db.query(query, [username], (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
+//CHANGE PASSWORD
+myApp.post(`/user/edit/:id`, (req, res) => {
+  const id = req.params.id;
+  const newPassword = req.body.password;
+
+  bcrypt.hash(newPassword, 10, (err, hash) => {
+    if (err) {
+      return res.status(500).json({ message: 'Server error' });
+    }
+    // Update in the database
+    const query = 'UPDATE users SET password = ? WHERE user_id = ?';
+    const values = [hash, id];
+    db.query(query, values, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: 'Server error' });
+      }
+      return res.json({ message: 'Password updated successfully' });
+    });
   });
 });
 

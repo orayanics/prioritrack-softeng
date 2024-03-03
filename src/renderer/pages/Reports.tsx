@@ -301,7 +301,35 @@ export default function Reports(): JSX.Element {
       worksheet['!cols'] = wscols;
 
       // Save workbook as Excel file
-      XLSX.writeFile(workbook, 'client_data.xlsx');
+      var order = '';
+      if (sortIcons.hasOwnProperty(activeSortIcon)) {
+        if (sortIcons[activeSortIcon] === 'asc') {
+          order = 'ascending';
+        } else {
+          order = 'descending';
+        }
+      }
+      var sortColumnName = '';
+      if (activeSortIcon == 'clientName') {
+        sortColumnName = 'client name';
+      } else if (activeSortIcon == 'propertyLocation') {
+        sortColumnName = 'property location';
+      } else if (activeSortIcon == 'documentNo') {
+        sortColumnName = 'document no.';
+      } else if (activeSortIcon == 'mostRecentDocument') {
+        sortColumnName = 'most recent document';
+      } else if (activeSortIcon == 'dateOfSubmission') {
+        sortColumnName = 'date of submission';
+      } else if (activeSortIcon == 'status') {
+        sortColumnName = 'status';
+      }
+      XLSX.writeFile(
+        workbook,
+        `Report for ${getMonthName(
+          month,
+        )} ${year} (${`sorted by ${sortColumnName} in ${order} order `}).xlsx`,
+      );
+      // XLSX.writeFile(workbook, 'client_data.xlsx');
     } else {
       console.log('No clients available to generate report.');
     }
@@ -564,88 +592,6 @@ export default function Reports(): JSX.Element {
           )}
         </div>
   );
-
-      {/* {users.length > 0 ? (
-        users.map((val) => (
-          <div key={val.client_id} className={styles.card}>
-            <div className={styles.column1}>
-              <div
-                className={`${styles.cardCapsule}  ${styles.statusMissed}`}
-              ></div>
-
-              <Link
-                className={styles.export}
-                to={`/client/detail/${val.client_id}`}
-              >
-                <div className={styles.column2}>
-                  <p className={`${styles.info} ${styles.cName}`}>
-                    {val.client_name}
-                  </p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>
-                    {val.client_property_location}
-                  </p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>
-                    {/* document number */}
-              //       {val.doc_no}
-              //     </p>
-              //     <p className={`${styles.info} ${styles.cName}`}>
-              //       {/* Most Recent Document */}
-              //       {val.doc_type}
-              //     </p>
-              //     <p className={`${styles.info} ${styles.cName}`}>
-              //       {/*  Date of Submission */}
-              //       {val.doc_date_submission}
-              //     </p>
-
-              //     <div className={`${styles.status} ${styles.info}`}>
-              //       {val.doc_status}
-              //     </div>
-              //   </div>
-              // </Link>
-              // <div className={`${styles.cursor}`}>
-              //   <button className={`${styles.edit}`}>
-              //     <Link
-              //       to={`/client/edit/${val.client_id}`}
-              //       className={styles.edit}
-              //     >
-              //       <FaEdit className={`${styles.green}`} />
-              //     </Link>
-              //   </button>
-              // </div>
-              // <div className={`${styles.cursor}`}>
-                {/* <button
-                  className={`${styles.delete}`}
-                  onClick={() => deleteData(val.client_id)}
-                >
-                  <FaTrashAlt className={`${styles.deletered}`} />
-                </button> */}
-  //               <button
-  //                 className={`${styles.delete}`}
-  //                 onClick={() => {
-  //                   setClientIdToDelete(val.client_id);
-  //                   setIsModalOpen(true);
-  //                 }}
-  //               >
-  //                 <FaTrashAlt className={`${styles.deletered}`} />
-  //               </button>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       ))
-  //     ) : (
-  //       <div className={styles.card}>
-  //         <div className={styles.column1}>
-  //           <div className={styles['card-capsule']}></div>
-  //           <div className={styles.column2}>
-  //             <p className={`${styles.info} ${styles.cName}`}>No data</p>
-  //             <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
-  //             <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-  //             <div className={`${styles.clientBA} ${styles.info}`}>No data</div>
-  //             <div className={`${styles.status} ${styles.info}`}>No data</div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     )} */}
-  //   </div>
-  // );
 }
+
+export default Reports;
