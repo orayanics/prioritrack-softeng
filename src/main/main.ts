@@ -419,6 +419,26 @@ myApp.get('/dashboard/list/status/desc', (req, res) => {
   });
 });
 
+// GET ALL USERS
+myApp.get('/dashboard/list', (req, res) => {
+  const query = `SELECT c.client_id,
+    c.client_name,
+    c.client_property_location,
+    d.doc_no,
+    d.doc_type,
+    d.doc_status,
+    d.doc_date_submission
+  FROM clients c
+  JOIN documents d ON c.client_id = d.client_id
+  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+    FROM documents
+    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
+  db.query(query, (err, data) => {
+    if (err) return res.json(err);
+    return res.send(data);
+  });
+});
+
 // GET CLIENT + CLIENT'S DOCUMENTS
 myApp.get(`/list/:id`, (req, res) => {
   const userId = req.params.id;
@@ -869,7 +889,24 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   });
 });
 
-// GET DOCUMENT:ID
+// DELETE USER AND ALL DOCUMENTS
+myApp.delete('/client/delete/:id', (req, res) => {
+  const userId = req.params.id;
+  const sql = `DELETE clients, documents FROM clients
+    LEFT JOIN documents ON clients.client_id = documents.client_id
+    WHERE clients.client_id = ?`;
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error('Error deleting user:', err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      console.log('User deleted successfully');
+      res.status(200).send('User deleted successfully');
+    }
+  });
+});
+
+// GET CLIENT:ID
 myApp.get('/document/get/:id', (req, res) => {
   const docId = req.params.id;
   const query = 'SELECT * FROM documents WHERE doc_id = ?';
@@ -878,7 +915,6 @@ myApp.get('/document/get/:id', (req, res) => {
     return res.send(data);
   });
 });
-
 
 // EDIT OR UPDATE DOCUMENT
 myApp.post(`/document/edited/:id`, (req, res) => {
@@ -903,23 +939,6 @@ myApp.post(`/document/edited/:id`, (req, res) => {
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
-  });
-});
-
-// DELETE USER AND ALL DOCUMENTS
-myApp.delete('/client/delete/:id', (req, res) => {
-  const userId = req.params.id;
-  const sql = `DELETE clients, documents FROM clients
-    LEFT JOIN documents ON clients.client_id = documents.client_id
-    WHERE clients.client_id = ?`;
-  db.query(sql, [userId], (err, result) => {
-    if (err) {
-      console.error('Error deleting user:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
-    }
   });
 });
 
