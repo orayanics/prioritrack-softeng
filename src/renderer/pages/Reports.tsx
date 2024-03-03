@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
+import styles from '../styles/dashboard.module.scss';
+import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
+import '../styles/reports.css';
+import * as XLSX from 'xlsx';
 import '../styles/reports.css';
 import '../styles/global_styles.css';
 import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
 import logo from '../assets/prioritrack-logo.svg';
-import * as XLSX from 'xlsx';
 
 interface SortIcons {
   clientName: 'asc' | 'desc';
@@ -16,9 +22,8 @@ interface SortIcons {
   status: 'asc' | 'desc';
 }
 
-function Reports(): JSX.Element {
+export default function Reports(): JSX.Element {
   const [users, setUsers] = useState([]);
-
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
     propertyLocation: 'asc',
@@ -27,6 +32,8 @@ function Reports(): JSX.Element {
     dateOfSubmission: 'asc',
     status: 'asc',
   });
+
+  // SORT
   const [activeSortIcon, setActiveSortIcon] = useState('');
   const isInitialSortMount = useRef(true);
   const handleSortIcon = (field: keyof SortIcons) => {
@@ -51,12 +58,20 @@ function Reports(): JSX.Element {
     }
   }, [sortIcons, activeSortIcon]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState<string | null>(null);
+
   interface Client {
+    client_id: string;
     client_name: string;
     client_property_location: string;
     client_bank_name: string;
     client_bank_address: string;
   }
+
+  const [selectedClientName, setSelectedClientName] = useState<string | null>(
+    null,
+  );
 
   const [clientDetails, setClientDetails] = useState<Client | null>(null);
 
@@ -68,8 +83,16 @@ function Reports(): JSX.Element {
   const today = new Date();
   const currMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currYear = today.getFullYear().toString().padStart(4, '0');
-  // const currMonth = '11';
-  // const currYear = '2022';
+
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await Axios.get('http://localhost:3001/dashboard/list');
+
+  //     setUsers(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
 
   const fetchData = async () => {
     try {
@@ -172,6 +195,7 @@ function Reports(): JSX.Element {
   const [ongoing, setOngoing] = useState(0);
   const [complete, setComplete] = useState(0);
   const [onHold, setOnHold] = useState(0);
+
   useEffect(() => {
     let missedCount = 0;
     let upcomingCount = 0;
@@ -200,7 +224,6 @@ function Reports(): JSX.Element {
           break;
       }
     });
-
     setMissed(missedCount);
     setUpcoming(upcomingCount);
     setOngoing(ongoingCount);
@@ -208,16 +231,43 @@ function Reports(): JSX.Element {
     setOnHold(onHoldCount);
   }, [users]);
 
+  const deleteData = async (id) => {
+    try {
+      await Axios.delete(`http://localhost:3001/client/delete/${id}`);
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
+  const handleDeleteConfirmation = async () => {
+    await deleteData(clientIdToDelete);
+    setIsModalOpen(false);
+  };
+
+  const openDeleteModal = async (id) => {
+    setClientIdToDelete(id);
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/client/update/${id}`,
+      );
+      setClientDetails(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching client details:', error);
+    }
+  };
+
   const handleGenerateReport = () => {
     if (users.length > 0) {
       // Prepare data for Excel
-      const data = users.map((val: any) => [
-        val.client_name,
-        val.client_property_location,
-        val.doc_no,
-        val.doc_type,
-        val.doc_date_submission,
-        val.doc_status,
+      const data = users.map((client: Client) => [
+        client.client_name,
+        client.client_property_location,
+        client.doc_no, // Include document number
+        client.doc_type, // Include document type
+        client.doc_date_submission, // Include document date of submission
+        client.doc_status, // Include status
       ]);
 
       // Add header row
@@ -240,7 +290,7 @@ function Reports(): JSX.Element {
 
       // Format Excel sheet
       const wscols = [
-        { wch: 20 }, // width of columns
+        { wch: 20 }, // Width of column A (Client Name)
         { wch: 20 },
         { wch: 20 },
         { wch: 20 },
@@ -279,185 +329,209 @@ function Reports(): JSX.Element {
           month,
         )} ${year} (${`sorted by ${sortColumnName} in ${order} order `}).xlsx`,
       );
+      // XLSX.writeFile(workbook, 'client_data.xlsx');
     } else {
       console.log('No clients available to generate report.');
     }
   };
 
   return (
-    <div>
-      <div className="bgLogo">
-        <img src={logo} />
-      </div>
-      <div className="container">
-        {/* Table */}
-        <div className="row">
-          <div className="column1">
-            {/* Use Link for Reports button */}
-            <button className="button2" onClick={handleGenerateReport}>
-              Generate Reports
-            </button>
+    <div className={styles.container}>
+      {isModalOpen && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.titleDelete}>
+              Are you sure you want to delete this client?
+            </h3>
+            <div className={styles.midDelete}>
+              <button
+                onClick={handleDeleteConfirmation}
+                className={`${styles.btn} ${styles.cancel}`}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className={`${styles.btn} ${styles.submit}`}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-        <div className="row2">
-          <div className="column1 statuses">
-            <table className="tablerow1">
-              <thead>
-                <tr>
-                  <th colSpan={2}>Month:</th>
-                  <th colSpan={2}>Year:</th>
-                  <th colSpan={2}>Missed</th>
-                  <th colSpan={2}>Upcoming</th>
-                  <th colSpan={2}>Ongoing</th>
-                  <th colSpan={2}>Complete</th>
-                  <th colSpan={2}>On Hold</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {/* Month dropdown */}
-                  <td colSpan={2}>
-                    <select
-                      name="month"
-                      id="month"
-                      className="dropdown"
-                      defaultValue={currMonth}
-                      onChange={(e) => setMonth(e.target.value)}
-                    >
-                      {months.map((month) => (
-                        <option key={month.number} value={month.number}>
-                          {month.name}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  {/* Year dropdown */}
-                  <td colSpan={2}>
-                    <select
-                      name="year"
-                      id="year"
-                      className="dropdown"
-                      defaultValue={currYear}
-                      onChange={(e) => setYear(e.target.value)}
-                    >
-                      {years.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  {/* Other data cells */}
-                  <td colSpan={2}>
-                    <div className="pill-report red">{missed}</div>
-                  </td>
-                  <td colSpan={2}>
-                    <div className="pill-report blue">{upcoming}</div>
-                  </td>
-                  <td colSpan={2}>
-                    <div className="pill-report yellow">{ongoing}</div>
-                  </td>
-                  <td colSpan={2}>
-                    <div className="pill-report green">{complete}</div>
-                  </td>
-                  <td colSpan={2}>
-                    <div className="pill-report orange">{onHold}</div>
-                  </td>
-                </tr>
-                {/* Add more rows as needed */}
-              </tbody>
-            </table>
-          </div>
-          <br></br>
-          <br></br>
-          <table className="table">
+      )}
+
+      <div className={styles.column1}>
+        <Link to="/reports">
+          <button className={styles.button} onClick={handleGenerateReport}>
+            Generate Reports
+          </button>
+        </Link>
+      </div>
+
+      <div className="row2">
+        <div className="column1">
+          <table className="tablerow1">
             <thead>
-              <tr className="column1">
-                <th
-                  className="title cName sortableColumn"
-                  onClick={() => handleSortIcon('clientName')}
-                >
-                  Client Name
-                  <img
-                    src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
-                    alt="Sort"
-                    className={`headerIcon ${
-                      activeSortIcon === 'clientName' && 'activeHeaderIcon'
-                    }`}
-                  ></img>
-                </th>
-                <th
-                  className="title pLoc sortableColumn"
-                  onClick={() => handleSortIcon('propertyLocation')}
-                >
-                  Property Location
-                  <img
-                    src={
-                      sortIcons.propertyLocation === 'asc'
-                        ? icSortUp
-                        : icSortDown
-                    }
-                    alt="Sort"
-                    className={`headerIcon ${
-                      activeSortIcon === 'propertyLocation' &&
-                      'activeHeaderIcon'
-                    }`}
-                  ></img>
-                </th>
-                <th className="docNo">Document No.</th>
-                <th
-                  className="title mostRecentDoc sortableColumn"
-                  onClick={() => handleSortIcon('mostRecentDocument')}
-                >
-                  Most Recent Document
-                  <img
-                    src={
-                      sortIcons.mostRecentDocument === 'asc'
-                        ? icSortUp
-                        : icSortDown
-                    }
-                    alt="Sort"
-                    className={`headerIcon ${
-                      activeSortIcon === 'mostRecentDocument' &&
-                      'activeHeaderIcon'
-                    }`}
-                  ></img>
-                </th>
-                <th
-                  className="title dateOfSub sortableColumn"
-                  onClick={() => handleSortIcon('dateOfSubmission')}
-                >
-                  Date of Submission
-                  <img
-                    src={
-                      sortIcons.dateOfSubmission === 'asc'
-                        ? icSortUp
-                        : icSortDown
-                    }
-                    alt="Sort"
-                    className={`headerIcon ${
-                      activeSortIcon === 'dateOfSubmission' &&
-                      'activeHeaderIcon'
-                    }`}
-                  ></img>
-                </th>
-                <th
-                  className="title stat sortableColumn"
-                  onClick={() => handleSortIcon('status')}
-                >
-                  Status
-                  <img
-                    src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
-                    alt="Sort"
-                    className={`headerIcon ${
-                      activeSortIcon === 'status' && 'activeHeaderIcon'
-                    }`}
-                  ></img>
-                </th>
+              <tr>
+                <th colSpan={2}>Month:</th>
+                <th colSpan={2}>Year:</th>
+                <th colSpan={2}>Missed</th>
+                <th colSpan={2}>Upcoming</th>
+                <th colSpan={2}>Ongoing</th>
+                <th colSpan={2}>Complete</th>
+                <th colSpan={2}>On Hold</th>
               </tr>
             </thead>
+            <tbody>
+              <tr>
+                {/* Month dropdown */}
+                <td colSpan={2}>
+                  <select
+                    name="month"
+                    id="month"
+                    className="dropdown"
+                    defaultValue={currMonth}
+                    onChange={(e) => setMonth(e.target.value)}
+                  >
+                    {months.map((month) => (
+                      <option key={month.number} value={month.number}>
+                        {month.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                {/* Year dropdown */}
+                <td colSpan={2}>
+                  <select
+                    name="year"
+                    id="year"
+                    className="dropdown"
+                    defaultValue={currYear}
+                    onChange={(e) => setYear(e.target.value)}
+                  >
+                    {years.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                {/* Other data cells */}
+                <td colSpan={2}>
+                  <div className="pill-report red">{missed}</div>
+                </td>
+                <td colSpan={2}>
+                  <div className="pill-report blue">{upcoming}</div>
+                </td>
+                <td colSpan={2}>
+                  <div className="pill-report yellow">{ongoing}</div>
+                </td>
+                <td colSpan={2}>
+                  <div className="pill-report green">{complete}</div>
+                </td>
+                <td colSpan={2}>
+                  <div className="pill-report orange">{onHold}</div>
+                </td>
+              </tr>
+              {/* Add more rows as needed */}
+            </tbody>
           </table>
-          {users.length > 0 ? (
+        </div>
+      </div>
+      <br></br>
+      {/* <div className={styles.column1}>
+        <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
+        <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
+        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
+        <p className={`${styles.title} ${styles.title_mrd}`}>
+          Most Recent Document
+        </p>
+        <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
+        <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
+        <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
+      </div> */}
+
+      <table className="table">
+        <thead>
+          <tr className="column1">
+            <th
+              className="title cName sortableColumn"
+              onClick={() => handleSortIcon('clientName')}
+            >
+              Client Name
+              <img
+                src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'clientName' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </th>
+            <th
+              className="title pLoc sortableColumn"
+              onClick={() => handleSortIcon('propertyLocation')}
+            >
+              Property Location
+              <img
+                src={
+                  sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </th>
+            <th className="docNo">Document No.</th>
+            <th
+              className="title mostRecentDoc sortableColumn"
+              onClick={() => handleSortIcon('mostRecentDocument')}
+            >
+              Most Recent Document
+              <img
+                src={
+                  sortIcons.mostRecentDocument === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'mostRecentDocument' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </th>
+            <th
+              className="title dateOfSub sortableColumn"
+              onClick={() => handleSortIcon('dateOfSubmission')}
+            >
+              Date of Submission
+              <img
+                src={
+                  sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </th>
+            <th
+              className="title stat sortableColumn"
+              onClick={() => handleSortIcon('status')}
+            >
+              Status
+              <img
+                src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'status' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </th>
+          </tr>
+        </thead>
+      </table>
+
+      {users.length > 0 ? (
             users.map((val: any) => (
               <div key={val.client_id}>
                 <div className="card-capsule"></div>
@@ -517,8 +591,6 @@ function Reports(): JSX.Element {
             </div>
           )}
         </div>
-      </div>
-    </div>
   );
 }
 

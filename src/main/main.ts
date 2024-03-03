@@ -913,7 +913,24 @@ myApp.post(`/list/edit/:id`, (req, res) => {
   });
 });
 
-// GET DOCUMENT:ID
+// DELETE USER AND ALL DOCUMENTS
+myApp.delete('/client/delete/:id', (req, res) => {
+  const userId = req.params.id;
+  const sql = `DELETE clients, documents FROM clients
+    LEFT JOIN documents ON clients.client_id = documents.client_id
+    WHERE clients.client_id = ?`;
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error('Error deleting user:', err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      console.log('User deleted successfully');
+      res.status(200).send('User deleted successfully');
+    }
+  });
+});
+
+// GET CLIENT:ID
 myApp.get('/document/get/:id', (req, res) => {
   const docId = req.params.id;
   const query = 'SELECT * FROM documents WHERE doc_id = ?';
@@ -940,23 +957,6 @@ myApp.post(`/document/edited/:id`, (req, res) => {
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
-  });
-});
-
-// DELETE USER AND ALL DOCUMENTS
-myApp.delete('/client/delete/:id', (req, res) => {
-  const userId = req.params.id;
-  const sql = `DELETE clients, documents FROM clients
-    LEFT JOIN documents ON clients.client_id = documents.client_id
-    WHERE clients.client_id = ?`;
-  db.query(sql, [userId], (err, result) => {
-    if (err) {
-      console.error('Error deleting user:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
-    }
   });
 });
 
