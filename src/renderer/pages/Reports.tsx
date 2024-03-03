@@ -440,18 +440,6 @@ export default function Reports(): JSX.Element {
         </div>
       </div>
       <br></br>
-      {/* <div className={styles.column1}>
-        <p className={`${styles.title} ${styles.title1}`}>Client Name</p>
-        <p className={`${styles.title} ${styles.pl}`}>Property Location</p>
-        <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
-        <p className={`${styles.title} ${styles.title_mrd}`}>
-          Most Recent Document
-        </p>
-        <p className={`${styles.title} ${styles.ds}`}>Date of Submission</p>
-        <p className={`${styles.title} ${styles.tStatus}`}>Status</p>
-        <p className={`${styles.title} ${styles.tStatus}`}>Action</p>
-      </div> */}
-
       <table className="table">
         <thead>
           <tr className="column1">
@@ -593,5 +581,3 @@ export default function Reports(): JSX.Element {
         </div>
   );
 }
-
-export default Reports;
