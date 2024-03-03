@@ -5,7 +5,6 @@ import styles from '../styles/dashboard.module.scss';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
-import '../styles/reports.css';
 import * as XLSX from 'xlsx';
 import '../styles/reports.css';
 import '../styles/global_styles.css';
@@ -323,13 +322,19 @@ export default function Reports(): JSX.Element {
       } else if (activeSortIcon == 'status') {
         sortColumnName = 'status';
       }
-      XLSX.writeFile(
-        workbook,
-        `Report for ${getMonthName(
-          month,
-        )} ${year} (${`sorted by ${sortColumnName} in ${order} order `}).xlsx`,
+      console.log(
+        `order: ${sortIcons[activeSortIcon]} column: ${activeSortIcon}`,
       );
-      // XLSX.writeFile(workbook, 'client_data.xlsx');
+      console.log(`order: ${order} column: ${sortColumnName}`);
+      var filename = '';
+      if (order == '' || sortColumnName == '') {
+        filename = `Report for ${getMonthName(month)} ${year}`;
+      } else {
+        filename = `Report for ${getMonthName(
+          month,
+        )} ${year} (${`sorted by ${sortColumnName} in ${order} order`})`;
+      }
+      XLSX.writeFile(workbook, `${filename}.xlsx`);
     } else {
       console.log('No clients available to generate report.');
     }
@@ -362,8 +367,8 @@ export default function Reports(): JSX.Element {
       )}
 
       <div className={styles.column1}>
-        <Link to="/reports">
-          <button className={styles.button} onClick={handleGenerateReport}>
+        <Link to="/reports" className={styles.export}>
+          <button className={'button'} onClick={handleGenerateReport}>
             Generate Reports
           </button>
         </Link>
@@ -520,64 +525,64 @@ export default function Reports(): JSX.Element {
       </table>
 
       {users.length > 0 ? (
-            users.map((val: any) => (
-              <div key={val.client_id}>
-                <div className="card-capsule"></div>
-                <div className="card">
-                  <table className="table2">
-                    <tbody>
-                      <tr>
-                        <td className="client-name align-left">
-                          {val.client_name}
-                        </td>
-                        <td className="align-left pLoc-row">
-                          {val.client_property_location}
-                        </td>
-                        <td className="align-left docNo-row">{val.doc_no}</td>
-                        <td>
-                          <div className="pill2">{val.doc_type}</div>
-                        </td>
-                        <td className="date">{val.doc_date_submission}</td>
-                        <td className="status-align">
-                          <div
-                            className={`pill ${
-                              val.doc_status == 'Missed'
-                                ? 'red'
-                                : val.doc_status == 'Upcoming'
-                                ? 'blue'
-                                : val.doc_status == 'Ongoing'
-                                ? 'yellow'
-                                : val.doc_status == 'Complete'
-                                ? 'green'
-                                : val.doc_status == 'On Hold'
-                                ? 'orange'
-                                : ''
-                            }`}
-                          >
-                            {val.doc_status}
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div>
-              <div className="card noDataCard">
-                <table className="table2">
-                  <thead>
-                    <tr>
-                      <td>{`There is no data for ${getMonthName(
-                        month,
-                      )} ${year}.`}</td>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
+        users.map((val: any) => (
+          <div key={val.client_id}>
+            <div className="card-capsule"></div>
+            <div className="card">
+              <table className="table2">
+                <tbody>
+                  <tr>
+                    <td className="client-name align-left">
+                      {val.client_name}
+                    </td>
+                    <td className="align-left pLoc-row">
+                      {val.client_property_location}
+                    </td>
+                    <td className="align-left docNo-row">{val.doc_no}</td>
+                    <td>
+                      <div className="pill2">{val.doc_type}</div>
+                    </td>
+                    <td className="date">{val.doc_date_submission}</td>
+                    <td className="status-align">
+                      <div
+                        className={`pill ${
+                          val.doc_status == 'Missed'
+                            ? 'red'
+                            : val.doc_status == 'Upcoming'
+                            ? 'blue'
+                            : val.doc_status == 'Ongoing'
+                            ? 'yellow'
+                            : val.doc_status == 'Complete'
+                            ? 'green'
+                            : val.doc_status == 'On Hold'
+                            ? 'orange'
+                            : ''
+                        }`}
+                      >
+                        {val.doc_status}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+        ))
+      ) : (
+        <div>
+          <div className="card noDataCard">
+            <table className="table2">
+              <thead>
+                <tr>
+                  <td>{`There is no data for ${getMonthName(
+                    month,
+                  )} ${year}.`}</td>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
+      )}
+    </div>
   );
 }
