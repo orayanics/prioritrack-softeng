@@ -39,7 +39,16 @@ export default function ManageClients() {
       <FaTrashAlt />
     </div>
   );
-
+  const successAddLogo = (
+    <div className={styles.logoSuccess}>
+      <FaPlus />
+    </div>
+  );
+  const successEditLogo = (
+    <div className={styles.logoSuccess}>
+      <FaEdit />
+    </div>
+  );
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
     propertyLocation: 'asc',
@@ -72,6 +81,7 @@ export default function ManageClients() {
   // Effect to check for a success message in the location state
   useEffect(() => {
     if (location.state?.successMessage) {
+      setIconToShow(successAddLogo);
       setSuccessMessage(location.state.successMessage);
       // Optionally, clear the message after displaying it
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed

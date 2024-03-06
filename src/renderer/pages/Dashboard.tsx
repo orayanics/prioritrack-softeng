@@ -58,6 +58,11 @@ export default function Home() {
       <FaEdit />
     </div>
   );
+  const successAddLogo = (
+    <div className={styles.logoSuccess}>
+      <FaPlus />
+    </div>
+  );
 
   const successLogin = (
     <div className={styles.logoSuccess}>
