@@ -201,21 +201,36 @@ export default function Home() {
         return '';
     }
   };
-
+  const [documents, setDocuments] = useState([
+    'BID Letter',
+    'Statement of Account',
+    'Minutes of Auction sale',
+    "Sheriff's fee",
+    'Tax Declaration',
+    'Real Estate Tax Payment',
+    'JDF Payment O.R.',
+    'Certificate of Sale',
+    'LRA Assessment Form P.O.',
+    'LRA O.R.',
+    'Annotated Transfer Certificate of Title',
+    'Certificate of Posting',
+    "Notice of Sheriff's Sale",
+    'Tax Clearance',
+    'Follow-up letter',
+  ]);
   return (
     <div>
       <div className={styles.bgLogo}>
         <img src={logo} />
       </div>
+      {successMessage && (
+        <div className={styles.containerSuccess}>
+          {iconToShow}
+
+          <div className={styles.successMessage}>{successMessage}</div>
+        </div>
+      )}
       <div className={styles.container}>
-        {successMessage && (
-          <div className={styles.containerSuccess}>
-            {iconToShow}
-
-            <div className={styles.successMessage}>{successMessage}</div>
-          </div>
-        )}
-
         {isModalOpen && (
           // {users.map((val) => (
           <div className={styles.modal}>
@@ -244,133 +259,135 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className={styles.column1}>
+        <div className={styles.columnButtons}>
           <Link to={`/AddClient`} className={styles.export}>
             <button className={styles.button}>Export Data</button>
           </Link>
           <Link to="/reports" className={styles.export}>
             <button className={styles.button}>Reports</button>
           </Link>
+          <div className={styles.col1}>
+            <div className={styles.rec}>
+              <h2>MRD Legends</h2>
+              {documents.map((document, index) => (
+                <div className={` ${styles.capsuleLegends}`}>
+                  <div key={index}>{document}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className={styles.column1}>
-          <p
-            className={`${styles.title} ${styles.title1} sortableColumn`}
-            onClick={() => handleSortIcon('clientName')}
-          >
-            Client Name
-            <img
-              src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
-              alt="Sort"
-              className={`headerIcon ${
-                activeSortIcon === 'clientName' && 'activeHeaderIcon'
-              }`}
-            ></img>
-          </p>
-          <p
-            className={`${styles.title} ${styles.pl} sortableColumn`}
-            onClick={() => handleSortIcon('propertyLocation')}
-          >
-            Property Location
-            <img
-              src={sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown}
-              alt="Sort"
-              className={`headerIcon ${
-                activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
-              }`}
-            ></img>
-          </p>
-          <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
-          <p
-            className={`${styles.title} ${styles.title_mrd} ${styles.sortableColumn}`}
-            onClick={() => handleSortIcon('mostRecentDocument')}
-          >
-            Most Recent Document
-            <img
-              src={
-                sortIcons.mostRecentDocument === 'asc' ? icSortUp : icSortDown
-              }
-              alt="Sort"
-              className={`headerIcon ${
-                activeSortIcon === 'mostRecentDocument' && 'activeHeaderIcon'
-              }`}
-            ></img>
-          </p>
-          <p
-            className={`${styles.title} ${styles.ds} ${styles.sortableColumn}`}
-            onClick={() => handleSortIcon('dateOfSubmission')}
-          >
-            Date of Submission
-            <img
-              src={sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown}
-              alt="Sort"
-              className={`headerIcon ${
-                activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
-              }`}
-            ></img>
-          </p>
-          <p
-            className={`${styles.title} ${styles.tStatus} ${styles.sortableColumn}`}
-            onClick={() => handleSortIcon('status')}
-          >
-            Status
-            <img
-              src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
-              alt="Sort"
-              className={`headerIcon ${
-                activeSortIcon === 'status' && 'activeHeaderIcon'
-              }`}
-            ></img>
-          </p>
-          {/* <p className={`${styles.title} ${styles.tAction}`}>Action</p> */}
-        </div>
-        {users.length > 0 ? (
-          users.map((val) => (
-            <div key={val.client_id} className={styles.card}>
-              <div className={styles.column1}>
-                <div
-                  className={`${styles.cardCapsule} ${
-                    val.doc_status == 'Missed'
-                      ? styles.statusMissed
-                      : val.doc_status == 'Ongoing'
-                      ? styles.statusOngoing
-                      : val.doc_status == 'Complete'
-                      ? styles.statusComplete
-                      : ''
-                  } {\*${getStatusClass(val.doc_status)}*\}`}
-                ></div>
 
-                <Link
-                  className={styles.export}
-                  to={`/client/detail/${val.client_id}`}
-                >
-                  <div className={styles.column2}>
-                    <p className={`${styles.info} ${styles.cName}`}>
-                      {val.client_name}
-                    </p>
-                    <p className={`${styles.info} ${styles.pLoc}`}>
-                      {val.client_property_location}
-                    </p>
-                    <p className={`${styles.info} ${styles.docNo}`}>
-                      {/* document number */}
-                      {val.doc_no}
-                    </p>
-                    <div className={styles.mrdWidth}>
-                      {/* <div
-                        className={`
-                        ${styles.info}
-                        ${styles.mrd} ${styles.cName}
-                        ${
-                          val.doc_status == 'Missed'
-                            ? styles.statusMissed
-                            : val.doc_status == 'Ongoing'
-                            ? styles.statusOngoing
-                            : val.doc_status == 'Complete'
-                            ? styles.statusComplete
-                            : ''
-                        } {\*${getStatusClass(val.doc_status)}*\}`}
-                      > */}
-                      <div
-                        className={`
+        <div className={styles.mainLayout}>
+          <div className={styles.column1}>
+            <p
+              className={`${styles.title} ${styles.title1} sortableColumn`}
+              onClick={() => handleSortIcon('clientName')}
+            >
+              Client Name
+              <img
+                src={sortIcons.clientName === 'asc' ? icSortUp : icSortDown}
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'clientName' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </p>
+            <p
+              className={`${styles.title} ${styles.pl} sortableColumn`}
+              onClick={() => handleSortIcon('propertyLocation')}
+            >
+              Property Location
+              <img
+                src={
+                  sortIcons.propertyLocation === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'propertyLocation' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </p>
+            <p className={`${styles.title} ${styles.dn}`}>Document No.</p>
+            <p
+              className={`${styles.title} ${styles.title_mrd} ${styles.sortableColumn}`}
+              onClick={() => handleSortIcon('mostRecentDocument')}
+            >
+              Most Recent Document
+              <img
+                src={
+                  sortIcons.mostRecentDocument === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'mostRecentDocument' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </p>
+            <p
+              className={`${styles.title} ${styles.ds} ${styles.sortableColumn}`}
+              onClick={() => handleSortIcon('dateOfSubmission')}
+            >
+              Date of Submission
+              <img
+                src={
+                  sortIcons.dateOfSubmission === 'asc' ? icSortUp : icSortDown
+                }
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'dateOfSubmission' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </p>
+            <p
+              className={`${styles.title} ${styles.tStatus} ${styles.sortableColumn}`}
+              onClick={() => handleSortIcon('status')}
+            >
+              Status
+              <img
+                src={sortIcons.status === 'asc' ? icSortUp : icSortDown}
+                alt="Sort"
+                className={`headerIcon ${
+                  activeSortIcon === 'status' && 'activeHeaderIcon'
+                }`}
+              ></img>
+            </p>
+            {/* <p className={`${styles.title} ${styles.tAction}`}>Action</p> */}
+          </div>
+          {users.length > 0 ? (
+            users.map((val) => (
+              <div key={val.client_id} className={styles.card}>
+                <div className={styles.column1}>
+                  <div
+                    className={`${styles.cardCapsule} ${
+                      val.doc_status == 'Missed'
+                        ? styles.statusMissed
+                        : val.doc_status == 'Ongoing'
+                        ? styles.statusOngoing
+                        : val.doc_status == 'Complete'
+                        ? styles.statusComplete
+                        : ''
+                    } {\*${getStatusClass(val.doc_status)}*\}`}
+                  ></div>
+
+                  <Link
+                    className={styles.export}
+                    to={`/client/detail/${val.client_id}`}
+                  >
+                    <div className={styles.column2}>
+                      <p className={`${styles.info} ${styles.cName}`}>
+                        {val.client_name}
+                      </p>
+                      <p className={`${styles.info} ${styles.pLoc}`}>
+                        {val.client_property_location}
+                      </p>
+                      <p className={`${styles.info} ${styles.docNo}`}>
+                        {/* document number */}
+                        {val.doc_no}
+                      </p>
+                      <div className={styles.mrdWidth}>
+                        <div
+                          className={`
                         ${styles.info}
                         ${styles.mrd} ${styles.cName}
                          ${
@@ -382,72 +399,54 @@ export default function Home() {
                              ? styles.statusComplete
                              : ''
                          } {\*${getStatusClass(val.doc_status)}*\}`}
+                        >
+                          {/* Most Recent Document */}
+                          {val.doc_type}
+                        </div>
+                      </div>
+                      <p className={`${styles.info} ${styles.dateSub}`}>
+                        {/*  Date of Submission */}
+                        {val.doc_date_submission}
+                      </p>
+
+                      <div
+                        className={`${styles.status} ${
+                          val.doc_status == 'Missed'
+                            ? styles.statusMissed
+                            : val.doc_status == 'Ongoing'
+                            ? styles.statusOngoing
+                            : val.doc_status == 'Complete'
+                            ? styles.statusComplete
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
                       >
-                        {/* Most Recent Document */}
-                        {val.doc_type}
+                        {val.doc_status}
                       </div>
                     </div>
-                    <p className={`${styles.info} ${styles.dateSub}`}>
-                      {/*  Date of Submission */}
-                      {val.doc_date_submission}
-                    </p>
-
-                    <div
-                      className={`${styles.status} ${
-                        val.doc_status == 'Missed'
-                          ? styles.statusMissed
-                          : val.doc_status == 'Ongoing'
-                          ? styles.statusOngoing
-                          : val.doc_status == 'Complete'
-                          ? styles.statusComplete
-                          : ''
-                      } {\*${getStatusClass(val.doc_status)}*\}`}
-                    >
-                      {val.doc_status}
-                    </div>
-                  </div>
-                </Link>
-                {/* <div className={`${styles.cursor}`}>
-                  <button className={`${styles.edit}`}>
-                    <Link
-                      to={`/client/edit/${val.client_id}`}
-                      className={styles.edit}
-                    >
-                      <FaEdit className={`${styles.green_icon}`} />
-                    </Link>
-                  </button>
-                </div> */}
-                {/* <div className={`${styles.cursor}`}>
-                  <button
-                    className={`${styles.delete}`}
-                    onClick={() => {
-                      setClientIdToDelete(val.client_id);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <FaTrashAlt className={`${styles.deletered}`} />
-                  </button>
-                </div> */}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className={styles.card}>
-            <div className={styles.column1}>
-              <div className={styles['card-capsule']}></div>
-              <div className={styles.column2}>
-                <p className={`${styles.info} ${styles.cName}`}>No data</p>
-                <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
-                <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-                <div className={`${styles.clientBA} ${styles.info}`}>
-                  No data
+                  </Link>
                 </div>
-                <div className={`${styles.status} ${styles.info}`}>No data</div>
+              </div>
+            ))
+          ) : (
+            <div className={styles.card}>
+              <div className={styles.column1}>
+                <div className={styles['card-capsule']}></div>
+                <div className={styles.column2}>
+                  <p className={`${styles.info} ${styles.cName}`}>No data</p>
+                  <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
+                  <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
+                  <div className={`${styles.clientBA} ${styles.info}`}>
+                    No data
+                  </div>
+                  <div className={`${styles.status} ${styles.info}`}>
+                    No data
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        <Outlet />
+          )}
+          <Outlet />
+        </div>
       </div>
     </div>
   );
