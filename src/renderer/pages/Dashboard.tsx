@@ -82,8 +82,10 @@ export default function Home() {
     dateOfSubmission: 'asc',
     status: 'asc',
   });
+  
   const [activeSortIcon, setActiveSortIcon] = useState('');
   const isInitialSortMount = useRef(true);
+
   const handleSortIcon = (field: keyof SortIcons) => {
     if (activeSortIcon == field) {
       setSortIcons((prevSortIcons) => ({
@@ -96,6 +98,7 @@ export default function Home() {
       activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
     );
   };
+
   useEffect(() => {
     //call if sortIcons, activeSortIcon changes
     if (isInitialSortMount.current) {
@@ -137,12 +140,19 @@ export default function Home() {
         }`,
       );
       setUsers(response.data);
-      //console.log(response);;
-      console.log(
-        `http://localhost:3001/dashboard/list/${activeSortIcon}/${
-          sortIcons[activeSortIcon as keyof SortIcons]
-        }`,
-      );
+      const sortedData = response.data;
+
+      // Sort filteredUsers state
+    const filteredSorted = filteredUsers.sort((a, b) => {
+      if (sortIcons[activeSortIcon as keyof SortIcons] === 'asc') {
+        return a[activeSortIcon] > b[activeSortIcon] ? 1 : -1;
+      } else {
+        return a[activeSortIcon] < b[activeSortIcon] ? 1 : -1;
+      }
+    });
+
+    setFilteredUsers(filteredSorted);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
