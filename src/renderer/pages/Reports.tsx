@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import styles from '../styles/dashboard.module.scss';
+import styles from '../styles/reports.module.scss';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
