@@ -11,6 +11,7 @@ function Login({ onLogin }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [successMessageLogin, setsuccessMessageLogin] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePassVisibility = () => {
@@ -30,7 +31,9 @@ function Login({ onLogin }) {
       if (response.data) {
         localStorage.setItem('authenticated', 'true');
         onLogin();
-        navigate('/home');
+        navigate('/home', {
+          state: { successMessageLogin: 'Login successfully!' },
+        });
       } else {
         console.error('Error occurred during login:', error);
         setError('Invalid username or password');

@@ -56,12 +56,8 @@ body {
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 1px 5px #00042c;
-  //box-shadow:
-  // 0 1px 1px rgba(0, 0, 0, 0.12),
-  // 0 2px 2px rgba(0, 0, 0, 0.12),
-  // 0 4px 4px rgba(0, 0, 0, 0.12);
 
-  width: 170px;
+  width: 278px;
   margin: 20px 20px 20px 0px;
   /* top right bottom left */
 }
@@ -92,6 +88,43 @@ body {
   align-items: center;
   flex-direction: row;
   margin-top: -5px;
+}
+.col1,
+.col2 {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rec {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  padding: 20px 25px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 1px 5px #ababab;
+  line-height: 2rem;
+  width: 228px;
+  margin-top: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+.capsuleLegends {
+  font-size: 13px;
+  color: black;
+  width: 140px;
+  font-weight: normal;
+  width: 225px;
+  background-color: var(--missed);
+  border-radius: 25px;
+  padding: 0px 5px 5px 5px;
+  /* top right bottom left */
+  height: 35px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: center !important;
 }
 
 .card {
@@ -155,10 +188,11 @@ body {
   width: 160px;
 }
 .title_mrd {
-  width: 130px;
+  width: 180px;
   display: flex;
   text-align: center !important;
 }
+
 .dn {
   width: 110px;
   padding-left: 5px;
@@ -249,11 +283,9 @@ body {
 }
 .info {
   font-size: 16px;
-
   text-align: left;
-
   color: black;
-  width: 100px;
+  width: 140px;
   font-weight: normal;
 }
 .status {
@@ -279,23 +311,15 @@ body {
   background-color: var(--on-going);
 }
 
-.statusUpcoming {
-  background-color: var(--upcoming);
-}
-
 .statusComplete {
   background-color: var(--complete);
-}
-
-.statusOnHold {
-  background-color: var(--on-hold);
 }
 
 .container {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  max-width: 840px;
+  flex-direction: row;
+  max-width: 140vh;
   margin: 0 auto;
   padding: 15px 30px 50px 30px;
   margin-top: 10px;
@@ -358,21 +382,6 @@ body {
   height: 30px;
   border-style: none;
   cursor: pointer;
-}
-.red {
-  background-color: #f8bdb0; /*#db8074*/
-}
-.blue {
-  background-color: #aad2e9; /*#7dade8*/
-}
-.yellow {
-  background-color: #efe368; /*#fcd04c*/
-}
-.green {
-  background-color: #9cd58f; /*#73bf67*/
-}
-.orange {
-  background-color: #ffc383; /*#fca14c*/
 }
 .containerSuccess {
   display: flex;
