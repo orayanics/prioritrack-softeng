@@ -1,27 +1,57 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import '../styles/navbar.css';
 import navlogo from '../assets/navlogo.png';
 import { Outlet, Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Navbar({onLogout}) {
+export default function Navbar({ onLogout }) {
+  const [activePage, setActivePage] = useState('Dashboard');
   const handleLogout = () => {
     onLogout();
   };
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
+      <Link
+        to={`/home`}
+        onClick={() => setActivePage('Dashboard')}
+        className="navbar-logo"
+      >
         <img src={navlogo} alt="Prioritrack " />
-      </div>
+      </Link>
       <div className="navbar-links">
-        <Link to="/reports">Reports</Link>
-        <Link to={`/home`}>Dashboard</Link>
-        <Link to="/reports">Reports</Link>
-        <Link to={`/client`}>Clients</Link>
-<<<<<<< HEAD
-
-        <Dropdown>
+        {/* <Link to={`/client/add`}>Add Client</Link> */}
+        {/* <Link to={`/`}>Root</Link> */}
+        {/* <Link
+          to={`/login`}
+          onClick={() => setActivePage('Login')}
+          className={`link ${activePage == 'Login' && 'active'}`}
+        >
+          Login
+        </Link> */}
+        {/* <Link to={`/client`}>Manage Clients</Link> */}
+        <Link
+          to={`/home`}
+          onClick={() => setActivePage('Dashboard')}
+          className={`link ${activePage == 'Dashboard' && 'active'}`}
+        >
+          Dashboard
+        </Link>
+        <Link
+          to="/reports"
+          onClick={() => setActivePage('Reports')}
+          className={`link ${activePage == 'Reports' && 'active'}`}
+        >
+          Reports
+        </Link>
+        <Link
+          to={`/client`}
+          onClick={() => setActivePage('Clients')}
+          className={`link ${activePage == 'Clients' && 'active'}`}
+        >
+          Clients
+        </Link>
+        {/* <Dropdown>
           <Dropdown.Toggle id="notif">
             <FaBell />
           </Dropdown.Toggle>
@@ -37,18 +67,34 @@ export default function Navbar({onLogout}) {
               Notification 3
             </Dropdown.Item>
           </Dropdown.Menu>
-        </Dropdown>
-
+        </Dropdown> */}
         {/* <Link to={`/document/edit/:id`}>Edit Document</Link> */}
         {/* <Link to={`/client/document/:id`}>Add Document</Link> */}
         {/* <Link to={`/`}>Logout</Link> */}
         {/* <Link to={`/changepass`}>Change Pass</Link>
         <Link to={`/forgotpass`}>forgot</Link> */}
 
-        <a href="#">Logout</a>
-=======
-        <a href="#" onClick={handleLogout}>Logout</a>
->>>>>>> main
+        <a href="#" onClick={handleLogout} className="link">
+          Logout
+        </a>
+
+        <div className="dropdownNav link">
+          <button className="dropbtn">
+            <FaBell />
+          </button>
+          <div className="dropdown-content">
+            <a href="#">
+              Notification 1
+              <div className="description">
+                Description Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                aliqua.
+              </div>
+            </a>
+            <a href="#">Notification 2</a>
+            <a href="#">Notification 3</a>
+          </div>
+        </div>
       </div>
     </nav>
   );

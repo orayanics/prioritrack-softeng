@@ -2,7 +2,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import Layout from './components/Layout';
 import { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import Home from './pages/Home';
 
 // CLIENT SIDE
@@ -34,7 +34,7 @@ export default function App() {
     <Router>
       <Routes>
         {/* account components no need for authentication */}
-        <Route path="/changepass" element={<ChangePass />} />
+        <Route path="/changepass/:id" element={<ChangePass />} />
         <Route path="/forgotpass" element={<ForgotPass />} />
         <Route
           path="/"

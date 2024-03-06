@@ -1,18 +1,36 @@
-// body {
-//   font-family: Arial, sans-serif;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100vh;
+.bg {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00042c;
+  position: relative;
+}
 
-//   //   background-image: url('../assets/bg.png');
-//   background-size: cover;
-//   background-position: center;
-//   background-repeat: no-repeat;
+.bgImage {
+  position: fixed;
+  width: inherit;
+  height: inherit;
+  z-index: 1;
+}
 
-//   opacity: 1;
-//   z-index: -1;
-// }
+.bgImage:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  opacity: 0.15;
+  background-image: url('../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 .login {
   display: flex;
@@ -34,19 +52,33 @@
 }
 
 .logo {
+  width: 100px;
+  height: 100px;
+  flex: 1;
+  order: 1;
   max-width: 100%; /* Ensure the logo is responsive */
-  height: 400px;
-  margin-right: 20px;
+  height: 300px;
   z-index: 1;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.logo img {
+  height: 300px;
 }
 
 .cardContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 100px;
+  justify-content: start;
+  margin-left: 100px;
+  //margin-top: 100px;
   //   margin-right: 150px;
-  //   z-index: 1;
+  z-index: 2;
+  flex: 1;
+  order: 2;
 }
 
 .card {
@@ -61,6 +93,7 @@
 }
 
 .h2 {
+  margin-top: 15px;
   margin-bottom: 15px;
 }
 
@@ -80,6 +113,7 @@
   margin-bottom: 12px;
   border: 1px solid #ffffff;
   border-radius: 4px;
+  flex: 1;
 }
 
 .button {
@@ -91,6 +125,44 @@
   align-self: center;
   border-radius: 20px;
   cursor: pointer;
+}
+
+.error {
+  color: var(--delete-red);
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.passInput {
+  padding-right: 35px;
+}
+
+.inputPassContainer {
+  position: relative;
+}
+
+.passToggle {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  right: 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b8b8b8;
+}
+
+.passToggle:hover {
+  color: #828282;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Media query for responsiveness */
@@ -107,5 +179,32 @@
   body {
     flex-wrap: wrap;
     justify-content: center;
+  }
+}
+@media only screen and (max-width: 1277px) {
+  .logo img {
+    height: 250px;
+  }
+}
+
+@media only screen and (max-width: 980px) {
+  .bg {
+    flex-direction: column; /* Stack items vertically */
+  }
+  .logo {
+    margin-top: 200px;
+    max-height: 100px;
+    justify-content: center;
+    margin-left: 0px;
+  }
+  .logo img {
+    height: 80px;
+  }
+  .cardContainer {
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
   }
 }

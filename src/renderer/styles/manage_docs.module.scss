@@ -1,7 +1,19 @@
+.bgLogo {
+  position: fixed;
+  bottom: -70px;
+  right: -35px;
+  display: block;
+  opacity: 0.2;
+  width: 850px;
+  height: auto;
+  z-index: -1;
+}
+
 .container {
   display: flex;
   justify-content: center;
   margin: 5rem;
+  padding-bottom: 50px;
 }
 
 .col1,
@@ -12,35 +24,61 @@
   align-items: center;
 }
 
+.col1 {
+  margin-right: 50px;
+}
+
+.export:hover {
+  text-decoration: none !important;
+  outline: none !important;
+}
+
 .button {
-  background-color: #f2f2f2;
-  border: none;
-  color: black;
-  padding: 15px 0px;
+  background-color: #043572; /* Green */
+  border: 1px solid #043572;
+  color: white;
+  padding: 15px 32px;
+  text-align: left;
   text-decoration: none;
+  display: flex;
+  align-items: center;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 0.5px 5px #00042c;
+
   width: 280px;
-  margin: 20px 20px 20px 20px;
+  margin: 20px 20px 20px 0px;
+  /* top right bottom left */
+  display: flex;
+  justify-content: space-between;
+}
+
+.button:focus,
+.button:active,
+.button:hover {
+  outline: none !important;
 }
 
 .rec {
-  background-color: #f2f2f2;
-  border: none;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
   padding: 20px 25px;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 5px;
-  box-shadow: 1px 5px #888787;
+  box-shadow: 1px 5px #ababab;
   line-height: 2rem;
+  width: 228px;
+  margin-top: 20px;
+  margin-right: 20px;
 }
 
 h3 {
   border-radius: 25px;
-  padding-left: 0.5rem;
+  //padding-left: 0.5rem;
   padding-right: 1rem;
 }
 
@@ -53,28 +91,42 @@ h3 {
 
 .row1 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .row2 {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
-  padding-top: 15px;
+  min-height: 60px;
+  //padding-top: 20px;
 }
 
 .card {
   margin-top: 10px;
-  background-color: #f2f2f2;
+  margin-bottom: 10px;
+  background-color: #ffffff;
   width: 100%;
   height: 60px;
   border-radius: 5px;
-  padding: 2px 16px;
+  padding: 2px 5px;
   padding-left: 0px;
-  box-shadow: 0 8px 3px -6px #9e9d9d;
+  padding-right: 20px;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.12),
+    0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.12);
 }
-.card-capsule {
+
+.card:hover {
+  background-color: #e8e6e6;
+}
+
+.cardCapsule {
   background-color: #fcbdbd;
   width: 5px;
   border-radius: 5px;
@@ -94,10 +146,13 @@ h3 {
 }
 
 .title {
+  text-align: center;
   font-size: 15px;
   padding-right: 30px;
   padding-left: 30px;
   font-weight: bold;
+  align-items: center;
+  display: flex;
 }
 
 .title1 {
@@ -113,25 +168,37 @@ h3 {
 .mrd {
   font-size: 14px;
   background-color: #fcbdbd;
-  width: 150px;
   border-radius: 35px;
-  padding: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   /* top right bottom left */
   height: 25px;
-  margin: 0px 0px 0px 0px;
-
+  align-items: center;
+  display: flex;
   text-align: center;
+  margin: auto !important;
+  text-align: center;
+}
+.mrdWidth {
+  width: 240px;
+  display: flex;
+  justify-content: center;
 }
 .status {
   font-size: 14px;
   background-color: #fcbdbd;
-  width: 80px;
+  width: 90px;
   border-radius: 35px;
-  padding: 0px 2px 2px 0px;
+  //padding: 3px 2px 2px 0px;
   /* top right bottom left */
-  height: 20px;
-  margin: 0px 10px 0px 50px;
-  text-align: center;
+  height: 25px;
+  //margin: 0px 10px 0px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
 }
 .docNo {
   width: 160px;
@@ -139,25 +206,32 @@ h3 {
   padding-left: 15px;
 }
 .dateSub {
-  width: 150px;
+  width: 165px;
   text-align: center;
-  padding-left: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  flex: 1;
+  margin-left: -10px;
+  margin-right: 10px;
+}
+.action {
+  padding-left: 25px;
 }
 
 .cursor {
   cursor: pointer;
 }
 .edit {
-  padding: 0px 8px 4px 11px !important;
-  /* top right bottom left */
-
+  padding-left: 10px !important;
+  padding-right: 8px !important;
+  padding-top: 3px;
   background-color: var(--complete);
 
   margin: 0px 0px 0px 10px;
   border: none;
   border-radius: 10px;
 }
-.green {
+.green_icon {
   color: var(--success-green);
   width: 15px;
 }
@@ -172,6 +246,34 @@ h3 {
   border-radius: 10px;
   /* top right bottom left */
   margin: 0px 0px 0px 10px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  padding-top: 3px;
+}
 
-  padding: 0px 8px 4px 8px !important;
+.dt {
+  width: 220px;
+  display: flex;
+  justify-content: center;
+}
+
+.cbn {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.red {
+  background-color: #f8bdb0; /*#db8074*/
+}
+.blue {
+  background-color: #aad2e9; /*#7dade8*/
+}
+.yellow {
+  background-color: #efe368; /*#fcd04c*/
+}
+.green {
+  background-color: #9cd58f; /*#73bf67*/
+}
+.orange {
+  background-color: #ffc383; /*#fca14c*/
 }

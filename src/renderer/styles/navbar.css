@@ -16,23 +16,63 @@
   height: 50px;
 }
 
+.navbar-logo:hover {
+  border-bottom: 0;
+}
+
 .navbar-links {
   display: flex;
 }
 
-.navbar-links a {
+.link {
   color: white;
-  margin-right: 5rem;
+  margin-right: 3rem;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  text-decoration: none;
   outline: none;
 }
 
-.navbar-links a:hover {
-  border-bottom: 1px solid;
+.link:link,
+.link:visited,
+.link:active,
+.link:hover {
+  text-decoration: none !important;
+  border-bottom: 0;
+}
+
+.link {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: #ffffff;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
 }
 
 #notif {
@@ -60,4 +100,57 @@
 #notif-menu a:hover {
   background-color: #c2d2e4;
   border: none;
+}
+
+.dropdownNav {
+  position: relative;
+  display: inline-block;
+  border: none;
+  height: 31px;
+  margin-right: 3rem;
+  margin-top: -4px;
+}
+
+.dropbtn {
+  background-color: #00042c;
+  color: white;
+  padding: 7px;
+  padding-bottom: 33px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  right: -47px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+}
+
+.dropdown-content a:hover {
+  background-color: #e8e6e6;
+  border: none;
+}
+
+.dropdownNav:hover .dropdown-content {
+  display: block;
+}
+
+.description {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: justify;
 }

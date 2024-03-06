@@ -8,17 +8,72 @@ body {
   z-index: -1;
 }
 
+.bg {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00042c;
+  position: relative;
+  flex-direction: column;
+}
+
+.bgImage {
+  position: fixed;
+  width: inherit;
+  height: inherit;
+  z-index: 1;
+}
+
+.bgImage:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  opacity: 0.15;
+  background-image: url('../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.logo {
+  width: 100px;
+  height: 100px;
+  flex: 1;
+  max-width: 100%; /* Ensure the logo is responsive */
+  height: 300px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  max-height: 100px;
+  justify-content: center;
+  padding-top: 10px;
+  margin-top: -140px;
+  margin-left: 0px;
+}
+
+.logo img {
+  height: 80px;
+}
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: -50px;
 }
 
 .cardContainer {
   display: flex;
   justify-content: center;
   margin-top: 100px;
+  z-index: 2;
 }
 
 .card {
@@ -44,9 +99,16 @@ label {
   margin-bottom: 8px;
 }
 
+.error {
+  color: var(--delete-red);
+  text-align: center;
+  font-size: 14px;
+}
+
 .input {
-  width: 420px;
+  width: 300px;
   padding: 8px;
+  padding-right: 35px;
   margin-bottom: 12px;
   border: 1px solid #ffffff;
   border-radius: 4px;
@@ -71,6 +133,39 @@ label {
 
 .cancelButton {
   background-color: #740000;
+}
+
+.cancel_text {
+  color: white;
+  text-decoration: none;
+  padding: 9px 52px 9px 52px;
+  border-radius: 100px;
+  margin-left: -10px;
+}
+.cancel_text:hover,
+.cancel_text:focus {
+  border: 0;
+}
+
+.inputPassContainer {
+  position: relative;
+}
+
+.passToggle {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  right: 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b8b8b8;
+}
+
+.passToggle:hover {
+  color: #828282;
 }
 
 /* Media query for responsiveness */
