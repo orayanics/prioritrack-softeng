@@ -1,9 +1,6 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
+import { MemoryRouter as Router, Routes, Route, redirect } from 'react-router-dom';
 import Layout from './components/Layout';
-import { useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Home from './pages/Home';
+import { useState, useEffect } from 'react';
 
 // CLIENT SIDE
 import Reports from './pages/Reports';
@@ -23,13 +20,23 @@ import EditDoc from './pages/document/EditDocument';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('authenticated');
+    if (isAuthenticated) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const handleLogin = () => {
     setIsLoggedIn(true);
+    localStorage.setItem('authenticated', 'true');
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    localStorage.removeItem('authenticated');
   };
+
   return (
     <Router>
       <Routes>
@@ -48,9 +55,7 @@ export default function App() {
         >
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
-          {/* MEDJ PROBLEMATIC ATA TO */}
           <Route path="/home" element={<Dashboard />} />
-
           <Route path="/document/edit/:id" element={<EditDoc />} />
 
           <Route path="/Reports" element={<Reports />} />
