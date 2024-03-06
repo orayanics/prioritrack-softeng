@@ -53,7 +53,9 @@ export default function EditDoc() {
         doc_type,
       });
       console.log('Success');
-      navigate('/home');
+      navigate('/home', {
+        state: { successMessage: 'Document Edited' },
+      });
     } catch (err) {
       console.log(err);
     }
@@ -84,12 +86,54 @@ export default function EditDoc() {
                   onChange={(e) => setDate(e.target.value)}
                 />
                 <h3 className={styles.inputTitle}>Document Type</h3>
-                <input
+                {/* <input
                   className={styles.input}
                   type="text"
                   value={doc_type}
                   onChange={(e) => setType(e.target.value)}
-                />
+                /> */}
+                <select
+                  id="status"
+                  name="status"
+                  className={styles.input}
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="">Select a Type of Document</option>
+                  <option value="BID Letter">BID Letter</option>
+                  <option value="Statement of Account">
+                    Statement of Account{' '}
+                  </option>
+                  <option value="Minutes of Auction sale">
+                    Minutes of Auction sale
+                  </option>
+                  <option value="Sheriff's fee">Sheriff's fee</option>
+                  <option value="Tax Declaration">Tax Declaration</option>
+
+                  <option value="Real Estate Tax Payment">
+                    Real Estate Tax Payment
+                  </option>
+                  <option value="Certificate of Sale">
+                    Certificate of Sale
+                  </option>
+                  <option value="LRA Assessment Form P.O.">
+                    LRA Assessment Form P.O.
+                  </option>
+                  <option value="LRA O.R.">LRA O.R.</option>
+                  <option value="Annotated Transfer Certificate of Title">
+                    Annotated Transfer Certificate of Title
+                  </option>
+
+                  <option value="Certificate of Posting">
+                    Certificate of Posting
+                  </option>
+                  <option value="Notice of Sheriff's Sale">
+                    Notice of Sheriff's Sale
+                  </option>
+                  <option value="Tax Clearance">Tax Clearance</option>
+                  <option value="Follow-up letter">Follow-up letter</option>
+                  <option value="Follow-up letter 2">Follow-up letter 2</option>
+                  <option value="Follow-up letter 3">Follow-up letter 3</option>
+                </select>
                 <h3 className={styles.inputTitle}>Document Status</h3>
                 <select
                   id="status"
@@ -101,9 +145,7 @@ export default function EditDoc() {
                   <option value="">Select a status</option>
                   <option value="Missed">Missed</option>
                   <option value="Ongoing">Ongoing</option>
-                  <option value="Upcoming">Upcoming</option>
                   <option value="Complete">Complete</option>
-                  <option value="On Hold">On Hold</option>
                 </select>
 
                 <div className={styles.btn2}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import styles from '../styles/dashboard.module.scss';
+import styles from '../styles/reports.module.scss';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
@@ -191,44 +191,34 @@ export default function Reports(): JSX.Element {
   };
 
   const [missed, setMissed] = useState(0);
-  const [upcoming, setUpcoming] = useState(0);
   const [ongoing, setOngoing] = useState(0);
   const [complete, setComplete] = useState(0);
-  const [onHold, setOnHold] = useState(0);
 
   useEffect(() => {
     let missedCount = 0;
-    let upcomingCount = 0;
     let ongoingCount = 0;
     let completeCount = 0;
-    let onHoldCount = 0;
 
     users.forEach((val: any) => {
       switch (val.doc_status) {
         case 'Missed':
           missedCount++;
           break;
-        case 'Upcoming':
-          upcomingCount++;
-          break;
+
         case 'Ongoing':
           ongoingCount++;
           break;
         case 'Complete':
           completeCount++;
           break;
-        case 'On Hold':
-          onHoldCount++;
-          break;
+
         default:
           break;
       }
     });
     setMissed(missedCount);
-    setUpcoming(upcomingCount);
     setOngoing(ongoingCount);
     setComplete(completeCount);
-    setOnHold(onHoldCount);
   }, [users]);
 
   const deleteData = async (id) => {
@@ -334,6 +324,21 @@ export default function Reports(): JSX.Element {
       console.log('No clients available to generate report.');
     }
   };
+  type StatusType = 'Missed' | 'Ongoing' | 'Complete';
+
+  const getStatusClass = (status: StatusType) => {
+    switch (status) {
+      case 'Missed':
+        return styles.statusMissed;
+      case 'Ongoing':
+        return styles.statusOngoing;
+      case 'Complete':
+        return styles.statusComplete;
+
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -377,10 +382,9 @@ export default function Reports(): JSX.Element {
                 <th colSpan={2}>Month:</th>
                 <th colSpan={2}>Year:</th>
                 <th colSpan={2}>Missed</th>
-                <th colSpan={2}>Upcoming</th>
+
                 <th colSpan={2}>Ongoing</th>
                 <th colSpan={2}>Complete</th>
-                <th colSpan={2}>On Hold</th>
               </tr>
             </thead>
             <tbody>
@@ -419,19 +423,14 @@ export default function Reports(): JSX.Element {
                 </td>
                 {/* Other data cells */}
                 <td colSpan={2}>
-                  <div className="pill-report red">{missed}</div>
+                  <div className="pill-report statusMissed">{missed}</div>
+                </td>
+
+                <td colSpan={2}>
+                  <div className="pill-report statusOngoing ">{ongoing}</div>
                 </td>
                 <td colSpan={2}>
-                  <div className="pill-report blue">{upcoming}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report yellow">{ongoing}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report green">{complete}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report orange">{onHold}</div>
+                  <div className="pill-report statusComplete">{complete}</div>
                 </td>
               </tr>
               {/* Add more rows as needed */}
@@ -520,64 +519,82 @@ export default function Reports(): JSX.Element {
       </table>
 
       {users.length > 0 ? (
-            users.map((val: any) => (
-              <div key={val.client_id}>
-                <div className="card-capsule"></div>
-                <div className="card">
-                  <table className="table2">
-                    <tbody>
-                      <tr>
-                        <td className="client-name align-left">
-                          {val.client_name}
-                        </td>
-                        <td className="align-left pLoc-row">
-                          {val.client_property_location}
-                        </td>
-                        <td className="align-left docNo-row">{val.doc_no}</td>
-                        <td>
-                          <div className="pill2">{val.doc_type}</div>
-                        </td>
-                        <td className="date">{val.doc_date_submission}</td>
-                        <td className="status-align">
-                          <div
-                            className={`pill ${
-                              val.doc_status == 'Missed'
-                                ? 'red'
-                                : val.doc_status == 'Upcoming'
-                                ? 'blue'
-                                : val.doc_status == 'Ongoing'
-                                ? 'yellow'
-                                : val.doc_status == 'Complete'
-                                ? 'green'
-                                : val.doc_status == 'On Hold'
-                                ? 'orange'
-                                : ''
-                            }`}
-                          >
-                            {val.doc_status}
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div>
-              <div className="card noDataCard">
-                <table className="table2">
-                  <thead>
-                    <tr>
-                      <td>{`There is no data for ${getMonthName(
-                        month,
-                      )} ${year}.`}</td>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
+        users.map((val: any) => (
+          <div key={val.client_id}>
+            <div
+              className={`card-capsule ${
+                val.doc_status == 'Missed'
+                  ? 'statusMissed'
+                  : val.doc_status == 'Ongoing'
+                  ? 'statusOngoing'
+                  : val.doc_status == 'Complete'
+                  ? 'statusComplete'
+                  : ''
+              } {\*${getStatusClass(val.doc_status)}*\}`}
+            ></div>
+            <div className="card">
+              <table className="table2">
+                <tbody>
+                  <tr>
+                    <td className="client-name align-left">
+                      {val.client_name}
+                    </td>
+                    <td className="align-left pLoc-row">
+                      {val.client_property_location}
+                    </td>
+                    <td className="align-left docNo-row">{val.doc_no}</td>
+                    <td>
+                      <div
+                        className={`pill2 ${
+                          val.doc_status == 'Missed'
+                            ? 'statusMissed'
+                            : val.doc_status == 'Ongoing'
+                            ? 'statusOngoing'
+                            : val.doc_status == 'Complete'
+                            ? 'statusComplete'
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                      >
+                        {val.doc_type}
+                      </div>
+                    </td>
+                    <td className="date">{val.doc_date_submission}</td>
+                    <td className="status-align">
+                      <div
+                        className={`pill ${
+                          val.doc_status == 'Missed'
+                            ? 'statusMissed'
+                            : val.doc_status == 'Ongoing'
+                            ? 'statusOngoing'
+                            : val.doc_status == 'Complete'
+                            ? 'statusComplete'
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                      >
+                        {val.doc_status}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+        ))
+      ) : (
+        <div>
+          <div className="card noDataCard">
+            <table className="table2">
+              <thead>
+                <tr>
+                  <td>{`There is no data for ${getMonthName(
+                    month,
+                  )} ${year}.`}</td>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
+      )}
+    </div>
   );
 }

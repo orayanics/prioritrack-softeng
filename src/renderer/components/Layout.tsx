@@ -1,27 +1,45 @@
-import React from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, redirect } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Navbar from './navbar';
 
-function Layout({onLogout}) {
+function Layout({ onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // REFRESH ON SAME PAGE
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem('lastPathname', location.pathname);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+    const lastPathname = localStorage.getItem('lastPathname');
+
+    if (isAuthenticated && lastPathname) {
+      navigate(lastPathname);
+      localStorage.removeItem('lastPathname');
+    }
+  }, [location.pathname]);
+
   const handleLogout = () => {
-    // Perform logout action
     localStorage.removeItem('authenticated');
     onLogout();
     navigate('/login');
   };
 
   return (
-    // <>
-    //   {location.pathname !== '/login' && <Navbar />}
-    //   <Outlet />
-    // </>
     <div>
-    {location.pathname !== '/login' && <Navbar onLogout={handleLogout} />}
-    <Outlet/>
-  </div>
+      {location.pathname !== '/login' && <Navbar onLogout={handleLogout} />}
+      <Outlet />
+    </div>
   );
 }
 
