@@ -181,7 +181,7 @@ export default function Home() {
       console.error('Error fetching client details:', error);
     }
   };
-  type StatusType = 'Missed' | 'Ongoing' | 'Upcoming' | 'Complete' | 'OnHold';
+  type StatusType = 'Missed' | 'Ongoing' | 'Complete';
 
   const getStatusClass = (status: StatusType) => {
     switch (status) {
@@ -189,12 +189,9 @@ export default function Home() {
         return styles.statusMissed;
       case 'Ongoing':
         return styles.statusOngoing;
-      case 'Upcoming':
-        return styles.statusUpcoming;
+
       case 'Complete':
         return styles.statusComplete;
-      case 'OnHold':
-        return styles.statusOnHold;
       default:
         return '';
     }
@@ -329,14 +326,10 @@ export default function Home() {
                   className={`${styles.cardCapsule} ${
                     val.doc_status == 'Missed'
                       ? styles.statusMissed
-                      : val.doc_status == 'Upcoming'
-                      ? styles.statusUpcoming
                       : val.doc_status == 'Ongoing'
                       ? styles.statusOngoing
                       : val.doc_status == 'Complete'
                       ? styles.statusComplete
-                      : val.doc_status == 'On Hold'
-                      ? styles.statusOnHold
                       : ''
                   } {\*${getStatusClass(val.doc_status)}*\}`}
                 ></div>
@@ -362,14 +355,10 @@ export default function Home() {
  ${
    val.doc_status == 'Missed'
      ? styles.statusMissed
-     : val.doc_status == 'Upcoming'
-     ? styles.statusUpcoming
      : val.doc_status == 'Ongoing'
      ? styles.statusOngoing
      : val.doc_status == 'Complete'
      ? styles.statusComplete
-     : val.doc_status == 'On Hold'
-     ? styles.statusOnHold
      : ''
  } {\*${getStatusClass(val.doc_status)}*\} `}
                       >
@@ -386,14 +375,10 @@ export default function Home() {
                       className={`${styles.status} ${
                         val.doc_status == 'Missed'
                           ? styles.statusMissed
-                          : val.doc_status == 'Upcoming'
-                          ? styles.statusUpcoming
                           : val.doc_status == 'Ongoing'
                           ? styles.statusOngoing
                           : val.doc_status == 'Complete'
                           ? styles.statusComplete
-                          : val.doc_status == 'On Hold'
-                          ? styles.statusOnHold
                           : ''
                       } {\*${getStatusClass(val.doc_status)}*\}`}
                     >

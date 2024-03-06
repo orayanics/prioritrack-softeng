@@ -191,44 +191,34 @@ export default function Reports(): JSX.Element {
   };
 
   const [missed, setMissed] = useState(0);
-  const [upcoming, setUpcoming] = useState(0);
   const [ongoing, setOngoing] = useState(0);
   const [complete, setComplete] = useState(0);
-  const [onHold, setOnHold] = useState(0);
 
   useEffect(() => {
     let missedCount = 0;
-    let upcomingCount = 0;
     let ongoingCount = 0;
     let completeCount = 0;
-    let onHoldCount = 0;
 
     users.forEach((val: any) => {
       switch (val.doc_status) {
         case 'Missed':
           missedCount++;
           break;
-        case 'Upcoming':
-          upcomingCount++;
-          break;
+
         case 'Ongoing':
           ongoingCount++;
           break;
         case 'Complete':
           completeCount++;
           break;
-        case 'On Hold':
-          onHoldCount++;
-          break;
+
         default:
           break;
       }
     });
     setMissed(missedCount);
-    setUpcoming(upcomingCount);
     setOngoing(ongoingCount);
     setComplete(completeCount);
-    setOnHold(onHoldCount);
   }, [users]);
 
   const deleteData = async (id) => {
@@ -334,7 +324,7 @@ export default function Reports(): JSX.Element {
       console.log('No clients available to generate report.');
     }
   };
-  type StatusType = 'Missed' | 'Ongoing' | 'Upcoming' | 'Complete' | 'OnHold';
+  type StatusType = 'Missed' | 'Ongoing' | 'Complete';
 
   const getStatusClass = (status: StatusType) => {
     switch (status) {
@@ -342,12 +332,9 @@ export default function Reports(): JSX.Element {
         return styles.statusMissed;
       case 'Ongoing':
         return styles.statusOngoing;
-      case 'Upcoming':
-        return styles.statusUpcoming;
       case 'Complete':
         return styles.statusComplete;
-      case 'OnHold':
-        return styles.statusOnHold;
+
       default:
         return '';
     }
@@ -395,10 +382,9 @@ export default function Reports(): JSX.Element {
                 <th colSpan={2}>Month:</th>
                 <th colSpan={2}>Year:</th>
                 <th colSpan={2}>Missed</th>
-                <th colSpan={2}>Upcoming</th>
+
                 <th colSpan={2}>Ongoing</th>
                 <th colSpan={2}>Complete</th>
-                <th colSpan={2}>On Hold</th>
               </tr>
             </thead>
             <tbody>
@@ -439,17 +425,12 @@ export default function Reports(): JSX.Element {
                 <td colSpan={2}>
                   <div className="pill-report statusMissed">{missed}</div>
                 </td>
-                <td colSpan={2}>
-                  <div className="pill-report statusUpcoming">{upcoming}</div>
-                </td>
+
                 <td colSpan={2}>
                   <div className="pill-report statusOngoing ">{ongoing}</div>
                 </td>
                 <td colSpan={2}>
                   <div className="pill-report statusComplete">{complete}</div>
-                </td>
-                <td colSpan={2}>
-                  <div className="pill-report statusOnHold">{onHold}</div>
                 </td>
               </tr>
               {/* Add more rows as needed */}
@@ -543,15 +524,11 @@ export default function Reports(): JSX.Element {
             <div
               className={`card-capsule ${
                 val.doc_status == 'Missed'
-                  ? styles.statusMissed
-                  : val.doc_status == 'Upcoming'
-                  ? styles.statusUpcoming
+                  ? 'statusMissed'
                   : val.doc_status == 'Ongoing'
-                  ? styles.statusOngoing
+                  ? 'statusOngoing'
                   : val.doc_status == 'Complete'
-                  ? styles.statusComplete
-                  : val.doc_status == 'On Hold'
-                  ? styles.statusOnHold
+                  ? 'statusComplete'
                   : ''
               } {\*${getStatusClass(val.doc_status)}*\}`}
             ></div>
@@ -570,15 +547,11 @@ export default function Reports(): JSX.Element {
                       <div
                         className={`pill2 ${
                           val.doc_status == 'Missed'
-                            ? styles.statusMissed
-                            : val.doc_status == 'Upcoming'
-                            ? styles.statusUpcoming
+                            ? 'statusMissed'
                             : val.doc_status == 'Ongoing'
-                            ? styles.statusOngoing
+                            ? 'statusOngoing'
                             : val.doc_status == 'Complete'
-                            ? styles.statusComplete
-                            : val.doc_status == 'On Hold'
-                            ? styles.statusOnHold
+                            ? 'statusComplete'
                             : ''
                         } {\*${getStatusClass(val.doc_status)}*\}`}
                       >
@@ -590,15 +563,11 @@ export default function Reports(): JSX.Element {
                       <div
                         className={`pill ${
                           val.doc_status == 'Missed'
-                            ? styles.statusMissed
-                            : val.doc_status == 'Upcoming'
-                            ? styles.statusUpcoming
+                            ? 'statusMissed'
                             : val.doc_status == 'Ongoing'
-                            ? styles.statusOngoing
+                            ? 'statusOngoing'
                             : val.doc_status == 'Complete'
-                            ? styles.statusComplete
-                            : val.doc_status == 'On Hold'
-                            ? styles.statusOnHold
+                            ? 'statusComplete'
                             : ''
                         } {\*${getStatusClass(val.doc_status)}*\}`}
                       >
