@@ -26,13 +26,20 @@ const bcrypt = require('bcrypt');
 myApp.use(cors());
 myApp.use(express.json());
 
+var RateLimit = require('express-rate-limit')
+var limiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+})
+
+myApp.use(limiter)
 // MYSQL CONNECTION
 // ENTER THIS IN QUERY IN MYSQL
 // ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_current_password';
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: '',
+  password: 'admin123',
   database: 'prioritrack',
 });
 
@@ -59,7 +66,6 @@ myApp.post('/login', (req: Request, res: Response) => {
       } else {
         res.send(result);
       }
-      console.log(hash);
     });
   });
 });
@@ -114,12 +120,6 @@ myApp.post('/client/add_submit', (req, res) => {
   const property_location = req.body.property_location;
   const client_bank_name = req.body.client_bank_name;
   const client_bank_address = req.body.client_bank_address;
-  console.log(
-    'THIS IS SERVER ' + name,
-    property_location,
-    client_bank_name,
-    client_bank_address,
-  );
   const sql =
     'INSERT INTO clients (client_name,client_property_location,client_bank_name,client_bank_address) VALUES (?, ?, ?, ?)';
   db.query(
@@ -170,6 +170,7 @@ myApp.get('/client/list', (req, res) => {
     return res.send(data);
   });
 });
+
 //SORT FOR CLIENTS
 //sort by clientName in ascending order
 myApp.get('/client/list/clientName/asc', (req, res) => {
