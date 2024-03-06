@@ -316,7 +316,7 @@ export default function Home() {
               }`}
             ></img>
           </p>
-          <p className={`${styles.title} ${styles.tAction}`}>Action</p>
+          {/* <p className={`${styles.title} ${styles.tAction}`}>Action</p> */}
         </div>
         {users.length > 0 ? (
           users.map((val) => (
@@ -350,17 +350,33 @@ export default function Home() {
                       {val.doc_no}
                     </p>
                     <div className={styles.mrdWidth}>
+                      {/* <div
+                        className={`
+                        ${styles.info}
+                        ${styles.mrd} ${styles.cName}
+                        ${
+                          val.doc_status == 'Missed'
+                            ? styles.statusMissed
+                            : val.doc_status == 'Ongoing'
+                            ? styles.statusOngoing
+                            : val.doc_status == 'Complete'
+                            ? styles.statusComplete
+                            : ''
+                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                      > */}
                       <div
-                        className={`${styles.info} ${styles.mrd} ${styles.cName}
- ${
-   val.doc_status == 'Missed'
-     ? styles.statusMissed
-     : val.doc_status == 'Ongoing'
-     ? styles.statusOngoing
-     : val.doc_status == 'Complete'
-     ? styles.statusComplete
-     : ''
- } {\*${getStatusClass(val.doc_status)}*\} `}
+                        className={`
+                        ${styles.info}
+                        ${styles.mrd} ${styles.cName}
+                         ${
+                           val.doc_status == 'Missed'
+                             ? styles.statusMissed
+                             : val.doc_status == 'Ongoing'
+                             ? styles.statusOngoing
+                             : val.doc_status == 'Complete'
+                             ? styles.statusComplete
+                             : ''
+                         } {\*${getStatusClass(val.doc_status)}*\}`}
                       >
                         {/* Most Recent Document */}
                         {val.doc_type}
@@ -386,7 +402,7 @@ export default function Home() {
                     </div>
                   </div>
                 </Link>
-                <div className={`${styles.cursor}`}>
+                {/* <div className={`${styles.cursor}`}>
                   <button className={`${styles.edit}`}>
                     <Link
                       to={`/client/edit/${val.client_id}`}
@@ -395,14 +411,8 @@ export default function Home() {
                       <FaEdit className={`${styles.green_icon}`} />
                     </Link>
                   </button>
-                </div>
-                <div className={`${styles.cursor}`}>
-                  {/* <button
-                  className={`${styles.delete}`}
-                  onClick={() => deleteData(val.client_id)}
-                >
-                  <FaTrashAlt className={`${styles.deletered}`} />
-                </button> */}
+                </div> */}
+                {/* <div className={`${styles.cursor}`}>
                   <button
                     className={`${styles.delete}`}
                     onClick={() => {
@@ -412,7 +422,7 @@ export default function Home() {
                   >
                     <FaTrashAlt className={`${styles.deletered}`} />
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           ))
