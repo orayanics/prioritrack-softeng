@@ -2,8 +2,7 @@ import React, { FC, useState } from 'react';
 import '../styles/navbar.css';
 import navlogo from '../assets/navlogo.png';
 import { Outlet, Link } from 'react-router-dom';
-import { FaBell } from 'react-icons/fa';
-import Dropdown from 'react-bootstrap/Dropdown';
+import Notif from './Notif';
 
 export default function Navbar({ onLogout }) {
   const [activePage, setActivePage] = useState('Dashboard');
@@ -78,23 +77,7 @@ export default function Navbar({ onLogout }) {
           Logout
         </a>
 
-        <div className="dropdownNav link">
-          <button className="dropbtn">
-            <FaBell />
-          </button>
-          <div className="dropdown-content">
-            <a href="#">
-              Notification 1
-              <div className="description">
-                Description Lorem ipsum dolor sit amet, consectetur adipiscing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                aliqua.
-              </div>
-            </a>
-            <a href="#">Notification 2</a>
-            <a href="#">Notification 3</a>
-          </div>
-        </div>
+        <Notif />
       </div>
     </nav>
   );
