@@ -1,18 +1,3 @@
-// const { connectDb } = require('../database/conn.tsx');
-
-// export default function Home() {
-
-//   const getProducts = async () => {
-//     const conn = await connectDb();
-//     const results = await conn.query('SELECT * FROM users');
-//     return results;
-//   };
-
-//   return (
-//     <div>Home</div>
-//   )
-// }
-
 import React, { useEffect, useState, useRef } from 'react';
 import Axios from 'axios';
 import { Outlet, Link } from 'react-router-dom';
@@ -26,6 +11,7 @@ import icSortUp from '../assets/icons/ic-sort-up.svg';
 import icSortDown from '../assets/icons/ic-sort-down.svg';
 import logo from '../assets/prioritrack-logo.svg';
 import { useLocation } from 'react-router-dom';
+import SearchBar from '../components/Search';
 
 Modal.setAppElement('#root');
 
@@ -46,6 +32,9 @@ export default function Home() {
   const [successMessage, setSuccessMessage] = useState('');
   const [iconToShow, setIconToShow] = useState<React.ReactElement | null>(null);
   const [successMessageLogin, setSuccessMessageLogin] = useState('');
+
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const successDeleteLogo = (
     <div className={styles.logoSuccess}>
@@ -133,6 +122,7 @@ export default function Home() {
     try {
       const response = await Axios.get(`http://localhost:3001/dashboard/list`);
       setUsers(response.data);
+      setFilteredUsers(response.data);
       console.log(response);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -218,6 +208,19 @@ export default function Home() {
     'Tax Clearance',
     'Follow-up letter',
   ]);
+
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    const filtered = users.filter((user) =>
+      user.client_name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setFilteredUsers(filtered);
+  };
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm]);
+
   return (
     <div>
       <div className={styles.bgLogo}>
@@ -260,6 +263,7 @@ export default function Home() {
           </div>
         )}
         <div className={styles.columnButtons}>
+          <SearchBar onSearch={handleSearch} />
           <Link to={`/AddClient`} className={styles.export}>
             <button className={styles.button}>Export Data</button>
           </Link>
@@ -354,8 +358,8 @@ export default function Home() {
             </p>
             {/* <p className={`${styles.title} ${styles.tAction}`}>Action</p> */}
           </div>
-          {users.length > 0 ? (
-            users.map((val) => (
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((val) => (
               <div key={val.client_id} className={styles.card}>
                 <div className={styles.column1}>
                   <div
@@ -430,17 +434,32 @@ export default function Home() {
           ) : (
             <div className={styles.card}>
               <div className={styles.column1}>
+                <div
+                  className={`${styles.cardCapsule} ${styles.statusMissed}`}
+                ></div>
                 <div className={styles['card-capsule']}></div>
                 <div className={styles.column2}>
                   <p className={`${styles.info} ${styles.cName}`}>No data</p>
                   <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
+                  <p className={`${styles.info} ${styles.docNo}`}>No data</p>
                   <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-                  <div className={`${styles.clientBA} ${styles.info}`}>
-                    No data
+
+                  <div className={styles.mrdWidth}>
+                    <div
+                      className={`
+                        ${styles.info}
+                        ${styles.mrd} ${styles.cName}
+                         ${styles.statusMissed}`}
+                    >
+                      {/* Most Recent Document */}
+                      No data
+                    </div>
                   </div>
-                  <div className={`${styles.status} ${styles.info}`}>
+
+                  <p className={`${styles.info} ${styles.dateSub}`}>
+                    {/*  Date of Submission */}
                     No data
-                  </div>
+                  </p>
                 </div>
               </div>
             </div>
