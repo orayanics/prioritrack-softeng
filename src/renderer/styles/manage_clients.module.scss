@@ -253,16 +253,8 @@ body {
   background-color: var(--on-going);
 }
 
-.status-upcoming {
-  background-color: var(--upcoming);
-}
-
 .status-complete {
   background-color: var(--complete);
-}
-
-.status-on-hold {
-  background-color: var(--on-hold);
 }
 
 .container {
@@ -328,6 +320,64 @@ body {
 
   font-size: 20px;
   font-weight: bold;
+}
+// MODAL
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+.modalContent {
+  background-color: #c1d7e0;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%; /* Adjust as needed */
+  max-width: 400px; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.titleDelete {
+  text-align: center;
+}
+.midDelete {
+  display: flex;
+  justify-content: center;
+}
+.btn {
+  // margin: 10px 0px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.cancel {
+  margin-left: 20px;
+  background-color: #740000;
+
+  margin-left: 20px;
+}
+.submit {
+  background-color: #00042c;
+}
+.btn {
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+
+  width: 160px;
+  height: 30px;
+  border-style: none;
+  cursor: pointer;
 }
 @media (max-width: 840px) {
 }

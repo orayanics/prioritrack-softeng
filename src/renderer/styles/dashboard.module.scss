@@ -155,7 +155,7 @@ body {
   width: 160px;
 }
 .title_mrd {
-  width: 130px;
+  width: 180px;
   display: flex;
   text-align: center !important;
 }
@@ -253,7 +253,7 @@ body {
   text-align: left;
 
   color: black;
-  width: 100px;
+  width: 140px;
   font-weight: normal;
 }
 .status {
@@ -279,16 +279,8 @@ body {
   background-color: var(--on-going);
 }
 
-.statusUpcoming {
-  background-color: var(--upcoming);
-}
-
 .statusComplete {
   background-color: var(--complete);
-}
-
-.statusOnHold {
-  background-color: var(--on-hold);
 }
 
 .container {
@@ -358,21 +350,6 @@ body {
   height: 30px;
   border-style: none;
   cursor: pointer;
-}
-.red {
-  background-color: #f8bdb0; /*#db8074*/
-}
-.blue {
-  background-color: #aad2e9; /*#7dade8*/
-}
-.yellow {
-  background-color: #efe368; /*#fcd04c*/
-}
-.green {
-  background-color: #9cd58f; /*#73bf67*/
-}
-.orange {
-  background-color: #ffc383; /*#fca14c*/
 }
 .containerSuccess {
   display: flex;
