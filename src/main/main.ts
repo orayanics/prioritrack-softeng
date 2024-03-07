@@ -21,6 +21,7 @@ const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 // MIDDLEWARE
 myApp.use(cors());
@@ -33,14 +34,15 @@ var limiter = RateLimit({
 })
 
 myApp.use(limiter)
+
 // MYSQL CONNECTION
 // ENTER THIS IN QUERY IN MYSQL
 // ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_current_password';
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'admin123',
-  database: 'prioritrack',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 db.connect();
@@ -262,6 +264,7 @@ myApp.get('/dashboard/list', (req, res) => {
     return res.send(data);
   });
 });
+
 //SORT FOR DASHBOARD
 //sort by clientName in ascending order
 myApp.get('/dashboard/list/clientName/asc', (req, res) => {
