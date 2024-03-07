@@ -8,6 +8,7 @@ import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
 import logo from '../../assets/prioritrack-logo.svg';
 import Modal from 'react-modal';
+import * as XLSX from 'xlsx';
 
 interface SortIcons {
   documentType: 'asc' | 'desc';
@@ -143,6 +144,87 @@ function ManageDocuments() {
       console.error('Error fetching client details:', error);
     }
   };
+// export shit
+const handleGenerateReport = () => {
+  if (
+    userData &&
+    userData.client_name &&
+    userData.client_property_location &&
+    userData.client_bank_name &&
+    userData.client_bank_address &&
+    userData.documents &&
+    userData.documents.length > 0
+  ) {
+    const client = userData;
+
+    // Prepare data for Excel
+    const data = userData.documents.map(document => [
+      client.client_name,
+      client.client_property_location,
+      client.client_bank_name,
+      client.client_bank_address,
+      document.doc_type,
+      document.doc_no,
+      document.doc_date_submission,
+      document.doc_status
+    ]);
+
+    // Add header row
+    const headers = [
+      'Client Name',
+      'Property Location',
+      'Bank Name',
+      'Bank Address',
+      'Document Type',
+      'Document Number',
+      'Date of Submission',
+      'Document Status'
+    ];
+    const excelData = [headers, ...data];
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Client Data');
+
+    // Format Excel sheet
+    const wscols = [
+      { wch: 20 }, // Width of column A (Client Name)
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 35 },
+      { wch: 35 }
+    ];
+
+    worksheet['!cols'] = wscols;
+
+    // Save workbook as Excel file
+    XLSX.writeFile(workbook, 'Client_Data.xlsx');
+  } else {
+    console.log('Data not available to generate report.');
+  }
+};
+
+type StatusType = 'Missed' | 'Ongoing' | 'Complete';
+
+const getStatusClass = (status: StatusType) => {
+  switch (status) {
+    case 'Missed':
+      return styles.statusMissed;
+    case 'Ongoing':
+      return styles.statusOngoing;
+    case 'Complete':
+      return styles.statusComplete;
+
+    default:
+      return '';
+  }
+};
 
   return (
     <div>
@@ -195,6 +277,11 @@ function ManageDocuments() {
                   Add a Document <FaPlus />
                 </button>
               </Link>
+              <Link to="/reports">
+          <button className={styles.button} onClick={handleGenerateReport}>
+            Generate Reports <FaPlus />
+          </button>
+        </Link>
               <div className={styles.rec}>
                 <p>Client Name</p>
                 <h3>{userData.client_name}</h3>
