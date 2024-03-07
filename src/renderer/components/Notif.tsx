@@ -63,7 +63,7 @@ export default function Notif() {
     }
 
     // For demonstration, return a placeholder status for documents not missed
-    return 'In Progress';
+    return 'Upcomming Deadline';
   };
 
   // Function to store a new notification

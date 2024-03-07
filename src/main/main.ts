@@ -1163,13 +1163,21 @@ myApp.post('/notif', (req, res) => {
 });
 
 myApp.get('/notif', (req, res) => {
+  // Calculate the date 3 days from now
+  const threeDaysFromNow = new Date();
+  threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+
+  // Format the date to match the format in your database
+  const formattedDate = threeDaysFromNow.toISOString().slice(0, 10);
+
   const sql = `
     SELECT clients.client_name, documents.doc_date_deadline, documents.doc_status
     FROM clients
     JOIN documents ON clients.client_id = documents.client_id
+    WHERE documents.doc_date_deadline >= CURDATE() AND documents.doc_date_deadline <= ?
   `;
 
-  db.query(sql, (err, results) => {
+  db.query(sql, [formattedDate], (err, results) => {
     if (err) {
       console.error('Error executing query:', err);
       res
@@ -1177,6 +1185,8 @@ myApp.get('/notif', (req, res) => {
         .json({ error: 'An error occurred while fetching notifications.' });
       return;
     }
+    // Assuming doc_status is a string indicating the status of the document
+    // and you want to handle it accordingly in your React component
     res.json(results);
   });
 });
