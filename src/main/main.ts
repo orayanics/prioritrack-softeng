@@ -27,13 +27,13 @@ require('dotenv').config();
 myApp.use(cors());
 myApp.use(express.json());
 
-var RateLimit = require('express-rate-limit')
+var RateLimit = require('express-rate-limit');
 var limiter = RateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-})
+});
 
-myApp.use(limiter)
+myApp.use(limiter);
 
 // MYSQL CONNECTION
 // ENTER THIS IN QUERY IN MYSQL
@@ -1144,3 +1144,39 @@ app
     });
   })
   .catch(console.log);
+
+//Notification
+myApp.post('/notif', (req, res) => {
+  const { client_name, doc_status } = req.body;
+  const storedAt = new Date();
+
+  const query =
+    'INSERT INTO prioritrack.notification (client_name, doc_status, stored_at) VALUES (?, ?, ?)';
+  db.query(query, [client_name, doc_status, storedAt], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error storing notification');
+    } else {
+      res.status(200).send('Notification stored successfully');
+    }
+  });
+});
+
+myApp.get('/notif', (req, res) => {
+  const sql = `
+    SELECT clients.client_name, documents.doc_date_deadline, documents.doc_status
+    FROM clients
+    JOIN documents ON clients.client_id = documents.client_id
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res
+        .status(500)
+        .json({ error: 'An error occurred while fetching notifications.' });
+      return;
+    }
+    res.json(results);
+  });
+});
