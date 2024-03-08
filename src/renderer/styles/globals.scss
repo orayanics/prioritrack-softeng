@@ -11,6 +11,21 @@
 
   --success-green: #13481d;
   --delete-red: #ad0000;
+
+  --bid-letter: #e5bedd;
+  --statement-of-account: #ffa8b8;
+  --minutes-of-auction-sale: #ccc7f5;
+  --sheriffs-fee: #f7d8c3;
+
+  --tax-declaration: #b5dcf9;
+  --real-estate-tax-payment: #a9e5e3;
+  --jdf-payment-or: #a0d995;
+  --certificate-of-sale: #d9e592;
+  --lra-po: #d2c897;
+  --annotated-transfer-cot: #fae187;
+  --cert-of-posting: #e8ba86;
+  --tax-clearance: #e09898;
+  --follow-up-letter: #c4c4c4;
 }
 body {
   background-color: white !important;
@@ -19,4 +34,57 @@ body {
 
 .container_main {
   width: 100% !important;
+}
+
+// labels
+.bidletter {
+  background-color: var(--bid-letter);
+}
+
+.statementofaccount {
+  background-color: var(--statement-of-account);
+}
+
+.minutesofauctionsale {
+  background-color: var(--minutes-of-auction-sale);
+}
+
+.sheriffsfee {
+  background-color: var(--sheriffs-fee);
+}
+
+.taxdeclaration {
+  background-color: var(--tax-declaration);
+}
+
+.realestatetaxpayment {
+  background-color: var(--real-estate-tax-payment);
+}
+
+.jdfpaymentor {
+  background-color: var(--jdf-payment-or);
+}
+
+.certificateofsale {
+  background-color: var(--certificate-of-sale);
+}
+
+.lrapo {
+  background-color: var(--lra-po);
+}
+
+.annotatedtransfercot {
+  background-color: var(--annotated-transfer-cot);
+}
+
+.certofposting {
+  background-color: var(--cert-of-posting);
+}
+
+.taxclearance {
+  background-color: var(--tax-clearance);
+}
+
+.followupletter {
+  background-color: var(--follow-up-letter);
 }

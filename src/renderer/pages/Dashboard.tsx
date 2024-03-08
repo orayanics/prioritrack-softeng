@@ -82,8 +82,10 @@ export default function Home() {
     dateOfSubmission: 'asc',
     status: 'asc',
   });
+
   const [activeSortIcon, setActiveSortIcon] = useState('');
   const isInitialSortMount = useRef(true);
+
   const handleSortIcon = (field: keyof SortIcons) => {
     if (activeSortIcon == field) {
       setSortIcons((prevSortIcons) => ({
@@ -96,6 +98,7 @@ export default function Home() {
       activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
     );
   };
+
   useEffect(() => {
     //call if sortIcons, activeSortIcon changes
     if (isInitialSortMount.current) {
@@ -137,12 +140,18 @@ export default function Home() {
         }`,
       );
       setUsers(response.data);
-      //console.log(response);;
-      console.log(
-        `http://localhost:3001/dashboard/list/${activeSortIcon}/${
-          sortIcons[activeSortIcon as keyof SortIcons]
-        }`,
-      );
+      const sortedData = response.data;
+
+      // Sort filteredUsers state
+      const filteredSorted = filteredUsers.sort((a, b) => {
+        if (sortIcons[activeSortIcon as keyof SortIcons] === 'asc') {
+          return a[activeSortIcon] > b[activeSortIcon] ? 1 : -1;
+        } else {
+          return a[activeSortIcon] < b[activeSortIcon] ? 1 : -1;
+        }
+      });
+
+      setFilteredUsers(filteredSorted);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -208,6 +217,39 @@ export default function Home() {
     'Tax Clearance',
     'Follow-up letter',
   ]);
+  function getDocumentClass(documents) {
+    switch (documents) {
+      case 'BID Letter':
+        return styles.bidletter;
+      case 'Statement of Account':
+        return styles.statementofaccount;
+      case 'Minutes of Auction sale':
+        return styles.minutesofauctionsale;
+      case "Sheriff's fee":
+        return styles.sheriffsfee;
+      case 'Tax Declaration':
+        return styles.taxdeclaration;
+      case 'Real Estate Tax Payment':
+        return styles.realestatetaxpayment;
+      case 'JDF Payment O.R.':
+        return styles.jdfpaymentor;
+      case 'Certificate of Sale':
+        return styles.certificateofsale;
+      case 'LRA Assessment Form P.O.':
+      case 'LRA O.R.':
+        return styles.lrapo;
+      case 'Annotated Transfer Certificate of Title':
+        return styles.annotatedtransfercot;
+      case 'Certificate of Posting':
+        return styles.certofposting;
+      case 'Tax Clearance':
+        return styles.taxclearance;
+      case 'Follow-up letter':
+        return styles.followupletter;
+      default:
+        return '';
+    }
+  }
 
   const handleSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
@@ -274,7 +316,11 @@ export default function Home() {
             <div className={styles.rec}>
               <h2>MRD Legends</h2>
               {documents.map((document, index) => (
-                <div className={` ${styles.capsuleLegends}`}>
+                <div
+                  className={`${styles.capsuleLegends} ${getDocumentClass(
+                    document,
+                  )}`}
+                >
                   <div key={index}>{document}</div>
                 </div>
               ))}
@@ -371,7 +417,7 @@ export default function Home() {
                         : val.doc_status == 'Complete'
                         ? styles.statusComplete
                         : ''
-                    } {\*${getStatusClass(val.doc_status)}*\}`}
+                    } `}
                   ></div>
 
                   <Link
@@ -391,18 +437,10 @@ export default function Home() {
                       </p>
                       <div className={styles.mrdWidth}>
                         <div
-                          className={`
-                        ${styles.info}
-                        ${styles.mrd} ${styles.cName}
-                         ${
-                           val.doc_status == 'Missed'
-                             ? styles.statusMissed
-                             : val.doc_status == 'Ongoing'
-                             ? styles.statusOngoing
-                             : val.doc_status == 'Complete'
-                             ? styles.statusComplete
-                             : ''
-                         } {\*${getStatusClass(val.doc_status)}*\}`}
+                          className={` ${styles.info}
+                          ${styles.mrd} ${styles.cName} ${getDocumentClass(
+                            val.doc_type,
+                          )}`}
                         >
                           {/* Most Recent Document */}
                           {val.doc_type}
@@ -422,7 +460,7 @@ export default function Home() {
                             : val.doc_status == 'Complete'
                             ? styles.statusComplete
                             : ''
-                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                        } `}
                       >
                         {val.doc_status}
                       </div>
