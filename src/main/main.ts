@@ -14,13 +14,13 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+const bcrypt = require('bcryptjs');
 
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
 const myApp = express();
 const port = 3001;
-const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 // MIDDLEWARE
