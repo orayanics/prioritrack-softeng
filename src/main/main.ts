@@ -27,13 +27,13 @@ require('dotenv').config();
 myApp.use(cors());
 myApp.use(express.json());
 
-var RateLimit = require('express-rate-limit')
+var RateLimit = require('express-rate-limit');
 var limiter = RateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-})
+});
 
-myApp.use(limiter)
+myApp.use(limiter);
 
 // MYSQL CONNECTION
 // ENTER THIS IN QUERY IN MYSQL
@@ -1078,10 +1078,14 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+
   mainWindow = new BrowserWindow({
+    center: true,
     show: false,
-    width: 1024,
-    height: 728,
+    height: 1080,
+    width: 1920,
+    minHeight: 1080,
+    minWidth: 1920,
     icon: getAssetPath('circlelogo.png'),
     webPreferences: {
       preload: app.isPackaged
