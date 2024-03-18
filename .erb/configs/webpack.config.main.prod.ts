@@ -11,6 +11,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+const Dotenv = require('dotenv-webpack');
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -41,6 +42,7 @@ const configuration: webpack.Configuration = {
         parallel: true,
       }),
     ],
+    minimize: false,
   },
 
   plugins: [
@@ -66,6 +68,13 @@ const configuration: webpack.Configuration = {
 
     new webpack.DefinePlugin({
       'process.type': '"browser"',
+    }),
+
+    new Dotenv({
+      path: path.join(webpackPaths.rootPath, '.env'),
+      safe: false, // If true, load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
+      silent: false, // If true, all warnings will be suppressed
+      defaults: false, // Adds support for dotenv-defaults. If set to true, uses ./.env.defaults. If a string, uses that location for a defaults file
     }),
   ],
 
