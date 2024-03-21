@@ -148,7 +148,7 @@ myApp.post('/client/document/add/:id', (req, res) => {
   const client_id = req.body.client_id;
   console.log('SERVER') + client_id;
   const sql =
-    'INSERT INTO documents (client_id, doc_no, doc_date_submission, doc_type, doc_status) VALUES (?, ?, ?, ?, ?)';
+    'INSERT INTO documents (client_id, doc_no, doc_date_submission,date_turnaround, doc_type, doc_status) VALUES (?, ?,? , ?, ?, ?)';
   db.query(
     sql,
     [client_id, doc_no, doc_date_submission, doc_type, doc_status],
