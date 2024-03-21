@@ -25,7 +25,7 @@ export default function Notif() {
           ...item,
           startTime: new Date().getTime(),
           elapsedTime: 0,
-          docStatus: getDocumentStatus(item.doc_date_deadline), // Use the function to determine docStatus
+          docStatus: item.doc_status,
         }));
 
         setNotifications(notificationsWithTimers);
@@ -47,24 +47,6 @@ export default function Notif() {
 
     return () => clearInterval(intervalId);
   }, [notifications]);
-
-  const clearAllNotifications = () => {
-    setNotifications([]);
-  };
-
-  // Function to determine document status
-  const getDocumentStatus = (deadline: string): string => {
-    const deadlineDate = new Date(deadline);
-    const currentDate = new Date();
-
-    // Check if the deadline has passed
-    if (currentDate > deadlineDate) {
-      return 'Missed Document';
-    }
-
-    // For demonstration, return a placeholder status for documents not missed
-    return 'Upcomming Deadline';
-  };
 
   // Function to store a new notification
   const storeNotification = (clientName, docStatus) => {
@@ -105,11 +87,6 @@ export default function Notif() {
         <FaBell />
       </button>
       <div className="dropdown-content">
-        <div className="dropdown-actions">
-          <button className="clear-all-btn" onClick={clearAllNotifications}>
-            Clear All
-          </button>
-        </div>
         {notifications.map((item, index) => (
           <a href="#" key={index}>
             <div className="icon">
