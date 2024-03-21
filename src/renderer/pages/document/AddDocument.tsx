@@ -14,6 +14,8 @@ export default function AddDocument() {
   const [doc_no, setNumber] = useState<string>('');
   const [doc_date_submission, setDate] = useState<string>('');
   const [doc_type, setType] = useState<string>('');
+  const [date_turnaround, setTurnAroundDate] = useState<string>('');
+
   const [isValid, setIsValid] = useState<boolean>(true);
   const { id } = useParams();
   const client_id = parseInt(id, 10);
@@ -31,6 +33,7 @@ export default function AddDocument() {
       doc_status,
       doc_no,
       doc_date_submission,
+      date_turnaround,
       doc_type,
     })
       .then(() => {
@@ -39,6 +42,7 @@ export default function AddDocument() {
           doc_status,
           doc_no,
           doc_date_submission,
+          date_turnaround,
           doc_type,
         );
         console.log('Success');
@@ -50,6 +54,7 @@ export default function AddDocument() {
           doc_status,
           doc_no,
           doc_date_submission,
+          date_turnaround,
           doc_type,
         );
         console.log(err);
@@ -85,6 +90,12 @@ export default function AddDocument() {
                 className={styles.input}
                 type="date"
                 onChange={(e) => setDate(e.target.value)}
+              />
+              <h3 className={styles.inputTitle}>Turnaround Date of Document</h3>
+              <input
+                className={styles.input}
+                type="date"
+                onChange={(e) => setTurnAroundDate(e.target.value)}
               />
               <h3 className={styles.inputTitle}>Document Type</h3>
               {/* <input
