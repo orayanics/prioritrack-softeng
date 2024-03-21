@@ -5,13 +5,12 @@ import { FaBell } from 'react-icons/fa';
 import { TbClipboardText } from 'react-icons/tb';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 
-// Define the type for a notification
 interface Notification {
   client_name: string;
-  doc_date_deadline: string; // Adjust the type as necessary
+  date_turnaround: string; // Adjust the property name here
   startTime: number;
   elapsedTime: number;
-  docStatus: string; // Status from the database
+  docStatus: string;
 }
 
 export default function Notif() {

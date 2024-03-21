@@ -1078,7 +1078,6 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-
   mainWindow = new BrowserWindow({
     center: true,
     show: false,
@@ -1175,11 +1174,11 @@ myApp.get('/notif', (req, res) => {
   const formattedDate = threeDaysFromNow.toISOString().slice(0, 10);
 
   const sql = `
-    SELECT clients.client_name, documents.doc_date_deadline, documents.doc_status
-    FROM clients
-    JOIN documents ON clients.client_id = documents.client_id
-    WHERE documents.doc_date_deadline >= CURDATE() AND documents.doc_date_deadline <= ?
-  `;
+  SELECT clients.client_name, documents.date_turnaround, documents.doc_status
+  FROM clients
+  JOIN documents ON clients.client_id = documents.client_id
+  WHERE documents.date_turnaround >= CURDATE() AND documents.date_turnaround <= ?
+`;
 
   db.query(sql, [formattedDate], (err, results) => {
     if (err) {
