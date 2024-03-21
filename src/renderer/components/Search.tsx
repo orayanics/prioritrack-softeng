@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../styles/search.module.scss';
 
 interface Props {
   onSearch: (term: string) => void;
@@ -15,12 +16,15 @@ export default function Search({ onSearch }: Props) {
 
   return (
     <form>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={handleChange}
-      />
+      <div className={styles.group}>
+        <input
+          className={styles.input}
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={handleChange}
+        />
+      </div>
     </form>
   );
 }
