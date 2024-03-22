@@ -4,6 +4,7 @@ import navlogo from '../assets/navlogo.png';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Notif from './Notif';
 import ConfirmLogoutModal from './ConfirmLogoutModal';
 
 export default function Navbar({ onLogout }) {
@@ -29,9 +30,9 @@ export default function Navbar({ onLogout }) {
   const handleLinkClick = (pageName) => {
     setActivePage(pageName);
   };
-  
+
   return (
-<nav className="navbar">
+    <nav className="navbar">
       <Link
         to="/home"
         onClick={() => handleLinkClick('Dashboard')}
@@ -61,30 +62,11 @@ export default function Navbar({ onLogout }) {
         >
           Clients
         </Link>
-        <a
-          href="#"
-          onClick={() => setIsModalOpen(true)}
-          className="link"
-        >
+        <a href="#" onClick={() => setIsModalOpen(true)} className="link">
           Logout
         </a>
-        <div className="dropdownNav link">
-          <button className="dropbtn">
-            <FaBell />
-          </button>
-          <div className="dropdown-content">
-            <a href="#">
-              Notification 1
-              <div className="description">
-                Description Lorem ipsum dolor sit amet, consectetur adipiscing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                aliqua.
-              </div>
-            </a>
-            <a href="#">Notification 2</a>
-            <a href="#">Notification 3</a>
-          </div>
-        </div>
+
+        <Notif />
       </div>
       <ConfirmLogoutModal
         show={isModalOpen}

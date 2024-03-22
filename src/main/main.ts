@@ -1078,7 +1078,6 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-
   mainWindow = new BrowserWindow({
     center: true,
     show: false,
@@ -1148,3 +1147,49 @@ app
     });
   })
   .catch(console.log);
+
+//Notification
+myApp.post('/notif', (req, res) => {
+  const { client_name, doc_status } = req.body;
+  const storedAt = new Date();
+
+  const query =
+    'INSERT INTO prioritrack.notification (client_name, doc_status, stored_at) VALUES (?, ?, ?)';
+  db.query(query, [client_name, doc_status, storedAt], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error storing notification');
+    } else {
+      res.status(200).send('Notification stored successfully');
+    }
+  });
+});
+
+myApp.get('/notif', (req, res) => {
+  // Calculate the date 3 days from now
+  const threeDaysFromNow = new Date();
+  threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+
+  // Format the date to match the format in your database
+  const formattedDate = threeDaysFromNow.toISOString().slice(0, 10);
+
+  const sql = `
+  SELECT clients.client_name, documents.date_turnaround, documents.doc_status
+  FROM clients
+  JOIN documents ON clients.client_id = documents.client_id
+  WHERE documents.date_turnaround >= CURDATE() AND documents.date_turnaround <= ?
+`;
+
+  db.query(sql, [formattedDate], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res
+        .status(500)
+        .json({ error: 'An error occurred while fetching notifications.' });
+      return;
+    }
+    // Assuming doc_status is a string indicating the status of the document
+    // and you want to handle it accordingly in your React component
+    res.json(results);
+  });
+});
