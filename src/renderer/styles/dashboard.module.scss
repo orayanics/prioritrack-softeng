@@ -58,7 +58,7 @@ body {
   box-shadow: 1px 5px #00042c;
 
   width: 278px;
-  margin: 20px 20px 20px 0px;
+  margin: 10px 20px 10px 0px;
   /* top right bottom left */
 }
 .export {
@@ -98,7 +98,7 @@ body {
 }
 .columnButtons {
   display: flex;
-  justify-content: center;
+  margin-top: 45px;
   flex-direction: column;
 }
 .rec {
@@ -144,7 +144,7 @@ body {
     0 1px 1px rgba(0, 0, 0, 0.12),
     0 2px 2px rgba(0, 0, 0, 0.12),
     0 4px 4px rgba(0, 0, 0, 0.12);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .card:hover {
@@ -193,9 +193,11 @@ body {
   width: 160px;
 }
 .title_mrd {
-  width: 180px;
+  width: 120px;
   display: flex;
   text-align: center !important;
+  padding-left: 50px;
+  padding-right: 30px;
 }
 
 .dn {
@@ -213,6 +215,7 @@ body {
   width: 70px;
   text-align: center !important;
   margin-left: 5px;
+  padding-left: 28px;
 }
 .tAction {
   width: 90px;
@@ -272,7 +275,7 @@ body {
 }
 .cName {
   // padding-top: 5px;
-  width: 105px !important;
+  width: 120px !important;
   margin-left: 15px !important;
   margin-right: 10px;
 }
@@ -324,10 +327,10 @@ body {
   flex: 1;
   display: flex;
   flex-direction: row;
-  max-width: 140vh;
+  justify-content: center;
   margin: 0 auto;
   padding: 15px 30px 50px 30px;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 // MODAL
@@ -422,7 +425,7 @@ body {
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 20px;
+  padding: 10px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;

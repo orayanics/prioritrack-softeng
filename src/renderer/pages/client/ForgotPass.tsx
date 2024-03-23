@@ -151,7 +151,7 @@ function ForgotPass(): JSX.Element {
                     Verify
                   </button>
                   <button type="button" className={`${styles.cancelButton}`}>
-                    <Link to={`/login`} className={styles.cancel_text}>
+                    <Link to={`/`} className={styles.cancel_text}>
                       Cancel
                     </Link>
                   </button>

@@ -20,7 +20,7 @@ export default function Search({ onSearch }: Props) {
         <input
           className={styles.input}
           type="text"
-          placeholder="Search..."
+          placeholder="Search client name..."
           value={searchTerm}
           onChange={handleChange}
         />

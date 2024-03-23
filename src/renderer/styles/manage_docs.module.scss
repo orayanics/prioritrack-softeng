@@ -9,10 +9,14 @@
   z-index: -1;
 }
 
+.topMargin {
+  margin-top: 2rem;
+}
+
 .container {
   display: flex;
   justify-content: center;
-  margin: 5rem;
+  margin: 0 5rem 5rem 5rem;
   padding-bottom: 50px;
 }
 
@@ -25,12 +29,17 @@
 }
 
 .col1 {
-  margin-right: 50px;
+  //margin-right: 50px;
+  padding-top: 25px;
 }
 
 .export:hover {
   text-decoration: none !important;
   outline: none !important;
+}
+
+a {
+  border: none !important;
 }
 
 .button {
@@ -49,7 +58,7 @@
   box-shadow: 0.5px 5px #00042c;
 
   width: 280px;
-  margin: 20px 20px 20px 0px;
+  margin: 10px 20px 10px 0px;
   /* top right bottom left */
   display: flex;
   justify-content: space-between;
@@ -59,6 +68,10 @@
 .button:active,
 .button:hover {
   outline: none !important;
+}
+
+.icExport {
+  font-size: 22px;
 }
 
 .rec {
@@ -135,6 +148,12 @@ h3 {
   height: 59px;
   margin-top: -2px;
 }
+
+.activeDoc {
+  background-color: #fff1c9;
+  // transition: background-color 0.5s ease;
+}
+
 .info {
   font-size: 17px;
   padding-right: 20px;
@@ -156,7 +175,8 @@ h3 {
 }
 
 .title1 {
-  padding-left: 15px;
+  padding-left: 80px;
+  min-width: 105px;
 }
 .cbn {
   padding-left: 40px;
@@ -182,7 +202,9 @@ h3 {
   text-align: center;
 }
 .mrdWidth {
-  width: 240px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 200px;
   display: flex;
   justify-content: center;
 }
@@ -201,21 +223,26 @@ h3 {
   margin-right: 20px;
 }
 .docNo {
-  width: 160px;
+  width: 120px;
   text-align: left;
   padding-left: 15px;
 }
 .dateSub {
-  width: 165px;
+  width: 110px;
   text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   flex: 1;
-  margin-left: -10px;
+  margin-left: 0px;
   margin-right: 10px;
 }
+.tStatus {
+  padding-left: 20px;
+  padding-right: 40px;
+}
 .action {
-  padding-left: 25px;
+  padding-left: 10px;
+  padding-right: 100px;
 }
 
 .cursor {
@@ -252,9 +279,10 @@ h3 {
 }
 
 .dt {
-  width: 220px;
+  width: 190px;
   display: flex;
   justify-content: center;
+  margin-right: -10px;
 }
 
 .cbn {
@@ -298,16 +326,17 @@ h3 {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   background-color: #c0f0b5;
   color: #13481d;
 
-  padding: 20px;
+  padding: 15px;
   padding-right: 25px;
 
   margin-bottom: 0px;
   margin-right: -10px;
-  margin-top: 20px;
+  margin-top: 15px;
 
   border-radius: 15px;
   border-top-right-radius: 0px;
@@ -317,13 +346,13 @@ h3 {
   border-width: 1px;
   border-color: #8ebd83;
 
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
 }
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 20px;
+  padding: 16px 15px 14px 15px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;
@@ -333,10 +362,10 @@ h3 {
   border-width: 1px;
   border-color: #8ebd83;
 
-  margin-top: 20px;
+  margin-top: 15px;
   margin-bottom: 0px;
 
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
 }
 // MODAL
@@ -405,4 +434,45 @@ h3 {
   margin-right: -50%;
   transform: translate(-50%, -50%);
   background-color: #f0aa89;
+}
+
+// labels
+.bidletter {
+  background-color: var(--bid-letter);
+}
+.statementofaccount {
+  background-color: var(--statement-of-account);
+}
+.minutesofauctionsale {
+  background-color: var(--minutes-of-auction-sale);
+}
+.sheriffsfee {
+  background-color: var(--sheriffs-fee);
+}
+.taxdeclaration {
+  background-color: var(--tax-declaration);
+}
+.realestatetaxpayment {
+  background-color: var(--real-estate-tax-payment);
+}
+.jdfpaymentor {
+  background-color: var(--jdf-payment-or);
+}
+.certificateofsale {
+  background-color: var(--certificate-of-sale);
+}
+.lrapo {
+  background-color: var(--lra-po);
+}
+.annotatedtransfercot {
+  background-color: var(--annotated-transfer-cot);
+}
+.certofposting {
+  background-color: var(--cert-of-posting);
+}
+.taxclearance {
+  background-color: var(--tax-clearance);
+}
+.followupletter {
+  background-color: var(--follow-up-letter);
 }
