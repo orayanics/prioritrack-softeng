@@ -24,7 +24,7 @@ interface SortIcons {
   status: 'asc' | 'desc';
 }
 
-export default function Home() {
+export default function Home({ setActivePage }) {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
@@ -65,6 +65,7 @@ export default function Home() {
       setIconToShow(successEditLogo);
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
+    setActivePage('Dashboard');
   }, [location]);
   useEffect(() => {
     if (location.state?.successMessageLogin) {
@@ -142,16 +143,16 @@ export default function Home() {
       setUsers(response.data);
       const sortedData = response.data;
 
-      // Sort filteredUsers state
-      const filteredSorted = filteredUsers.sort((a, b) => {
-        if (sortIcons[activeSortIcon as keyof SortIcons] === 'asc') {
-          return a[activeSortIcon] > b[activeSortIcon] ? 1 : -1;
-        } else {
-          return a[activeSortIcon] < b[activeSortIcon] ? 1 : -1;
-        }
-      });
+      // // Sort filteredUsers state
+      // const filteredSorted = filteredUsers.sort((a, b) => {
+      //   if (sortIcons[activeSortIcon as keyof SortIcons] === 'asc') {
+      //     return a[activeSortIcon] > b[activeSortIcon] ? 1 : -1;
+      //   } else {
+      //     return a[activeSortIcon] < b[activeSortIcon] ? 1 : -1;
+      //   }
+      // });
 
-      setFilteredUsers(filteredSorted);
+      setFilteredUsers(sortedData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -163,7 +164,7 @@ export default function Home() {
       fetchData();
       setIconToShow(successDeleteLogo);
       setSuccessMessage('Client Deleted');
-      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed (3000)
     } catch (error) {
       console.error('Error deleting data:', error);
     }
@@ -246,6 +247,12 @@ export default function Home() {
         return styles.taxclearance;
       case 'Follow-up letter':
         return styles.followupletter;
+      case 'Follow-up letter 1':
+        return styles.followupletter;
+      case 'Follow-up letter 2':
+        return styles.followupletter;
+      case 'Follow-up letter 3':
+        return styles.followupletter;
       default:
         return '';
     }
@@ -317,11 +324,12 @@ export default function Home() {
               <h2>MRD Legends</h2>
               {documents.map((document, index) => (
                 <div
+                  key={index}
                   className={`${styles.capsuleLegends} ${getDocumentClass(
                     document,
                   )}`}
                 >
-                  <div key={index}>{document}</div>
+                  <div>{document}</div>
                 </div>
               ))}
             </div>

@@ -122,6 +122,11 @@ body {
   z-index: 10;
 }
 
+.activeClient {
+  background-color: #fff1c9;
+  // transition: background-color 0.5s ease;
+}
+
 .c-name {
   padding-left: 10px;
 }
@@ -272,7 +277,10 @@ body {
   display: flex;
   flex-direction: row !important;
   max-width: 940px;
-  margin: 0 auto;
+  margin: auto;
+  position: absolute;
+  width: 750px;
+  left: 50%;
   // padding: 15px 50px 0 30px;
   /* top right bottom left */
 }
@@ -280,16 +288,17 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   background-color: #c0f0b5;
   color: #13481d;
 
-  padding: 20px;
+  padding: 15px;
   padding-right: 25px;
 
   margin-bottom: 10px;
   margin-right: -10px;
-  margin-top: 20px;
+  margin-top: 15px;
 
   border-radius: 15px;
   border-top-right-radius: 0px;
@@ -299,13 +308,13 @@ body {
   border-width: 1px;
   border-color: #8ebd83;
 
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
 }
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 20px;
+  padding: 16px 15px 14px 15px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;
@@ -315,10 +324,10 @@ body {
   border-width: 1px;
   border-color: #8ebd83;
 
-  margin-top: 20px;
+  margin-top: 15px;
   margin-bottom: 10px;
 
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
 }
 // MODAL

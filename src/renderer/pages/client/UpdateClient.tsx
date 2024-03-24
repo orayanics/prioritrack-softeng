@@ -5,7 +5,7 @@ import styles from '../../styles/add_client.module.scss';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/prioritrack-logo.svg';
 
-export default function Update() {
+export default function Update({ setActiveClient }) {
   const [users, setUsers] = useState([]);
   const { id } = useParams();
   const client_id = parseInt(id, 10);
@@ -48,6 +48,7 @@ export default function Update() {
       return;
     }
     setIsValid(true);
+    setActiveClient(client_name);
     await Axios.post(`http://localhost:3001/list/edit/${id}`, {
       client_name,
       client_property_location,
@@ -63,7 +64,7 @@ export default function Update() {
           client_bank_name,
           client_bank_address,
         );
-        navigate('/home', {
+        navigate('/client', {
           state: { successMessage: 'Client Edited' },
         });
       })
@@ -77,6 +78,14 @@ export default function Update() {
       <div className={styles.bgLogo}>
         <img src={logo} />
       </div>
+      {!isValid && (
+        <div className={styles.alert}>
+          <span className={styles.closebtn} onClick={() => setIsValid(true)}>
+            &times;
+          </span>
+          <p>Please fill out all fields.</p>
+        </div>
+      )}
       {users.map((val) => (
         <div className={styles.card} key={val.client_id}>
           <h1 className={styles.title}>Edit a Client</h1>
@@ -86,28 +95,40 @@ export default function Update() {
               className={styles.input}
               type="text"
               value={client_name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setIsValid(true);
+              }}
             />
             <h3 className={styles.inputTitle}>Property Location</h3>
             <input
               className={styles.input}
               type="text"
               value={client_property_location}
-              onChange={(e) => setPropertyLocation(e.target.value)}
+              onChange={(e) => {
+                setPropertyLocation(e.target.value);
+                setIsValid(true);
+              }}
             />
             <h3 className={styles.inputTitle}>Client Bank Name</h3>
             <input
               className={styles.input}
               type="text"
               value={client_bank_name}
-              onChange={(e) => setClientBankName(e.target.value)}
+              onChange={(e) => {
+                setClientBankName(e.target.value);
+                setIsValid(true);
+              }}
             />
             <h3 className={styles.inputTitle}>Client Bank Address</h3>
             <input
               className={styles.input}
               type="text"
               value={client_bank_address}
-              onChange={(e) => setClientBankAddress(e.target.value)}
+              onChange={(e) => {
+                setClientBankAddress(e.target.value);
+                setIsValid(true);
+              }}
             />
             <div className={styles.btn2}>
               <button

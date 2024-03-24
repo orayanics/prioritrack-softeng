@@ -2,7 +2,7 @@ import { Outlet, useLocation, useNavigate, redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from './navbar';
 
-function Layout({ onLogout }) {
+function Layout({ onLogout, activePage, setActivePage }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,12 +32,18 @@ function Layout({ onLogout }) {
   const handleLogout = () => {
     localStorage.removeItem('authenticated');
     onLogout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
     <div>
-      {location.pathname !== '/login' && <Navbar onLogout={handleLogout} />}
+      {activePage !== 'Login' && (
+        <Navbar
+          onLogout={handleLogout}
+          activePage={activePage}
+          setActivePage={setActivePage}
+        />
+      )}
       <Outlet />
     </div>
   );

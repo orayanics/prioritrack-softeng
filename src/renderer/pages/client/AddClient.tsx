@@ -6,7 +6,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/prioritrack-logo.svg';
 
-export default function UserAdd() {
+export default function UserAdd({ setActiveClient }) {
   Axios.defaults.baseURL = 'http://localhost:3001';
   const navigate = useNavigate();
 
@@ -28,6 +28,7 @@ export default function UserAdd() {
       return;
     }
     setIsValid(true);
+    setActiveClient(name);
     await Axios.post('http://localhost:3001/client/add_submit', {
       name,
       property_location,
@@ -44,7 +45,7 @@ export default function UserAdd() {
         console.log('Success');
         // navigate('/client');
         navigate('/client', {
-          state: { successMessage: 'Client added successfully' },
+          state: { successMessage: 'Client Added' },
         });
       })
       .catch((err) => {
@@ -80,26 +81,38 @@ export default function UserAdd() {
               <input
                 className={styles.input}
                 type="text"
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Property Location</h3>
               <input
                 className={styles.input}
                 type="text"
-                onChange={(e) => setPropertyLocation(e.target.value)}
+                onChange={(e) => {
+                  setPropertyLocation(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Client Bank Name</h3>
               <input
                 className={styles.input}
                 type="text"
-                onChange={(e) => setClientBankName(e.target.value)}
+                onChange={(e) => {
+                  setClientBankName(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Client Bank Address</h3>
               <input
                 className={styles.input}
                 name="query"
                 type="text"
-                onChange={(e) => setClientBankAddress(e.target.value)}
+                onChange={(e) => {
+                  setClientBankAddress(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <div className={styles.btn2}>
                 <button

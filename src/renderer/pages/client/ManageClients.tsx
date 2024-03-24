@@ -17,7 +17,7 @@ interface SortIcons {
   clientBankAddress: 'asc' | 'desc';
 }
 
-export default function ManageClients() {
+export default function ManageClients({ activeClient, setActiveClient }) {
   const [users, setUsers] = useState([]);
   const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState(''); // State for the success message
@@ -69,6 +69,7 @@ export default function ManageClients() {
       activeSortIcon + ' ' + sortIcons[activeSortIcon as keyof SortIcons],
     );
   };
+
   useEffect(() => {
     //call if sortIcons, activeSortIcon changes
     if (isInitialSortMount.current) {
@@ -78,11 +79,37 @@ export default function ManageClients() {
     }
   }, [sortIcons, activeSortIcon]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const column = document.getElementById(activeClient);
+      console.log(`Column: ${column} = ${activeClient}`);
+      if (column) {
+        column.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    // Remove the activeDoc class after 3 seconds
+    const timeout = setTimeout(() => {
+      setActiveClient('');
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [activeClient]);
+
   // Effect to check for a success message in the location state
   useEffect(() => {
     if (location.state?.successMessage) {
-      setIconToShow(successAddLogo);
       setSuccessMessage(location.state.successMessage);
+      console.log(
+        `Location.state.successMessage: ${location.state.successMessage}`,
+      );
+      if (location.state.successMessage == 'Client Edited') {
+        setIconToShow(successEditLogo);
+      } else if (location.state.successMessage == 'Client Added') {
+        setIconToShow(successAddLogo);
+      }
       // Optionally, clear the message after displaying it
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
@@ -253,7 +280,13 @@ export default function ManageClients() {
         </div>
         {users.length > 0 ? (
           users.map((val) => (
-            <div key={val.client_id} className={styles.card}>
+            <div
+              key={val.client_id}
+              className={`${styles.card} ${
+                val.client_name === activeClient && styles.activeClient
+              }`}
+              id={val.client_name}
+            >
               <div className={styles.column1}>
                 <div className={styles['card-capsule']}></div>
                 <Link

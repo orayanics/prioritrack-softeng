@@ -11,13 +11,15 @@
   height: 40px;
   line-height: 28px;
   padding: 0 1rem;
-  padding-left: 2.5rem;
+  padding-left: 1rem;
   border: 2px solid transparent;
   border-radius: 8px;
   outline: none;
-  background-color: #f3f3f4;
+  background-color: #ffffff;
   color: #0d0c22;
   transition: 0.3s ease;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 .input::placeholder {

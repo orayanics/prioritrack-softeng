@@ -6,7 +6,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { IoEyeSharp, IoEyeOffSharp } from 'react-icons/io5';
 
-function ChangePass(): JSX.Element {
+function ChangePass({ setActivePage }): JSX.Element {
   const navigate = useNavigate();
   const { id } = useParams();
   const [newPassword, setNewPassword] = useState('');
@@ -39,7 +39,8 @@ function ChangePass(): JSX.Element {
         },
       );
       console.log('Password updated successfully');
-      navigate('/login');
+      setActivePage('Dashboard');
+      navigate('/');
     } catch (error) {
       setError(`Error updating password: ${error}`);
       console.error('Error updating password:', error);
@@ -117,7 +118,7 @@ function ChangePass(): JSX.Element {
                     type="button"
                     className={`${styles.button} ${styles.cancelButton}`}
                   >
-                    <Link to={`/login`} className={styles.cancel_text}>
+                    <Link to={`/`} className={styles.cancel_text}>
                       Cancel
                     </Link>
                   </button>

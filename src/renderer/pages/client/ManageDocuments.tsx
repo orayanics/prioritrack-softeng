@@ -3,6 +3,7 @@ import '../../styles/global_styles.css';
 import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
+import { TiExport } from 'react-icons/ti';
 import styles from '../../styles/manage_docs.module.scss';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
@@ -13,11 +14,12 @@ import * as XLSX from 'xlsx';
 interface SortIcons {
   documentType: 'asc' | 'desc';
   dateOfSubmission: 'asc' | 'desc';
+  turnaroundDate: 'asc' | 'desc';
   status: 'asc' | 'desc';
 }
 import { useLocation } from 'react-router-dom';
 
-function ManageDocuments() {
+function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -25,6 +27,7 @@ function ManageDocuments() {
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     documentType: 'asc',
     dateOfSubmission: 'asc',
+    turnaroundDate: 'asc',
     status: 'asc',
   });
   const [activeSortIcon, setActiveSortIcon] = useState('');
@@ -62,7 +65,11 @@ function ManageDocuments() {
       <FaTrashAlt />
     </div>
   );
-
+  const successAddLogo = (
+    <div className={styles.logoSuccess}>
+      <FaPlus />
+    </div>
+  );
   const successEditLogo = (
     <div className={styles.logoSuccess}>
       <FaEdit />
@@ -70,9 +77,39 @@ function ManageDocuments() {
   );
 
   useEffect(() => {
+    setActivePage('');
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const column = document.getElementById(activeDoc);
+      console.log(`Column: ${column} = ${activeDoc}`);
+      if (column) {
+        column.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    // Remove the activeDoc class after 3 seconds
+    const timeout = setTimeout(() => {
+      setActiveDoc('');
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [activeDoc]);
+
+  useEffect(() => {
     if (location.state?.successMessage) {
       setSuccessMessage(location.state.successMessage);
-      setIconToShow(successEditLogo);
+      console.log(
+        `Location.state.successMessage: ${location.state.successMessage}`,
+      );
+      if (location.state.successMessage == 'Document Edited') {
+        setIconToShow(successEditLogo);
+      } else if (location.state.successMessage == 'Document Added') {
+        setIconToShow(successAddLogo);
+      }
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
   }, [location]);
@@ -144,93 +181,146 @@ function ManageDocuments() {
       console.error('Error fetching client details:', error);
     }
   };
-// export shit
-const handleGenerateReport = () => {
-  if (
-    userData &&
-    userData.client_name &&
-    userData.client_property_location &&
-    userData.client_bank_name &&
-    userData.client_bank_address &&
-    userData.documents &&
-    userData.documents.length > 0
-  ) {
-    const client = userData;
+  // Export to Excel
+  const handleGenerateReport = () => {
+    if (
+      userData &&
+      userData.client_name &&
+      userData.client_property_location &&
+      userData.client_bank_name &&
+      userData.client_bank_address &&
+      userData.documents &&
+      userData.documents.length > 0
+    ) {
+      const client = userData;
 
-    // Prepare data for Excel
-    const data = userData.documents.map(document => [
-      client.client_name,
-      client.client_property_location,
-      client.client_bank_name,
-      client.client_bank_address,
-      document.doc_type,
-      document.doc_no,
-      document.doc_date_submission,
-      document.doc_status
-    ]);
+      // Prepare client data for Excel
+      const clientData = [
+        ['Client Name', 'Property Location', 'Bank Name', 'Bank Address'],
+        [
+          client.client_name,
+          client.client_property_location,
+          client.client_bank_name,
+          client.client_bank_address,
+        ],
+      ];
 
-    // Add header row
-    const headers = [
-      'Client Name',
-      'Property Location',
-      'Bank Name',
-      'Bank Address',
-      'Document Type',
-      'Document Number',
-      'Date of Submission',
-      'Document Status'
-    ];
-    const excelData = [headers, ...data];
+      // Prepare document data for Excel
+      const documentData = [
+        [
+          'Document Type',
+          'Document Number',
+          'Date of Submission',
+          'Turnaround Date',
+          'Document Status',
+        ],
+      ];
+      // Map each document to its corresponding data row
+      userData.documents.forEach((document) => {
+        documentData.push([
+          document.doc_type,
+          document.doc_no,
+          document.doc_date_submission,
+          document.doc_date_turnaround,
+          document.doc_status,
+        ]);
+      });
 
-    // Create a new workbook
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+      const emptyRow = [[]];
 
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Client Data');
+      const excelData = [...clientData, emptyRow, ...documentData];
 
-    // Format Excel sheet
-    const wscols = [
-      { wch: 20 }, // Width of column A (Client Name)
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 35 },
-      { wch: 35 }
-    ];
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.aoa_to_sheet(excelData);
 
-    worksheet['!cols'] = wscols;
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Client Data');
 
-    // Save workbook as Excel file
-    XLSX.writeFile(workbook, 'Client_Data.xlsx');
-  } else {
-    console.log('Data not available to generate report.');
-  }
-};
+      // Format Excel sheet
+      const wscols = [
+        { wch: 20 }, // Width of column A (Client Name)
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+      ];
 
-type StatusType = 'Missed' | 'Ongoing' | 'Complete';
+      worksheet['!cols'] = wscols;
 
-const getStatusClass = (status: StatusType) => {
-  switch (status) {
-    case 'Missed':
-      return styles.statusMissed;
-    case 'Ongoing':
-      return styles.statusOngoing;
-    case 'Complete':
-      return styles.statusComplete;
+      // Save workbook as Excel file
+      XLSX.writeFile(workbook, `Report for ${clientData[1][0]}.xlsx`);
+    } else {
+      console.log('Data not available to generate report.');
+    }
+  };
 
-    default:
-      return '';
-  }
-};
+  type StatusType = 'Missed' | 'Ongoing' | 'Complete';
+
+  const getStatusClass = (status: StatusType) => {
+    switch (status) {
+      case 'Missed':
+        return styles.statusMissed;
+      case 'Ongoing':
+        return styles.statusOngoing;
+      case 'Complete':
+        return styles.statusComplete;
+
+      default:
+        return '';
+    }
+  };
+
+  const getDocumentClass = (documents) => {
+    switch (documents) {
+      case 'BID Letter':
+        return styles.bidletter;
+      case 'Statement of Account':
+        return styles.statementofaccount;
+      case 'Minutes of Auction sale':
+        return styles.minutesofauctionsale;
+      case "Sheriff's fee":
+        return styles.sheriffsfee;
+      case 'Tax Declaration':
+        return styles.taxdeclaration;
+      case 'Real Estate Tax Payment':
+        return styles.realestatetaxpayment;
+      case 'JDF Payment O.R.':
+        return styles.jdfpaymentor;
+      case 'Certificate of Sale':
+        return styles.certificateofsale;
+      case 'LRA Assessment Form P.O.':
+      case 'LRA O.R.':
+        return styles.lrapo;
+      case 'Annotated Transfer Certificate of Title':
+        return styles.annotatedtransfercot;
+      case 'Certificate of Posting':
+        return styles.certofposting;
+      case 'Tax Clearance':
+        return styles.taxclearance;
+      case 'Follow-up letter':
+        return styles.followupletter;
+      case 'Follow-up letter 1':
+        return styles.followupletter;
+      case 'Follow-up letter 2':
+        return styles.followupletter;
+      case 'Follow-up letter 3':
+        return styles.followupletter;
+      default:
+        return '';
+    }
+  };
 
   return (
     <div>
       <div className={styles.bgLogo}>
         <img src={logo} />
       </div>
+      <div className={styles.topMargin}></div>
       {successMessage && (
         <div className={styles.containerSuccess}>
           {iconToShow}
@@ -277,11 +367,9 @@ const getStatusClass = (status: StatusType) => {
                   Add a Document <FaPlus />
                 </button>
               </Link>
-              <Link to="/reports">
-          <button className={styles.button} onClick={handleGenerateReport}>
-            Generate Reports <FaPlus />
-          </button>
-        </Link>
+              <button className={styles.button} onClick={handleGenerateReport}>
+                Generate Report <TiExport className={styles.icExport} />
+              </button>
               <div className={styles.rec}>
                 <p>Client Name</p>
                 <h3>{userData.client_name}</h3>
@@ -354,6 +442,21 @@ const getStatusClass = (status: StatusType) => {
                   ></img>
                 </p>
                 <p
+                  className={`${styles.title} ${styles.cbn} sortableColumn`}
+                  onClick={() => handleSortIcon('turnaroundDate')}
+                >
+                  Turnaround Date
+                  <img
+                    src={
+                      sortIcons.turnaroundDate === 'asc' ? icSortUp : icSortDown
+                    }
+                    alt="Sort"
+                    className={`headerIcon ${
+                      activeSortIcon === 'turnaroundDate' && 'activeHeaderIcon'
+                    }`}
+                  ></img>
+                </p>
+                <p
                   className={`${styles.title} ${styles.tStatus} sortableColumn`}
                   onClick={() => handleSortIcon('status')}
                 >
@@ -369,7 +472,13 @@ const getStatusClass = (status: StatusType) => {
                 <p className={`${styles.title} ${styles.action}`}>Action</p>
               </div>
               {userData.documents.map((doc) => (
-                <div className={styles.card}>
+                <div
+                  className={`${styles.card} ${
+                    doc.doc_no === activeDoc && styles.activeDoc
+                  }`}
+                  key={doc.doc_id}
+                  id={doc.doc_no}
+                >
                   <div className={styles.row1}>
                     <div
                       className={`${styles.cardCapsule} ${
@@ -394,20 +503,7 @@ const getStatusClass = (status: StatusType) => {
                         <div
                           className={`${styles.info} ${styles.mrd} ${
                             styles.cName
-                          }
-                        ${
-                          doc.doc_status == 'Missed'
-                            ? styles.statusMissed
-                            : doc.doc_status == 'Upcoming'
-                            ? styles.statusUpcoming
-                            : doc.doc_status == 'Ongoing'
-                            ? styles.statusOngoing
-                            : doc.doc_status == 'Complete'
-                            ? styles.statusComplete
-                            : doc.doc_status == 'On Hold'
-                            ? styles.statusOnHold
-                            : ''
-                        }`}
+                          }  ${getDocumentClass(doc.doc_type)}`}
                         >
                           {' '}
                           {doc.doc_type}
@@ -415,6 +511,9 @@ const getStatusClass = (status: StatusType) => {
                       </div>
                       <p className={styles.dateSub}>
                         {doc.doc_date_submission}
+                      </p>
+                      <p className={styles.dateSub}>
+                        {doc.doc_date_turnaround}
                       </p>
                       <div
                         className={`${styles.status} ${
