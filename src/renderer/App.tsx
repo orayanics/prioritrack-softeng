@@ -21,6 +21,8 @@ import { AccordionItem } from 'react-bootstrap';
 
 export default function App() {
   const [activePage, setActivePage] = useState('Dashboard');
+  const [prevActivePage, setPrevActivePage] = useState('Dashboard');
+  const [prevLoc, setPrevLoc] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeClient, setActiveClient] = useState('');
   const [activeDoc, setActiveDoc] = useState('');
@@ -64,25 +66,36 @@ export default function App() {
                 onLogout={handleLogout}
                 activePage={activePage}
                 setActivePage={setActivePage}
+                prevActivePage={prevActivePage}
+                setPrevActivePage={setPrevActivePage}
               />
             }
           >
             <Route
               path="/"
-              element={<Dashboard setActivePage={setActivePage} />}
+              element={
+                <Dashboard
+                  setActivePage={setActivePage}
+                  setPrevActivePage={setPrevActivePage}
+                />
+              }
             />
             <Route
               path="/document/edit/:id"
               element={<EditDoc setActiveDoc={setActiveDoc} />}
             />
 
-            <Route path="/Reports" element={<Reports />} />
+            <Route
+              path="/Reports"
+              element={<Reports setActivePage={setActivePage} />}
+            />
             <Route
               path="/client"
               element={
                 <ManageClients
                   activeClient={activeClient}
                   setActiveClient={setActiveClient}
+                  setPrevActivePage={setPrevActivePage}
                 />
               }
             />
@@ -102,13 +115,21 @@ export default function App() {
                   setActivePage={setActivePage}
                   activeDoc={activeDoc}
                   setActiveDoc={setActiveDoc}
+                  setPrevLoc={setPrevLoc}
+                  prevActivePage={prevActivePage}
+                  setPrevActivePage={setPrevActivePage}
                 />
               }
             />
 
             <Route
               path="/client/edit/:id"
-              element={<UpdateClient setActiveClient={setActiveClient} />}
+              element={
+                <UpdateClient
+                  setActiveClient={setActiveClient}
+                  prevLoc={prevLoc}
+                />
+              }
             />
           </Route>
         ) : (

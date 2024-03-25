@@ -2,7 +2,13 @@ import { Outlet, useLocation, useNavigate, redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from './navbar';
 
-function Layout({ onLogout, activePage, setActivePage }) {
+function Layout({
+  onLogout,
+  activePage,
+  setActivePage,
+  prevActivePage,
+  setPrevActivePage,
+}) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -42,6 +48,8 @@ function Layout({ onLogout, activePage, setActivePage }) {
           onLogout={handleLogout}
           activePage={activePage}
           setActivePage={setActivePage}
+          prevActivePage={prevActivePage}
+          setPrevActivePage={setPrevActivePage}
         />
       )}
       <Outlet />

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/global_styles.css';
 import Axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
-import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { FaTrashAlt, FaEdit, FaPlus, FaCopy } from 'react-icons/fa';
 import { TiExport } from 'react-icons/ti';
 import styles from '../../styles/manage_docs.module.scss';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
+import icLinkFolder from '../../assets/icons/ic-link-folder.svg';
 import logo from '../../assets/prioritrack-logo.svg';
 import Modal from 'react-modal';
 import * as XLSX from 'xlsx';
@@ -19,10 +20,19 @@ interface SortIcons {
 }
 import { useLocation } from 'react-router-dom';
 
-function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
+function ManageDocuments({
+  setActivePage,
+  activeDoc,
+  setActiveDoc,
+  setPrevLoc,
+  prevActivePage,
+  setPrevActivePage,
+}) {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [mostRecentDoc, setMostRecentDoc] = useState('');
 
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     documentType: 'asc',
@@ -51,14 +61,18 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [DocumentIdToDelete, setDocumentIdToDelete] = useState(null);
-  // interface Client {
-  //   client_name: string;
-  //   client_property_location: string;
-  //   client_bank_name: string;
-  //   client_bank_address: string;
-  // }
 
-  // const [clientDetails, setClientDetails] = useState<Client | null>(null);
+  //Client Modal
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState(null);
+  interface Client {
+    client_name: string;
+    client_property_location: string;
+    client_bank_name: string;
+    client_bank_address: string;
+    client_docs_link: string;
+  }
+  const [clientDetails, setClientDetails] = useState<Client | null>(null);
 
   const successDeleteLogo = (
     <div className={styles.logoSuccess}>
@@ -75,9 +89,16 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
       <FaEdit />
     </div>
   );
+  const successCopyLogo = (
+    <div className={styles.logoSuccess}>
+      <FaCopy />
+    </div>
+  );
 
   useEffect(() => {
     setActivePage('');
+    setPrevLoc('');
+    getMostRecentDoc();
   }, []);
 
   useEffect(() => {
@@ -105,14 +126,25 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
       console.log(
         `Location.state.successMessage: ${location.state.successMessage}`,
       );
-      if (location.state.successMessage == 'Document Edited') {
+      if (
+        location.state.successMessage == 'Document Edited' ||
+        location.state.successMessage == 'Client Edited'
+      ) {
         setIconToShow(successEditLogo);
       } else if (location.state.successMessage == 'Document Added') {
         setIconToShow(successAddLogo);
       }
+      getMostRecentDoc();
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
   }, [location]);
+
+  useEffect(() => {
+    if (successMessage == 'Copied To Clipboard') {
+      setIconToShow(successCopyLogo);
+    }
+    getMostRecentDoc();
+  }, [successMessage]);
 
   useEffect(() => {
     fetchData();
@@ -143,6 +175,23 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
     }
   };
 
+  const getMostRecentDoc = async () => {
+    try {
+      const response =
+        id != null &&
+        (await Axios.get(
+          `http://localhost:3001/list/${id}/dateOfSubmission/desc`,
+        ));
+      console.log('Most Recent Doc Sort: ');
+      console.log(response.data);
+      if (response.data.documents.length > 0) {
+        setMostRecentDoc(response.data.documents[0].doc_type);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   // const deleteData = async (id) => {
   //   try {
   //     await Axios.delete(`http://localhost:3001/doc/delete/${id}`);
@@ -159,6 +208,7 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
       fetchData();
       setIconToShow(successDeleteLogo);
       setSuccessMessage('Document Deleted');
+      getMostRecentDoc();
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -181,6 +231,34 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
       console.error('Error fetching client details:', error);
     }
   };
+
+  const deleteClientData = async (id) => {
+    try {
+      await Axios.delete(`http://localhost:3001/client/delete/${id}`);
+      fetchData();
+      setIconToShow(successDeleteLogo);
+      setSuccessMessage('Client Deleted');
+      setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
+      if (prevActivePage == 'Dashboard') {
+        navigate('/', {
+          state: { successMessage: 'Client Deleted' },
+        });
+      } else if (prevActivePage == 'Clients') {
+        navigate('/client', {
+          state: { successMessage: 'Client Deleted' },
+        });
+      }
+      setPrevActivePage('');
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
+  const handleClientDeleteConfirmation = async () => {
+    await deleteClientData(clientIdToDelete);
+    setIsModalOpen(false);
+  };
+
   // Export to Excel
   const handleGenerateReport = () => {
     if (
@@ -315,6 +393,19 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
     }
   };
 
+  const copyToClipboard = (text: string) => {
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = text;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    tempTextArea.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    setSuccessMessage('Copied To Clipboard');
+    setTimeout(() => setSuccessMessage(''), 3000);
+    document.body.removeChild(tempTextArea);
+    console.log('Copied the text: ' + text);
+  };
+
   return (
     <div>
       <div className={styles.bgLogo}>
@@ -332,7 +423,7 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h3 className={styles.titleDelete}>
-              Are you sure you want to delete this Document?
+              Are you sure you want to delete this document?
             </h3>
             {/* <p>Client Name: {clientDetails.client_name}</p>
             <p>Property Location: {clientDetails.client_property_location}</p>
@@ -347,6 +438,34 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
               </button>
               <button
                 onClick={() => setIsModalOpen(false)}
+                className={styles.btn + ' ' + styles.submit}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isClientModalOpen && (
+        // {users.map((val) => (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.titleDelete}>
+              Are you sure you want to delete this client?
+            </h3>
+            {/* <p>Client Name: {clientDetails.client_name}</p>
+            <p>Property Location: {clientDetails.client_property_location}</p>
+            <p>Bank Name: {clientDetails.client_bank_name}</p>
+            <p>Bank Address: {clientDetails.client_bank_address}</p> */}
+            <div className={styles.midDelete}>
+              <button
+                onClick={handleClientDeleteConfirmation}
+                className={styles.btn + ' ' + styles.cancel}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsClientModalOpen(false)}
                 className={styles.btn + ' ' + styles.submit}
               >
                 Cancel
@@ -380,17 +499,20 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
                 <p>Client Bank Address</p>
                 <h3>{userData.client_bank_address}</h3>
                 <p>Most Recent Document</p>
-
-                {userData.documents.length >= 0 ? (
+                {/* {userData.documents.length > 0 ? (
                   <>
                     {userData.documents
                       .map((doc) => ({
                         ...doc,
                         doc_date_submission: new Date(doc.doc_date_submission),
                       }))
-                      .sort(
-                        (a, b) => b.doc_date_submission - a.doc_date_submission,
-                      )
+                      .sort((a, b) => {
+                        if (a.doc_date_submission !== b.doc_date_submission) {
+                          return b.doc_date_submission - a.doc_date_submission;
+                        } else {
+                          return b.doc_id - a.doc_id;
+                        }
+                      })
                       .slice(0, 1)
                       .map((doc) => (
                         <div key={doc.doc_id}>
@@ -399,8 +521,79 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
                       ))}
                   </>
                 ) : (
-                  <p>No documents found</p>
-                )}
+                  <h3>No documents found</h3>
+                )} */}
+                <h3>{mostRecentDoc != '' ? mostRecentDoc : 'N/A'}</h3>
+                <p>Link to Folder</p>
+                <div className={`${styles.linkButtons}`}>
+                  <div>
+                    <a
+                      href={userData.client_docs_link}
+                      className={
+                        userData.client_docs_link == '' ||
+                        userData.client_docs_link == null
+                          ? styles.disabledLink
+                          : ''
+                      }
+                    >
+                      <button
+                        className={`${styles.linkFolderButton} ${
+                          userData.client_docs_link == '' ||
+                          userData.client_docs_link == null
+                            ? styles.linkButtonDisabled
+                            : ''
+                        }`}
+                      >
+                        <img
+                          src={icLinkFolder}
+                          alt="Linked Folder"
+                          className={`${styles.linkFolderIcon}  ${
+                            userData.client_docs_link == '' ||
+                            userData.client_docs_link == null
+                              ? styles.linkIconDisabled
+                              : ''
+                          }`}
+                        ></img>
+                        Open Link
+                      </button>
+                    </a>
+                  </div>
+                  <button
+                    className={`${styles.copy} ${styles.copyLink} ${
+                      userData.client_docs_link == '' ||
+                      userData.client_docs_link == null
+                        ? `${styles.copyLinkDisabled} ${styles.disabledLink}`
+                        : ''
+                    }`}
+                    onClick={() => {
+                      copyToClipboard(`${userData.client_docs_link}`);
+                    }}
+                  >
+                    <FaCopy className={`${styles.copyIcon}`} /> Copy Link
+                  </button>
+                </div>
+              </div>
+              <div className={styles.rec2}>
+                <div className={`${styles.clientButtons}`}>
+                  <button
+                    className={`${styles.edit} ${styles.editClient}`}
+                    onClick={() => setPrevLoc(`${id}`)}
+                  >
+                    <Link to={`/client/edit/${userData.client_id}`}>
+                      <FaEdit className={`${styles.green_icon}`} /> Edit
+                    </Link>
+                  </button>
+                  <button
+                    className={`${styles.delete} ${styles.deleteClient}`}
+                    onClick={() => {
+                      setClientIdToDelete(userData.client_id);
+                      setIsClientModalOpen(true);
+                      setPrevLoc(`${id}`);
+                    }}
+                  >
+                    <FaTrashAlt className={`${styles.deletered}`} /> Delete
+                  </button>
+                </div>
               </div>
             </div>
             <div className={styles.col2}>
@@ -471,52 +664,18 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
                 </p>
                 <p className={`${styles.title} ${styles.action}`}>Action</p>
               </div>
-              {userData.documents.map((doc) => (
-                <div
-                  className={`${styles.card} ${
-                    doc.doc_no === activeDoc && styles.activeDoc
-                  }`}
-                  key={doc.doc_id}
-                  id={doc.doc_no}
-                >
-                  <div className={styles.row1}>
-                    <div
-                      className={`${styles.cardCapsule} ${
-                        doc.doc_status == 'Missed'
-                          ? styles.statusMissed
-                          : doc.doc_status == 'Upcoming'
-                          ? styles.statusUpcoming
-                          : doc.doc_status == 'Ongoing'
-                          ? styles.statusOngoing
-                          : doc.doc_status == 'Complete'
-                          ? styles.statusComplete
-                          : doc.doc_status == 'On Hold'
-                          ? styles.statusOnHold
-                          : ''
-                      }`}
-                    >
-                      {' '}
-                    </div>
-                    <div className={styles.row2} key={doc.doc_id}>
-                      <p className={styles.docNo}>{doc.doc_no}</p>
-                      <div className={styles.mrdWidth}>
-                        <div
-                          className={`${styles.info} ${styles.mrd} ${
-                            styles.cName
-                          }  ${getDocumentClass(doc.doc_type)}`}
-                        >
-                          {' '}
-                          {doc.doc_type}
-                        </div>
-                      </div>
-                      <p className={styles.dateSub}>
-                        {doc.doc_date_submission}
-                      </p>
-                      <p className={styles.dateSub}>
-                        {doc.doc_date_turnaround}
-                      </p>
+              {userData.documents.length > 0 ? (
+                userData.documents.map((doc) => (
+                  <div
+                    className={`${styles.card} ${
+                      doc.doc_no === activeDoc && styles.activeDoc
+                    }`}
+                    key={doc.doc_id}
+                    id={doc.doc_no}
+                  >
+                    <div className={styles.row1}>
                       <div
-                        className={`${styles.status} ${
+                        className={`${styles.cardCapsule} ${
                           doc.doc_status == 'Missed'
                             ? styles.statusMissed
                             : doc.doc_status == 'Upcoming'
@@ -530,31 +689,73 @@ function ManageDocuments({ setActivePage, activeDoc, setActiveDoc }) {
                             : ''
                         }`}
                       >
-                        {doc.doc_status}
+                        {' '}
                       </div>
-                      <div className={styles.cursor}>
-                        <button className={styles.edit}>
-                          <Link to={`/document/edit/${doc.doc_id}`}>
-                            <FaEdit className={styles.green_icon} />
-                          </Link>
-                        </button>
-                      </div>
-                      <div className={styles.cursor}>
-                        <button
-                          className={styles.delete}
-                          // onClick={() => deleteData(doc.doc_id)}
-                          onClick={() => {
-                            setDocumentIdToDelete(doc.doc_id);
-                            setIsModalOpen(true);
-                          }}
+                      <div className={styles.row2} key={doc.doc_id}>
+                        <p className={styles.docNo}>{doc.doc_no}</p>
+                        <div className={styles.mrdWidth}>
+                          <div
+                            className={`${styles.info} ${styles.mrd} ${
+                              styles.cName
+                            }  ${getDocumentClass(doc.doc_type)}`}
+                          >
+                            {' '}
+                            {doc.doc_type}
+                          </div>
+                        </div>
+                        <p className={styles.dateSub}>
+                          {doc.doc_date_submission}
+                        </p>
+                        <p className={styles.dateSub}>
+                          {doc.doc_date_turnaround}
+                        </p>
+                        <div
+                          className={`${styles.status} ${
+                            doc.doc_status == 'Missed'
+                              ? styles.statusMissed
+                              : doc.doc_status == 'Upcoming'
+                              ? styles.statusUpcoming
+                              : doc.doc_status == 'Ongoing'
+                              ? styles.statusOngoing
+                              : doc.doc_status == 'Complete'
+                              ? styles.statusComplete
+                              : doc.doc_status == 'On Hold'
+                              ? styles.statusOnHold
+                              : ''
+                          }`}
                         >
-                          <FaTrashAlt className={styles.deletered} />
-                        </button>
+                          {doc.doc_status}
+                        </div>
+                        <div className={styles.cursor}>
+                          <button className={styles.edit}>
+                            <Link to={`/document/edit/${doc.doc_id}`}>
+                              <FaEdit className={styles.green_icon} />
+                            </Link>
+                          </button>
+                        </div>
+                        <div className={styles.cursor}>
+                          <button
+                            className={styles.delete}
+                            // onClick={() => deleteData(doc.doc_id)}
+                            onClick={() => {
+                              setDocumentIdToDelete(doc.doc_id);
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            <FaTrashAlt className={styles.deletered} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className={styles.card}>
+                  <div className={`${styles.row1} ${styles.center}`}>
+                    There are no documents added yet for this client.
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </>
         )}

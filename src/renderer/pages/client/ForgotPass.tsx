@@ -111,6 +111,7 @@ function ForgotPass(): JSX.Element {
                 onChange={(e) => setBirthday(e.target.value)}
                 required
                 className={`${styles.input}`}
+                style={{ outline: 'none' }}
               />
 
               <label htmlFor="dog" className={styles.label}>
@@ -123,6 +124,7 @@ function ForgotPass(): JSX.Element {
                 onChange={(e) => setDog(e.target.value)}
                 required
                 className={styles.input}
+                style={{ outline: 'none' }}
               />
 
               <label htmlFor="mother" className={styles.label}>
@@ -135,6 +137,7 @@ function ForgotPass(): JSX.Element {
                 onChange={(e) => setMother(e.target.value)}
                 required
                 className={styles.input}
+                style={{ outline: 'none' }}
               />
 
               {error && <p className={styles.error}>{error}</p>}

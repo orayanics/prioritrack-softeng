@@ -51,6 +51,7 @@ body {
 
   width: 200px;
   margin: 20px 20px 20px 0px;
+  justify-content: space-between !important;
   /* top right bottom left */
 }
 
@@ -591,14 +592,17 @@ a:hover {
 
 .statusMissed {
   background-color: var(--missed);
+  border: 1px solid #ff8f8f;
 }
 
 .statusOngoing {
   background-color: var(--on-going);
+  border: 1px solid #e6b200;
 }
 
 .statusComplete {
   background-color: var(--complete);
+  border: 1px solid #7cb86e;
 }
 body {
   display: flex;
@@ -1156,7 +1160,7 @@ a:hover {
 
 .dropdown {
   margin-top: 5px;
-  box-shadow: 1px 5px #ababab;
+  box-shadow: 1px 5px #ababab !important;
   background-color: #ffffff;
   border-radius: 5px !important;
   border: 1px solid #dbdbdb !important;

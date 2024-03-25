@@ -32,7 +32,7 @@ body {
   margin: 0;
 }
 .cursor {
-  cursor: pointer;
+  cursor: auto;
   display: flex;
   align-items: center;
   height: 64px;
@@ -79,6 +79,8 @@ body {
 }
 .columnHeader {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 .column2 {
   display: flex;
@@ -122,9 +124,16 @@ body {
   z-index: 10;
 }
 
+.center {
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+  height: inherit;
+  width: inherit;
+}
+
 .activeClient {
   background-color: #fff1c9;
-  // transition: background-color 0.5s ease;
 }
 
 .c-name {
@@ -168,6 +177,10 @@ body {
 .cba {
   width: 170px;
 }
+.linkFolder {
+  width: 50px;
+  text-align: center;
+}
 .action {
   width: 90px;
   text-align: center;
@@ -183,6 +196,40 @@ body {
   margin: 1px 0px 0px 0px;
 
   text-align: center;
+}
+.linkFolderButton {
+  padding: 5px 8px 3px 3px !important;
+  /* top right bottom left */
+  padding-top: 0px;
+  background-color: #bfddff;
+  margin: 0px 7px 0px 10px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.linkFolderIcon {
+  padding: 0px 5px 0px 5px !important;
+  /* top right bottom left */
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  width: 18px;
+  height: 18px;
+  margin-left: 5px;
+  // filter: invert(15%) sepia(22%) saturate(7499%) hue-rotate(202deg)
+  //   brightness(91%) contrast(97%);
+  filter: invert(18%) sepia(42%) saturate(6382%) hue-rotate(211deg)
+    brightness(99%) contrast(101%);
+}
+.linkButtonDisabled {
+  background-color: #d4d4d4;
+  cursor: auto !important;
+}
+.linkIconDisabled {
+  filter: invert(41%) sepia(0%) saturate(626%) hue-rotate(163deg)
+    brightness(89%) contrast(81%);
 }
 .edit {
   padding: 0px 5px 3px 0px !important;
@@ -266,7 +313,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 750px;
+  max-width: 810px;
   margin: 0 auto;
   margin-top: 25px;
   padding-bottom: 50px;
@@ -294,7 +341,7 @@ body {
   color: #13481d;
 
   padding: 15px;
-  padding-right: 25px;
+  padding-right: 20px;
 
   margin-bottom: 10px;
   margin-right: -10px;
@@ -307,6 +354,7 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-right: 0;
 
   font-size: 15px;
   font-weight: bold;
@@ -314,7 +362,7 @@ body {
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 16px 15px 14px 15px;
+  padding: 16px 15px 14px 5px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;
@@ -323,6 +371,7 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-left: 0;
 
   margin-top: 15px;
   margin-bottom: 10px;

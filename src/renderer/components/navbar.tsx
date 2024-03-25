@@ -7,9 +7,14 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Notif from './Notif';
 import ConfirmLogoutModal from './ConfirmLogoutModal';
 
-export default function Navbar({ onLogout, activePage, setActivePage }) {
+export default function Navbar({
+  onLogout,
+  activePage,
+  setActivePage,
+  prevActivePage,
+  setPrevActivePage,
+}) {
   const location = useLocation();
-  const [prevActivePage, setPrevActivePage] = useState('Dashboard');
 
   //useEffect(() => {
   // const pathnameSegments = location.pathname.split('/');
