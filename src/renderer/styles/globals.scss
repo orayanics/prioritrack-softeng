@@ -1,7 +1,7 @@
 :root {
   --missed: #fcbdbd;
-  --on-going: #fde3f0;
-  --complete: #d3f2cc;
+  --on-going: #ffecab;
+  --complete: #c0ebb7;
 
   --mrd-blue: #c1d7e0;
   --mrd-purple: #e0d8e9;
@@ -30,6 +30,7 @@
 body {
   background-color: white !important;
   color: black !important;
+  overflow-x: hidden;
 }
 
 .container_main {

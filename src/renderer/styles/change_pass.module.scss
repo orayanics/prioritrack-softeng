@@ -114,6 +114,18 @@ label {
   border-radius: 4px;
 }
 
+.input::placeholder {
+  color: #9e9ea7;
+}
+
+.input:focus,
+.input:hover {
+  outline: none;
+  border-color: var(--crud-blue);
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(63, 125, 191, 0.3);
+}
+
 .buttonContainer {
   margin-top: 20px;
 }

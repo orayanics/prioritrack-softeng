@@ -4,7 +4,8 @@ import { Outlet, Link } from 'react-router-dom';
 
 import styles from '../styles/dashboard.module.scss';
 import '../styles/global_styles.css';
-import { FaTrashAlt, FaPlus, FaEdit, FaUser } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaEdit, FaUser, FaTable } from 'react-icons/fa';
+import { TiExport } from 'react-icons/ti';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
 import icSortUp from '../assets/icons/ic-sort-up.svg';
@@ -12,6 +13,7 @@ import icSortDown from '../assets/icons/ic-sort-down.svg';
 import logo from '../assets/prioritrack-logo.svg';
 import { useLocation } from 'react-router-dom';
 import SearchBar from '../components/Search';
+import * as XLSX from 'xlsx';
 
 Modal.setAppElement('#root');
 
@@ -24,8 +26,9 @@ interface SortIcons {
   status: 'asc' | 'desc';
 }
 
-export default function Home({ setActivePage }) {
+export default function Home({ setActivePage, setPrevActivePage }) {
   const [users, setUsers] = useState([]);
+  const [exportData, setExportData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
   const location = useLocation(); // Use the useLocation hook
@@ -62,7 +65,12 @@ export default function Home({ setActivePage }) {
   useEffect(() => {
     if (location.state?.successMessage) {
       setSuccessMessage(location.state.successMessage);
-      setIconToShow(successEditLogo);
+      console.log(
+        `Location.state.successMessage: ${location.state.successMessage}`,
+      );
+      if (location.state.successMessage == 'Client Deleted') {
+        setIconToShow(successDeleteLogo);
+      }
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
     }
     setActivePage('Dashboard');
@@ -120,6 +128,7 @@ export default function Home({ setActivePage }) {
 
   useEffect(() => {
     fetchData();
+    getAllData();
   }, []);
 
   const fetchData = async () => {
@@ -270,15 +279,120 @@ export default function Home({ setActivePage }) {
     handleSearch(searchTerm);
   }, [searchTerm]);
 
+  const getAllData = async () => {
+    try {
+      const response = await Axios.get(`http://localhost:3001/list`);
+      // console.log('Export Data:');
+      // console.log(response.data);
+      setExportData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const currDay = today.getDate().toString().padStart(2, '0');
+    const currMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+    const currYear = today.getFullYear().toString().padStart(4, '0');
+    return `${currMonth}-${currDay}-${currYear}`;
+  };
+
+  // Export Data
+  const handleGenerateReport = () => {
+    const clients = exportData;
+    console.log('Export Data:', clients);
+    if (clients && clients.length > 0) {
+      // Prepare data for Excel
+      const data = [];
+      clients.forEach((client) => {
+        if (client.documents && client.documents.length > 0) {
+          client.documents.forEach((document) => {
+            data.push([
+              client.client_name,
+              client.client_property_location,
+              client.client_bank_name,
+              client.client_bank_address,
+              document.doc_type,
+              document.doc_no,
+              document.doc_date_submission,
+              document.doc_date_turnaround,
+              document.doc_status,
+            ]);
+          });
+        } else {
+          data.push([
+            client.client_name,
+            client.client_property_location,
+            client.client_bank_name,
+            client.client_bank_address,
+            '',
+            '',
+            '',
+            '',
+            '',
+          ]);
+        }
+      });
+
+      if (data.length > 0) {
+        // Add header row
+        const headers = [
+          'Client Name',
+          'Property Location',
+          'Bank Name',
+          'Bank Address',
+          'Document Type',
+          'Document Number',
+          'Date of Submission',
+          'Turnaround Date',
+          'Document Status',
+        ];
+        const excelData = [headers, ...data];
+        // Create a new workbook
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+        // Add worksheet to workbook
+        XLSX.utils.book_append_sheet(
+          workbook,
+          worksheet,
+          'Clients and Documents Data',
+        );
+        // Format Excel sheet
+        const wscols = [
+          { wch: 20 }, // Width of column A (Client Name)
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+        ];
+        worksheet['!cols'] = wscols;
+        // Save workbook as Excel file
+        XLSX.writeFile(
+          workbook,
+          `Client and Documents Data - ${getTodayDate()}.xlsx`,
+        );
+      } else {
+        console.log('No data available to generate report.');
+      }
+    } else {
+      console.log('No clients found.');
+    }
+  };
+
   return (
     <div>
       <div className={styles.bgLogo}>
         <img src={logo} />
       </div>
+      <div className={styles.topMargin}></div>
       {successMessage && (
         <div className={styles.containerSuccess}>
           {iconToShow}
-
           <div className={styles.successMessage}>{successMessage}</div>
         </div>
       )}
@@ -313,11 +427,17 @@ export default function Home({ setActivePage }) {
         )}
         <div className={styles.columnButtons}>
           <SearchBar onSearch={handleSearch} />
-          <Link to={`/AddClient`} className={styles.export}>
-            <button className={styles.button}>Export Data</button>
-          </Link>
+          <div className={styles.export} onClick={handleGenerateReport}>
+            <button className={styles.button}>
+              Export Data
+              <TiExport className={styles.icExport} />
+            </button>
+          </div>
           <Link to="/reports" className={styles.export}>
-            <button className={styles.button}>Reports</button>
+            <button className={styles.button}>
+              Reports
+              <FaTable className={styles.icTable} />
+            </button>
           </Link>
           <div className={styles.col1}>
             <div className={styles.rec}>
@@ -431,6 +551,7 @@ export default function Home({ setActivePage }) {
                   <Link
                     className={styles.export}
                     to={`/client/detail/${val.client_id}`}
+                    onClick={() => setPrevActivePage('Dashboard')}
                   >
                     <div className={styles.column2}>
                       <p className={`${styles.info} ${styles.cName}`}>
@@ -479,33 +600,9 @@ export default function Home({ setActivePage }) {
             ))
           ) : (
             <div className={styles.card}>
-              <div className={styles.column1}>
-                <div
-                  className={`${styles.cardCapsule} ${styles.statusMissed}`}
-                ></div>
-                <div className={styles['card-capsule']}></div>
-                <div className={styles.column2}>
-                  <p className={`${styles.info} ${styles.cName}`}>No data</p>
-                  <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
-                  <p className={`${styles.info} ${styles.docNo}`}>No data</p>
-                  <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-
-                  <div className={styles.mrdWidth}>
-                    <div
-                      className={`
-                        ${styles.info}
-                        ${styles.mrd} ${styles.cName}
-                         ${styles.statusMissed}`}
-                    >
-                      {/* Most Recent Document */}
-                      No data
-                    </div>
-                  </div>
-
-                  <p className={`${styles.info} ${styles.dateSub}`}>
-                    {/*  Date of Submission */}
-                    No data
-                  </p>
+              <div className={`${styles.column1} ${styles.center}`}>
+                <div className={`${styles.column2}`}>
+                  There is no client with a document yet.
                 </div>
               </div>
             </div>

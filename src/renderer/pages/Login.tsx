@@ -36,7 +36,7 @@ function Login({ onLogin, setActivePage }) {
         localStorage.setItem('authenticated', 'true');
         onLogin();
         navigate('/', {
-          state: { successMessageLogin: 'Login successfully!' },
+          state: { successMessageLogin: 'Login Successfull' },
         });
         setActivePage('Dashboard');
       } else {
@@ -66,6 +66,7 @@ function Login({ onLogin, setActivePage }) {
             <label htmlFor="username">Username</label>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               id="username"
               name="username"
@@ -78,6 +79,7 @@ function Login({ onLogin, setActivePage }) {
             <div className={`${styles.inputPassContainer} ${styles.flex}`}>
               <input
                 className={`${styles.input} ${styles.passInput}`}
+                style={{ outline: 'none' }}
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"

@@ -22,7 +22,7 @@ interface SortIcons {
   status: 'asc' | 'desc';
 }
 
-export default function Reports(): JSX.Element {
+export default function Reports({ setActivePage }): JSX.Element {
   const [users, setUsers] = useState([]);
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
@@ -57,6 +57,10 @@ export default function Reports(): JSX.Element {
       fetchSortedData();
     }
   }, [sortIcons, activeSortIcon]);
+
+  useEffect(() => {
+    setActivePage('Reports');
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState<string | null>(null);

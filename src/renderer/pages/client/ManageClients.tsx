@@ -7,6 +7,7 @@ import { FaTrashAlt, FaEdit, FaPlus } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import icSortUp from '../../assets/icons/ic-sort-up.svg';
 import icSortDown from '../../assets/icons/ic-sort-down.svg';
+import icLinkFolder from '../../assets/icons/ic-link-folder.svg';
 import logo from '../../assets/prioritrack-logo.svg';
 import Modal from 'react-modal';
 
@@ -17,7 +18,11 @@ interface SortIcons {
   clientBankAddress: 'asc' | 'desc';
 }
 
-export default function ManageClients({ activeClient, setActiveClient }) {
+export default function ManageClients({
+  activeClient,
+  setActiveClient,
+  setPrevActivePage,
+}) {
   const [users, setUsers] = useState([]);
   const location = useLocation(); // Use the useLocation hook
   const [successMessage, setSuccessMessage] = useState(''); // State for the success message
@@ -109,6 +114,8 @@ export default function ManageClients({ activeClient, setActiveClient }) {
         setIconToShow(successEditLogo);
       } else if (location.state.successMessage == 'Client Added') {
         setIconToShow(successAddLogo);
+      } else if (location.state.successMessage == 'Client Deleted') {
+        setIconToShow(successDeleteLogo);
       }
       // Optionally, clear the message after displaying it
       setTimeout(() => setSuccessMessage(''), 3000); // Adjust the timeout as needed
@@ -123,6 +130,7 @@ export default function ManageClients({ activeClient, setActiveClient }) {
     try {
       const response = await Axios.get('http://localhost:3001/client/list');
       setUsers(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -276,6 +284,9 @@ export default function ManageClients({ activeClient, setActiveClient }) {
           {/* <p className={`${styles.title} ${styles.tStatus} sortableColumn`}>
           Status
         </p> */}
+          <p className={`${styles.title} ${styles.linkFolder}`}>
+            Link to Folder
+          </p>
           <p className={`${styles.title} ${styles.action}`}>Action</p>
         </div>
         {users.length > 0 ? (
@@ -292,6 +303,7 @@ export default function ManageClients({ activeClient, setActiveClient }) {
                 <Link
                   className={styles.export}
                   to={`/client/detail/${val.client_id}`}
+                  onClick={() => setPrevActivePage('Clients')}
                 >
                   <div className={styles.column2}>
                     <p className={`${styles.info} ${styles.cName}`}>
@@ -311,6 +323,30 @@ export default function ManageClients({ activeClient, setActiveClient }) {
                   </div> */}
                   </div>
                 </Link>
+
+                <div className={`${styles.cursor}`}>
+                  <a href={val.client_docs_link}>
+                    <button
+                      className={`${styles.linkFolderButton} ${
+                        val.client_docs_link == '' ||
+                        val.client_docs_link == null
+                          ? styles.linkButtonDisabled
+                          : ''
+                      }`}
+                    >
+                      <img
+                        src={icLinkFolder}
+                        alt="Linked Folder"
+                        className={`${styles.linkFolderIcon}  ${
+                          val.client_docs_link == '' ||
+                          val.client_docs_link == null
+                            ? styles.linkIconDisabled
+                            : ''
+                        }`}
+                      ></img>
+                    </button>
+                  </a>
+                </div>
                 <div className={`${styles.cursor}`}>
                   <button className={`${styles.edit}`}>
                     <Link
@@ -339,17 +375,8 @@ export default function ManageClients({ activeClient, setActiveClient }) {
           ))
         ) : (
           <div className={styles.card}>
-            <div className={styles.column1}>
-              <div className={styles['card-capsule']}></div>
-              <div className={styles.column2}>
-                <p className={`${styles.info} ${styles.cName}`}>No data</p>
-                <p className={`${styles.info} ${styles.pLoc}`}>No data</p>
-                <p className={`${styles.info} ${styles.clientBN}`}>No data</p>
-                <div className={`${styles.clientBA} ${styles.info}`}>
-                  No data
-                </div>
-                <div className={`${styles.status} ${styles.info}`}>No data</div>
-              </div>
+            <div className={`${styles.column1} ${styles.center}`}>
+              <div className={styles.column2}>There is no client yet.</div>
             </div>
           </div>
         )}

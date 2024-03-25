@@ -5,7 +5,7 @@ import styles from '../../styles/add_client.module.scss';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/prioritrack-logo.svg';
 
-export default function Update({ setActiveClient }) {
+export default function Update({ setActiveClient, prevLoc }) {
   const [users, setUsers] = useState([]);
   const { id } = useParams();
   const client_id = parseInt(id, 10);
@@ -24,6 +24,8 @@ export default function Update({ setActiveClient }) {
   const [client_property_location, setPropertyLocation] = useState('');
   const [client_bank_name, setClientBankName] = useState('');
   const [client_bank_address, setClientBankAddress] = useState('');
+  const [client_docs_link, setClientDocsLink] = useState<string>('');
+  const [errMessage, setErrMessage] = useState<string>('');
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
@@ -33,11 +35,18 @@ export default function Update({ setActiveClient }) {
       setPropertyLocation(user.client_property_location || '');
       setClientBankName(user.client_bank_name || '');
       setClientBankAddress(user.client_bank_address || '');
+      setClientDocsLink(user.client_docs_link || '');
     }
   }, [users]);
 
   const updateDb = async (e) => {
     e.preventDefault();
+    const isValidLink = (url) => {
+      // Regular expression to match the pattern https?://*
+      const pattern = /^(https?):\/\/.*$/;
+      return pattern.test(url);
+    };
+
     if (
       !client_name ||
       !client_property_location ||
@@ -45,15 +54,23 @@ export default function Update({ setActiveClient }) {
       !client_bank_address
     ) {
       setIsValid(false);
+      setErrMessage('Please fill out all fields.');
+      return;
+    }
+    if (client_docs_link && !isValidLink(client_docs_link)) {
+      setIsValid(false);
+      setErrMessage('Invalid Link.');
       return;
     }
     setIsValid(true);
+    setErrMessage('');
     setActiveClient(client_name);
     await Axios.post(`http://localhost:3001/list/edit/${id}`, {
       client_name,
       client_property_location,
       client_bank_name,
       client_bank_address,
+      client_docs_link,
       client_id,
     })
       .then(() => {
@@ -63,10 +80,17 @@ export default function Update({ setActiveClient }) {
           client_property_location,
           client_bank_name,
           client_bank_address,
+          client_docs_link,
         );
-        navigate('/client', {
-          state: { successMessage: 'Client Edited' },
-        });
+        if (prevLoc != '') {
+          navigate(`/client/detail/${prevLoc}`, {
+            state: { successMessage: 'Client Edited' },
+          });
+        } else {
+          navigate('/client', {
+            state: { successMessage: 'Client Edited' },
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -83,7 +107,7 @@ export default function Update({ setActiveClient }) {
           <span className={styles.closebtn} onClick={() => setIsValid(true)}>
             &times;
           </span>
-          <p>Please fill out all fields.</p>
+          <p>{errMessage}</p>
         </div>
       )}
       {users.map((val) => (
@@ -93,6 +117,7 @@ export default function Update({ setActiveClient }) {
             <h3 className={styles.inputTitle}>Client Name</h3>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               value={client_name}
               onChange={(e) => {
@@ -103,6 +128,7 @@ export default function Update({ setActiveClient }) {
             <h3 className={styles.inputTitle}>Property Location</h3>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               value={client_property_location}
               onChange={(e) => {
@@ -113,6 +139,7 @@ export default function Update({ setActiveClient }) {
             <h3 className={styles.inputTitle}>Client Bank Name</h3>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               value={client_bank_name}
               onChange={(e) => {
@@ -123,10 +150,22 @@ export default function Update({ setActiveClient }) {
             <h3 className={styles.inputTitle}>Client Bank Address</h3>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               value={client_bank_address}
               onChange={(e) => {
                 setClientBankAddress(e.target.value);
+                setIsValid(true);
+              }}
+            />
+            <h3 className={styles.inputTitle}>Link to Documents</h3>
+            <input
+              className={styles.input}
+              style={{ outline: 'none' }}
+              type="text"
+              value={client_docs_link}
+              onChange={(e) => {
+                setClientDocsLink(e.target.value);
                 setIsValid(true);
               }}
             />
@@ -139,9 +178,18 @@ export default function Update({ setActiveClient }) {
                 Submit
               </button>
               <button className={styles.btn + ' ' + styles.cancel}>
-                <Link className={styles.cancel_text} to={`/client`}>
-                  Cancel
-                </Link>
+                {prevLoc != '' ? (
+                  <Link
+                    className={styles.cancel_text}
+                    to={`/client/detail/${prevLoc}`}
+                  >
+                    Cancel
+                  </Link>
+                ) : (
+                  <Link className={styles.cancel_text} to={`/client`}>
+                    Cancel
+                  </Link>
+                )}
               </button>
             </div>
           </form>

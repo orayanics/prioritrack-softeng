@@ -51,7 +51,9 @@ body {
   padding: 15px 30px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
@@ -60,6 +62,15 @@ body {
   width: 278px;
   margin: 10px 20px 10px 0px;
   /* top right bottom left */
+}
+.icExport {
+  padding-left: 15px;
+  font-size: 22px;
+}
+.icTable {
+  padding-left: 15px;
+  padding-right: 2px;
+  font-size: 16px;
 }
 .export {
   text-decoration: none;
@@ -91,15 +102,22 @@ body {
 }
 .col1,
 .col2 {
-  padding: 5px;
+  padding: 5px 5px 5px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .columnButtons {
   display: flex;
-  margin-top: 45px;
+  margin-top: 50px;
   flex-direction: column;
+}
+.center {
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+  height: inherit;
+  width: inherit;
 }
 .rec {
   background-color: #ffffff;
@@ -124,12 +142,12 @@ body {
   width: 225px;
   background-color: var(--missed);
   border-radius: 25px;
-  padding: 0px 5px 5px 5px;
   /* top right bottom left */
   height: 35px;
   margin-top: 8px;
   display: flex;
   justify-content: center !important;
+  align-items: center;
 }
 
 .card {
@@ -330,6 +348,9 @@ body {
   justify-content: center;
   margin: 0 auto;
   padding: 15px 30px 50px 30px;
+}
+
+.topMargin {
   margin-top: 30px;
 }
 
@@ -400,16 +421,17 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   background-color: #c0f0b5;
   color: #13481d;
 
-  padding: 20px;
-  padding-right: 25px;
+  padding: 15px;
+  padding-right: 20px;
 
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-right: -10px;
-  margin-top: 20px;
+  margin-top: 15px;
 
   border-radius: 15px;
   border-top-right-radius: 0px;
@@ -418,14 +440,15 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-right: 0;
 
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
 }
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 10px;
+  padding: 16px 15px 14px 5px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;
@@ -434,11 +457,12 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-left: 0;
 
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 0px;
 
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
 }
 // labels
