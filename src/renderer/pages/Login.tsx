@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom';
 import axios from 'axios'; // Make sure axios is imported
 import styles from '../styles/login.module.scss';
 import logo from '../assets/prioritrack-logo-with-text.svg';
 import { IoEyeSharp, IoEyeOffSharp } from 'react-icons/io5';
 
-function Login({ onLogin }) {
+function Login({ onLogin, setActivePage }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const [successMessageLogin, setsuccessMessageLogin] = useState('');
+
+  useEffect(() => {
+    setActivePage('Login');
+  }, []);
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePassVisibility = () => {
@@ -31,9 +35,10 @@ function Login({ onLogin }) {
       if (response.data) {
         localStorage.setItem('authenticated', 'true');
         onLogin();
-        navigate('/home', {
-          state: { successMessageLogin: 'Login successfully!' },
+        navigate('/', {
+          state: { successMessageLogin: 'Login Successfull' },
         });
+        setActivePage('Dashboard');
       } else {
         console.error('Error occurred during login:', error);
         setError('Invalid username or password');
@@ -61,6 +66,7 @@ function Login({ onLogin }) {
             <label htmlFor="username">Username</label>
             <input
               className={styles.input}
+              style={{ outline: 'none' }}
               type="text"
               id="username"
               name="username"
@@ -73,6 +79,7 @@ function Login({ onLogin }) {
             <div className={`${styles.inputPassContainer} ${styles.flex}`}>
               <input
                 className={`${styles.input} ${styles.passInput}`}
+                style={{ outline: 'none' }}
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"

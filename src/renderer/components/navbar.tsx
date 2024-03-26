@@ -7,15 +7,20 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Notif from './Notif';
 import ConfirmLogoutModal from './ConfirmLogoutModal';
 
-export default function Navbar({ onLogout }) {
+export default function Navbar({
+  onLogout,
+  activePage,
+  setActivePage,
+  prevActivePage,
+  setPrevActivePage,
+}) {
   const location = useLocation();
-  const [activePage, setActivePage] = useState('');
 
-  useEffect(() => {
-    const pathnameSegments = location.pathname.split('/');
-    const lastSegment = pathnameSegments[pathnameSegments.length - 1];
-    setActivePage(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
-  }, [location.pathname]);
+  //useEffect(() => {
+  // const pathnameSegments = location.pathname.split('/');
+  // const lastSegment = pathnameSegments[pathnameSegments.length - 1];
+  // setActivePage(lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1));
+  //}, [location.pathname]);
 
   const handleLogout = () => {
     onLogout();
@@ -23,7 +28,14 @@ export default function Navbar({ onLogout }) {
   };
 
   const handleCloseModal = () => {
+    setActivePage(prevActivePage);
     setIsModalOpen(false);
+  };
+
+  const handleClickModal = () => {
+    setPrevActivePage(activePage);
+    setActivePage('Logout');
+    setIsModalOpen(true);
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -34,7 +46,7 @@ export default function Navbar({ onLogout }) {
   return (
     <nav className="navbar">
       <Link
-        to="/home"
+        to="/"
         onClick={() => handleLinkClick('Dashboard')}
         className="navbar-logo"
       >
@@ -42,7 +54,7 @@ export default function Navbar({ onLogout }) {
       </Link>
       <div className="navbar-links">
         <Link
-          to="/home"
+          to="/"
           onClick={() => handleLinkClick('Dashboard')}
           className={`link ${activePage === 'Dashboard' && 'active'}`}
         >
@@ -62,7 +74,11 @@ export default function Navbar({ onLogout }) {
         >
           Clients
         </Link>
-        <a href="#" onClick={() => setIsModalOpen(true)} className="link">
+        <a
+          href="#"
+          onClick={() => handleClickModal()}
+          className={`link ${activePage === 'Logout' && 'active'}`}
+        >
           Logout
         </a>
 

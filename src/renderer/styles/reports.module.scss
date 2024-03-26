@@ -78,6 +78,10 @@ body {
   text-decoration: none !important;
   outline: none !important;
 }
+.icExport {
+  font-size: 22px;
+  padding-left: 25px;
+}
 
 .column1 {
   display: flex;
@@ -272,15 +276,56 @@ body {
   text-align: center;
 }
 .statusMissed {
-  background-color: var(--missed);
+  background-color: var(--missed) !important;
 }
 
 .statusOngoing {
-  background-color: var(--on-going);
+  background-color: var(--on-going) !important;
 }
 
 .statusComplete {
-  background-color: var(--complete);
+  background-color: var(--complete) !important;
+}
+
+// labels
+.bidletter {
+  background-color: var(--bid-letter);
+}
+.statementofaccount {
+  background-color: var(--statement-of-account);
+}
+.minutesofauctionsale {
+  background-color: var(--minutes-of-auction-sale);
+}
+.sheriffsfee {
+  background-color: var(--sheriffs-fee);
+}
+.taxdeclaration {
+  background-color: var(--tax-declaration);
+}
+.realestatetaxpayment {
+  background-color: var(--real-estate-tax-payment);
+}
+.jdfpaymentor {
+  background-color: var(--jdf-payment-or);
+}
+.certificateofsale {
+  background-color: var(--certificate-of-sale);
+}
+.lrapo {
+  background-color: var(--lra-po);
+}
+.annotatedtransfercot {
+  background-color: var(--annotated-transfer-cot);
+}
+.certofposting {
+  background-color: var(--cert-of-posting);
+}
+.taxclearance {
+  background-color: var(--tax-clearance);
+}
+.followupletter {
+  background-color: var(--follow-up-letter);
 }
 
 .container {

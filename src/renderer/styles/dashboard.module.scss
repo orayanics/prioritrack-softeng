@@ -51,15 +51,26 @@ body {
   padding: 15px 30px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 1px 5px #00042c;
 
   width: 278px;
-  margin: 20px 20px 20px 0px;
+  margin: 10px 20px 10px 0px;
   /* top right bottom left */
+}
+.icExport {
+  padding-left: 15px;
+  font-size: 22px;
+}
+.icTable {
+  padding-left: 15px;
+  padding-right: 2px;
+  font-size: 16px;
 }
 .export {
   text-decoration: none;
@@ -91,15 +102,22 @@ body {
 }
 .col1,
 .col2 {
-  padding: 5px;
+  padding: 5px 5px 5px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .columnButtons {
   display: flex;
-  justify-content: center;
+  margin-top: 50px;
   flex-direction: column;
+}
+.center {
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+  height: inherit;
+  width: inherit;
 }
 .rec {
   background-color: #ffffff;
@@ -124,12 +142,12 @@ body {
   width: 225px;
   background-color: var(--missed);
   border-radius: 25px;
-  padding: 0px 5px 5px 5px;
   /* top right bottom left */
   height: 35px;
   margin-top: 8px;
   display: flex;
   justify-content: center !important;
+  align-items: center;
 }
 
 .card {
@@ -144,7 +162,7 @@ body {
     0 1px 1px rgba(0, 0, 0, 0.12),
     0 2px 2px rgba(0, 0, 0, 0.12),
     0 4px 4px rgba(0, 0, 0, 0.12);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .card:hover {
@@ -193,9 +211,11 @@ body {
   width: 160px;
 }
 .title_mrd {
-  width: 180px;
+  width: 120px;
   display: flex;
   text-align: center !important;
+  padding-left: 50px;
+  padding-right: 30px;
 }
 
 .dn {
@@ -213,6 +233,7 @@ body {
   width: 70px;
   text-align: center !important;
   margin-left: 5px;
+  padding-left: 28px;
 }
 .tAction {
   width: 90px;
@@ -272,7 +293,7 @@ body {
 }
 .cName {
   // padding-top: 5px;
-  width: 105px !important;
+  width: 120px !important;
   margin-left: 15px !important;
   margin-right: 10px;
 }
@@ -324,10 +345,13 @@ body {
   flex: 1;
   display: flex;
   flex-direction: row;
-  max-width: 140vh;
+  justify-content: center;
   margin: 0 auto;
   padding: 15px 30px 50px 30px;
-  margin-top: 10px;
+}
+
+.topMargin {
+  margin-top: 30px;
 }
 
 // MODAL
@@ -397,16 +421,17 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   background-color: #c0f0b5;
   color: #13481d;
 
-  padding: 20px;
-  padding-right: 25px;
+  padding: 15px;
+  padding-right: 20px;
 
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-right: -10px;
-  margin-top: 20px;
+  margin-top: 15px;
 
   border-radius: 15px;
   border-top-right-radius: 0px;
@@ -415,14 +440,15 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-right: 0;
 
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
 }
 .successMessage {
   background-color: #c0f0b5;
   color: #13481d;
-  padding: 20px;
+  padding: 16px 15px 14px 5px;
 
   border-radius: 15px;
   border-top-left-radius: 0px;
@@ -431,11 +457,12 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #8ebd83;
+  border-left: 0;
 
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 0px;
 
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
 }
 // labels

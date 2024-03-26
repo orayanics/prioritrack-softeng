@@ -6,7 +6,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/prioritrack-logo.svg';
 
-export default function UserAdd() {
+export default function UserAdd({ setActiveClient }) {
   Axios.defaults.baseURL = 'http://localhost:3001';
   const navigate = useNavigate();
 
@@ -14,10 +14,18 @@ export default function UserAdd() {
   const [property_location, setPropertyLocation] = useState<string>('');
   const [client_bank_name, setClientBankName] = useState<string>('');
   const [client_bank_address, setClientBankAddress] = useState<string>('');
+  const [client_docs_link, setClientDocsLink] = useState<string>('');
+  const [errMessage, setErrMessage] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const postDb = async (e) => {
     e.preventDefault();
+    const isValidLink = (url) => {
+      // Regular expression to match the pattern https?://*
+      const pattern = /^(https?):\/\/.*$/;
+      return pattern.test(url);
+    };
+
     if (
       !name ||
       !property_location ||
@@ -25,14 +33,23 @@ export default function UserAdd() {
       !client_bank_address
     ) {
       setIsValid(false);
+      setErrMessage('Please fill out all fields.');
+      return;
+    }
+    if (client_docs_link && !isValidLink(client_docs_link)) {
+      setIsValid(false);
+      setErrMessage('Invalid Link.');
       return;
     }
     setIsValid(true);
+    setErrMessage('');
+    setActiveClient(name);
     await Axios.post('http://localhost:3001/client/add_submit', {
       name,
       property_location,
       client_bank_name,
       client_bank_address,
+      client_docs_link,
     })
       .then(() => {
         console.log(
@@ -40,11 +57,12 @@ export default function UserAdd() {
           property_location,
           client_bank_name,
           client_bank_address,
+          client_docs_link,
         );
         console.log('Success');
         // navigate('/client');
         navigate('/client', {
-          state: { successMessage: 'Client added successfully' },
+          state: { successMessage: 'Client Added' },
         });
       })
       .catch((err) => {
@@ -53,6 +71,7 @@ export default function UserAdd() {
           property_location,
           client_bank_name,
           client_bank_address,
+          client_docs_link,
         );
         console.log(err);
       });
@@ -69,7 +88,7 @@ export default function UserAdd() {
             <span className={styles.closebtn} onClick={() => setIsValid(true)}>
               &times;
             </span>
-            <p>Please fill out all fields.</p>
+            <p>{errMessage}</p>
           </div>
         )}
         <div className={styles.card}>
@@ -79,27 +98,54 @@ export default function UserAdd() {
               <h3 className={styles.inputTitle}>Client Name</h3>
               <input
                 className={styles.input}
+                style={{ outline: 'none' }}
                 type="text"
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Property Location</h3>
               <input
                 className={styles.input}
+                style={{ outline: 'none' }}
                 type="text"
-                onChange={(e) => setPropertyLocation(e.target.value)}
+                onChange={(e) => {
+                  setPropertyLocation(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Client Bank Name</h3>
               <input
                 className={styles.input}
+                style={{ outline: 'none' }}
                 type="text"
-                onChange={(e) => setClientBankName(e.target.value)}
+                onChange={(e) => {
+                  setClientBankName(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <h3 className={styles.inputTitle}>Client Bank Address</h3>
               <input
                 className={styles.input}
+                style={{ outline: 'none' }}
                 name="query"
                 type="text"
-                onChange={(e) => setClientBankAddress(e.target.value)}
+                onChange={(e) => {
+                  setClientBankAddress(e.target.value);
+                  setIsValid(true);
+                }}
+              />
+              <h3 className={styles.inputTitle}>Link to Documents</h3>
+              <input
+                className={styles.input}
+                style={{ outline: 'none' }}
+                name="query"
+                type="text"
+                onChange={(e) => {
+                  setClientDocsLink(e.target.value);
+                  setIsValid(true);
+                }}
               />
               <div className={styles.btn2}>
                 <button

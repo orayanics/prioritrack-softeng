@@ -3,9 +3,9 @@ import Axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import styles from '../styles/reports.module.scss';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import { TiExport } from 'react-icons/ti';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
-import '../styles/reports.css';
 import * as XLSX from 'xlsx';
 import '../styles/reports.css';
 import '../styles/global_styles.css';
@@ -22,7 +22,7 @@ interface SortIcons {
   status: 'asc' | 'desc';
 }
 
-export default function Reports(): JSX.Element {
+export default function Reports({ setActivePage }): JSX.Element {
   const [users, setUsers] = useState([]);
   const [sortIcons, setSortIcons] = useState<SortIcons>({
     clientName: 'asc',
@@ -57,6 +57,10 @@ export default function Reports(): JSX.Element {
       fetchSortedData();
     }
   }, [sortIcons, activeSortIcon]);
+
+  useEffect(() => {
+    setActivePage('Reports');
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState<string | null>(null);
@@ -132,7 +136,7 @@ export default function Reports(): JSX.Element {
     { name: 'December', number: '12' },
   ];
   const years = []; //change year to when Anrylle is established
-  for (let year = 2000; year <= Number(currYear); year++) {
+  for (let year = 2019; year <= Number(currYear); year++) {
     years.push(year);
   }
 
@@ -313,17 +317,24 @@ export default function Reports(): JSX.Element {
       } else if (activeSortIcon == 'status') {
         sortColumnName = 'status';
       }
-      XLSX.writeFile(
-        workbook,
-        `Report for ${getMonthName(
-          month,
-        )} ${year} (${`sorted by ${sortColumnName} in ${order} order `}).xlsx`,
+      console.log(
+        `order: ${sortIcons[activeSortIcon]} column: ${activeSortIcon}`,
       );
-      // XLSX.writeFile(workbook, 'client_data.xlsx');
+      console.log(`order: ${order} column: ${sortColumnName}`);
+      var filename = '';
+      if (order == '' || sortColumnName == '') {
+        filename = `Report for ${getMonthName(month)} ${year}`;
+      } else {
+        filename = `Report for ${getMonthName(
+          month,
+        )} ${year} (${`sorted by ${sortColumnName} in ${order} order`})`;
+      }
+      XLSX.writeFile(workbook, `${filename}.xlsx`);
     } else {
       console.log('No clients available to generate report.');
     }
   };
+
   type StatusType = 'Missed' | 'Ongoing' | 'Complete';
 
   const getStatusClass = (status: StatusType) => {
@@ -335,6 +346,45 @@ export default function Reports(): JSX.Element {
       case 'Complete':
         return styles.statusComplete;
 
+      default:
+        return '';
+    }
+  };
+  const getDocumentClass = (documents) => {
+    switch (documents) {
+      case 'BID Letter':
+        return styles.bidletter;
+      case 'Statement of Account':
+        return styles.statementofaccount;
+      case 'Minutes of Auction sale':
+        return styles.minutesofauctionsale;
+      case "Sheriff's fee":
+        return styles.sheriffsfee;
+      case 'Tax Declaration':
+        return styles.taxdeclaration;
+      case 'Real Estate Tax Payment':
+        return styles.realestatetaxpayment;
+      case 'JDF Payment O.R.':
+        return styles.jdfpaymentor;
+      case 'Certificate of Sale':
+        return styles.certificateofsale;
+      case 'LRA Assessment Form P.O.':
+      case 'LRA O.R.':
+        return styles.lrapo;
+      case 'Annotated Transfer Certificate of Title':
+        return styles.annotatedtransfercot;
+      case 'Certificate of Posting':
+        return styles.certofposting;
+      case 'Tax Clearance':
+        return styles.taxclearance;
+      case 'Follow-up letter':
+        return styles.followupletter;
+      case 'Follow-up letter 1':
+        return styles.followupletter;
+      case 'Follow-up letter 2':
+        return styles.followupletter;
+      case 'Follow-up letter 3':
+        return styles.followupletter;
       default:
         return '';
     }
@@ -367,9 +417,9 @@ export default function Reports(): JSX.Element {
       )}
 
       <div className={styles.column1}>
-        <Link to="/reports">
-          <button className={styles.button} onClick={handleGenerateReport}>
-            Generate Reports
+        <Link to="/reports" className={styles.export}>
+          <button className={'button'} onClick={handleGenerateReport}>
+            Generate Report <TiExport className={styles.icExport} />
           </button>
         </Link>
       </div>
@@ -522,15 +572,7 @@ export default function Reports(): JSX.Element {
         users.map((val: any) => (
           <div key={val.client_id}>
             <div
-              className={`card-capsule ${
-                val.doc_status == 'Missed'
-                  ? 'statusMissed'
-                  : val.doc_status == 'Ongoing'
-                  ? 'statusOngoing'
-                  : val.doc_status == 'Complete'
-                  ? 'statusComplete'
-                  : ''
-              } {\*${getStatusClass(val.doc_status)}*\}`}
+              className={`card-capsule ${getStatusClass(val.doc_status)}`}
             ></div>
             <div className="card">
               <table className="table2">
@@ -545,32 +587,14 @@ export default function Reports(): JSX.Element {
                     <td className="align-left docNo-row">{val.doc_no}</td>
                     <td>
                       <div
-                        className={`pill2 ${
-                          val.doc_status == 'Missed'
-                            ? 'statusMissed'
-                            : val.doc_status == 'Ongoing'
-                            ? 'statusOngoing'
-                            : val.doc_status == 'Complete'
-                            ? 'statusComplete'
-                            : ''
-                        } {\*${getStatusClass(val.doc_status)}*\}`}
+                        className={`pill2 ${getDocumentClass(val.doc_type)}`}
                       >
                         {val.doc_type}
                       </div>
                     </td>
                     <td className="date">{val.doc_date_submission}</td>
                     <td className="status-align">
-                      <div
-                        className={`pill ${
-                          val.doc_status == 'Missed'
-                            ? 'statusMissed'
-                            : val.doc_status == 'Ongoing'
-                            ? 'statusOngoing'
-                            : val.doc_status == 'Complete'
-                            ? 'statusComplete'
-                            : ''
-                        } {\*${getStatusClass(val.doc_status)}*\}`}
-                      >
+                      <div className={`pill ${getStatusClass(val.doc_status)}`}>
                         {val.doc_status}
                       </div>
                     </td>

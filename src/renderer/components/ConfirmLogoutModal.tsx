@@ -7,7 +7,7 @@ const ConfirmLogoutModal = ({ show, handleClose, handleLogout }) => {
       <div className={styles.modal}>
         <div className={styles.modalContent}>
           <h3 className={styles.titleDelete}>
-            Are you sure you want to Logout?
+            Are you sure you want to logout?
           </h3>
           <div className={styles.midDelete}>
             <button

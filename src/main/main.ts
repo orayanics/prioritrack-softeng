@@ -122,11 +122,18 @@ myApp.post('/client/add_submit', (req, res) => {
   const property_location = req.body.property_location;
   const client_bank_name = req.body.client_bank_name;
   const client_bank_address = req.body.client_bank_address;
+  const client_docs_link = req.body.client_docs_link;
   const sql =
-    'INSERT INTO clients (client_name,client_property_location,client_bank_name,client_bank_address) VALUES (?, ?, ?, ?)';
+    'INSERT INTO clients (client_name,client_property_location,client_bank_name,client_bank_address,client_docs_link) VALUES (?, ?, ?, ?, ?)';
   db.query(
     sql,
-    [name, property_location, client_bank_name, client_bank_address],
+    [
+      name,
+      property_location,
+      client_bank_name,
+      client_bank_address,
+      client_docs_link,
+    ],
     (err, result) => {
       if (err) {
         console.error('Error inserting data into MySQL:', err);
@@ -144,14 +151,22 @@ myApp.post('/client/document/add/:id', (req, res) => {
   const doc_status = req.body.doc_status;
   const doc_no = req.body.doc_no;
   const doc_date_submission = req.body.doc_date_submission;
+  const doc_date_turnaround = req.body.doc_date_turnaround;
   const doc_type = req.body.doc_type;
   const client_id = req.body.client_id;
   console.log('SERVER') + client_id;
   const sql =
-    'INSERT INTO documents (client_id, doc_no, doc_date_submission,date_turnaround, doc_type, doc_status) VALUES (?, ?,? , ?, ?, ?)';
+    'INSERT INTO documents (client_id, doc_no, doc_date_submission, doc_date_turnaround, doc_type, doc_status) VALUES (?, ?,? , ?, ?, ?)';
   db.query(
     sql,
-    [client_id, doc_no, doc_date_submission, doc_type, doc_status],
+    [
+      client_id,
+      doc_no,
+      doc_date_submission,
+      doc_date_turnaround,
+      doc_type,
+      doc_status,
+    ],
     (err, result) => {
       if (err) {
         console.error('Error inserting data into MySQL:', err);
@@ -253,12 +268,28 @@ myApp.get('/dashboard/list', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission);`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -274,13 +305,29 @@ myApp.get('/dashboard/list/clientName/asc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -294,13 +341,29 @@ myApp.get('/dashboard/list/clientName/desc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY c.client_name DESC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY c.client_name DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -314,13 +377,29 @@ myApp.get('/dashboard/list/propertyLocation/asc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY c.client_property_location ASC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY c.client_property_location ASC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -334,13 +413,29 @@ myApp.get('/dashboard/list/propertyLocation/desc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY c.client_property_location DESC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY c.client_property_location DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -354,13 +449,29 @@ myApp.get('/dashboard/list/mostRecentDocument/asc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_type ASC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_type ASC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -374,13 +485,29 @@ myApp.get('/dashboard/list/mostRecentDocument/desc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_type DESC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_type DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -394,13 +521,29 @@ myApp.get('/dashboard/list/dateOfSubmission/asc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_date_submission ASC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_date_submission ASC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -414,13 +557,29 @@ myApp.get('/dashboard/list/dateOfSubmission/desc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_date_submission DESC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_date_submission DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -434,13 +593,29 @@ myApp.get('/dashboard/list/status/asc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_status ASC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_status ASC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
@@ -454,16 +629,94 @@ myApp.get('/dashboard/list/status/desc', (req, res) => {
     d.doc_no,
     d.doc_type,
     d.doc_status,
-    d.doc_date_submission
+    d.doc_date_submission,
+    d.doc_date_turnaround
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
-    FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    ORDER BY d.doc_status DESC, c.client_name ASC`;
+  JOIN (
+  SELECT client_id,
+        MAX(doc_date_submission) AS newest_date
+  FROM documents
+  GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+  AND d.doc_date_submission = d2.newest_date
+  LEFT JOIN (
+  SELECT client_id,
+        doc_date_submission,
+        MAX(doc_id) AS max_doc_id
+  FROM documents
+  GROUP BY client_id, doc_date_submission
+  ) d3 ON d.client_id = d3.client_id
+  AND d.doc_date_submission = d3.doc_date_submission
+  AND d.doc_id = d3.max_doc_id
+  WHERE (d3.client_id IS NULL OR d.doc_id = d3.max_doc_id)
+  AND d.doc_type = (SELECT MIN(doc_type) FROM documents WHERE client_id = c.client_id AND doc_date_submission = d.doc_date_submission)
+  ORDER BY d.doc_status DESC, c.client_name ASC`;
   db.query(query, (err, data) => {
     if (err) return res.json(err);
     return res.send(data);
+  });
+});
+
+// GET ALL DATA (CLIENTS & DOCUMENTS)
+myApp.get(`/list`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.client_id AS client__id, u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    ORDER BY u.client_id`;
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Initialize an empty array to store clients
+      const clients = [];
+
+      result.forEach((row) => {
+        const clientId = row.client__id;
+        let client = clientId
+          ? clients.find((client) => client.client_id === clientId)
+          : null;
+
+        // If client doesn't exist in the array, create a new client object
+        if (!client) {
+          client = {
+            client_id: clientId,
+            client_name: row.client_name,
+            client_phone: row.client_phone,
+            client_property_location: row.client_property_location,
+            client_bank_name: row.client_bank_name,
+            client_bank_address: row.client_bank_address,
+            client_docs_link: row.client_docs_link,
+            documents: [],
+          };
+          clients.push(client);
+        }
+
+        // If the row contains document data, add it to the client's documents array
+        if (row.doc_id) {
+          const document = {
+            doc_id: row.doc_id,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          };
+          client.documents.push(document);
+        }
+      });
+
+      console.log('Clients array:', clients);
+      res.json(clients);
+    }
   });
 });
 
@@ -486,12 +739,13 @@ myApp.get(`/list/:id`, (req, res) => {
       }
 
       const userData = {
-        client_id: result[0].client_id,
+        client_id: id,
         client_name: result[0].client_name,
         client_phone: result[0].client_phone,
         client_property_location: result[0].client_property_location,
         client_bank_name: result[0].client_bank_name,
         client_bank_address: result[0].client_bank_address,
+        client_docs_link: result[0].client_docs_link,
         documents: [],
       };
 
@@ -502,6 +756,7 @@ myApp.get(`/list/:id`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -548,6 +803,7 @@ myApp.get(`/list/:id/documentType/asc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -592,6 +848,7 @@ myApp.get(`/list/:id/documentType/desc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -636,6 +893,7 @@ myApp.get(`/list/:id/dateOfSubmission/asc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -680,6 +938,97 @@ myApp.get(`/list/:id/dateOfSubmission/desc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by turnaroundDate in ascending order
+myApp.get(`/list/:id/turnaroundDate/asc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_date_turnaround ASC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
+            doc_type: row.doc_type,
+            doc_status: row.doc_status,
+          });
+        }
+      });
+      res.json(userData);
+      console.log(userData);
+    }
+  });
+});
+//sort by turnaroundDate in descending order
+myApp.get(`/list/:id/turnaroundDate/desc`, (req, res) => {
+  const userId = req.params.id;
+  const id = parseInt(userId);
+  const query = `
+    SELECT u.*, d.*
+    FROM clients u
+    LEFT JOIN documents d ON u.client_id = d.client_id
+    WHERE u.client_id = ?
+    ORDER BY d.doc_date_turnaround DESC, d.client_id ASC`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: 'Server error' });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userData = {
+        client_id: result[0].client_id,
+        client_name: result[0].client_name,
+        client_phone: result[0].client_phone,
+        client_property_location: result[0].client_property_location,
+        client_bank_name: result[0].client_bank_name,
+        client_bank_address: result[0].client_bank_address,
+        documents: [],
+      };
+      result.forEach((row) => {
+        if (row.doc_id) {
+          userData.documents.push({
+            doc_id: row.doc_id,
+            doc_name: row.doc_name,
+            doc_no: row.doc_no,
+            doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -724,6 +1073,7 @@ myApp.get(`/list/:id/status/asc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -768,6 +1118,7 @@ myApp.get(`/list/:id/status/desc`, (req, res) => {
             doc_name: row.doc_name,
             doc_no: row.doc_no,
             doc_date_submission: row.doc_date_submission,
+            doc_date_turnaround: row.doc_date_turnaround,
             doc_type: row.doc_type,
             doc_status: row.doc_status,
           });
@@ -794,10 +1145,16 @@ myApp.get('/reports/:month/:year', (req, res) => {
     d.doc_date_submission
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+  JOIN (
+    SELECT client_id,
+      MAX(doc_date_submission) AS newest_date,
+      MAX(doc_id) AS max_doc_id
     FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    WHERE LEFT(d.doc_date_submission, 7) = ?`;
+    GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+    AND d.doc_date_submission = d2.newest_date
+    AND d.doc_id = d2.max_doc_id
+  WHERE LEFT(d.doc_date_submission, 7) = ?`;
   db.query(query, [yearMonth], (err, result) => {
     if (err) {
       console.error('Database error:', err);
@@ -816,6 +1173,7 @@ myApp.get('/reports/:month/:year', (req, res) => {
         doc_type: row.doc_type,
         doc_status: row.doc_status,
         doc_date_submission: row.doc_date_submission,
+        doc_date_turnaround: row.doc_date_turnaround,
       }));
 
       res.json(userData);
@@ -851,11 +1209,17 @@ myApp.get('/reports/:month/:year/:column/:order', (req, res) => {
     d.doc_date_submission
   FROM clients c
   JOIN documents d ON c.client_id = d.client_id
-  JOIN (SELECT client_id, MAX(doc_date_submission) AS newest_date
+  JOIN (
+    SELECT client_id,
+      MAX(doc_date_submission) AS newest_date,
+      MAX(doc_id) AS max_doc_id
     FROM documents
-    GROUP BY client_id) d2 ON d.client_id = d2.client_id AND d.doc_date_submission = d2.newest_date
-    WHERE LEFT(d.doc_date_submission, 7) = ?
-    ORDER BY ${sort}, c.client_name ASC`;
+    GROUP BY client_id
+  ) d2 ON d.client_id = d2.client_id
+    AND d.doc_date_submission = d2.newest_date
+    AND d.doc_id = d2.max_doc_id
+  WHERE LEFT(d.doc_date_submission, 7) = ?
+  ORDER BY ${sort}, c.client_name ASC`;
   db.query(query, [yearMonth], (err, result) => {
     if (err) {
       console.error('Database error:', err);
@@ -874,6 +1238,7 @@ myApp.get('/reports/:month/:year/:column/:order', (req, res) => {
         doc_type: row.doc_type,
         doc_status: row.doc_status,
         doc_date_submission: row.doc_date_submission,
+        doc_date_turnaround: row.doc_date_turnaround,
       }));
 
       res.json(userData);
@@ -895,20 +1260,19 @@ myApp.get('/client/update/:id', (req, res) => {
 myApp.post(`/list/edit/:id`, (req, res) => {
   const id = req.params.id;
   const client_name = req.body.client_name;
-
   const client_property_location = req.body.client_property_location;
-
   const client_bank_name = req.body.client_bank_name;
-
   const client_bank_address = req.body.client_bank_address;
+  const client_docs_link = req.body.client_docs_link;
 
   const query =
-    'UPDATE clients SET client_name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ? WHERE client_id = ?';
+    'UPDATE clients SET client_name = ?, client_property_location = ?, client_bank_name = ?,client_bank_address = ?,client_docs_link = ? WHERE client_id = ?';
   const values = [
     client_name,
     client_property_location,
     client_bank_name,
     client_bank_address,
+    client_docs_link,
     id,
   ];
   db.query(query, values, (err, result) => {
@@ -920,16 +1284,26 @@ myApp.post(`/list/edit/:id`, (req, res) => {
 // DELETE USER AND ALL DOCUMENTS
 myApp.delete('/client/delete/:id', (req, res) => {
   const userId = req.params.id;
-  const sql = `DELETE clients, documents FROM clients
-    LEFT JOIN documents ON clients.client_id = documents.client_id
-    WHERE clients.client_id = ?`;
-  db.query(sql, [userId], (err, result) => {
+  // const sql = `DELETE clients, documents FROM clients
+  //   LEFT JOIN documents ON clients.client_id = documents.client_id
+  //   WHERE clients.client_id = ?`;
+  const deleteDocsSql = `DELETE FROM documents WHERE client_id = ?`;
+  const deleteClientSql = `DELETE FROM clients WHERE client_id = ?`;
+
+  db.query(deleteDocsSql, [userId], (err, result) => {
     if (err) {
-      console.error('Error deleting user:', err);
+      console.error('Error deleting documents:', err);
       res.status(500).send('Internal Server Error');
     } else {
-      console.log('User deleted successfully');
-      res.status(200).send('User deleted successfully');
+      db.query(deleteClientSql, [userId], (err, result) => {
+        if (err) {
+          console.error('Error deleting user:', err);
+          res.status(500).send('Internal Server Error');
+        } else {
+          console.log('Client and documents deleted successfully');
+          res.status(200).send('Client and documents deleted successfully');
+        }
+      });
     }
   });
 });
@@ -948,16 +1322,20 @@ myApp.get('/document/get/:id', (req, res) => {
 myApp.post(`/document/edited/:id`, (req, res) => {
   const id = req.params.id;
   const doc_no = req.body.doc_no;
-
   const doc_date_submission = req.body.doc_date_submission;
-
+  const doc_date_turnaround = req.body.doc_date_turnaround;
   const doc_type = req.body.doc_type;
-
   const doc_status = req.body.doc_status;
-
   const query =
-    'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
-  const values = [doc_no, doc_date_submission, doc_type, doc_status, id];
+    'UPDATE documents SET doc_no = ?, doc_date_submission = ?, doc_date_turnaround = ?, doc_type = ?, doc_status = ? WHERE doc_id = ?';
+  const values = [
+    doc_no,
+    doc_date_submission,
+    doc_date_turnaround,
+    doc_type,
+    doc_status,
+    id,
+  ];
   db.query(query, values, (err, result) => {
     if (err) res.json({ message: 'Server error' });
     return res.json(result);
@@ -1083,8 +1461,8 @@ const createWindow = async () => {
     show: false,
     height: 1080,
     width: 1920,
-    minHeight: 1080,
-    minWidth: 1920,
+    minHeight: 720,
+    minWidth: 1280,
     icon: getAssetPath('circlelogo.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -1104,6 +1482,12 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+  });
+
+  // Open external links externally using the default web browser
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   mainWindow.on('closed', () => {
@@ -1174,10 +1558,10 @@ myApp.get('/notif', (req, res) => {
   const formattedDate = threeDaysFromNow.toISOString().slice(0, 10);
 
   const sql = `
-  SELECT clients.client_name, documents.date_turnaround, documents.doc_status
+  SELECT clients.client_name, documents.doc_date_turnaround, documents.doc_status
   FROM clients
   JOIN documents ON clients.client_id = documents.client_id
-  WHERE documents.date_turnaround >= CURDATE() AND documents.date_turnaround <= ?
+  WHERE documents.doc_date_turnaround >= CURDATE() AND documents.doc_date_turnaround <= ?
 `;
 
   db.query(sql, [formattedDate], (err, results) => {
