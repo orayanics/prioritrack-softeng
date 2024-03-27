@@ -7,7 +7,7 @@ import { FaRegCircleCheck } from 'react-icons/fa6';
 
 interface Notification {
   client_name: string;
-  date_turnaround: string; // Adjust the property name here
+  doc_date_turnaround: string;
   startTime: number;
   elapsedTime: number;
   docStatus: string;

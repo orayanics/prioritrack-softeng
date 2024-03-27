@@ -1534,18 +1534,54 @@ app
 
 //Notification
 myApp.post('/notif', (req, res) => {
-  const { client_name, doc_status } = req.body;
-  const storedAt = new Date();
+  // Calculate the date 3 days from now
+  const threeDaysFromNow = new Date();
+  threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
 
-  const query =
-    'INSERT INTO prioritrack.notification (client_name, doc_status, stored_at) VALUES (?, ?, ?)';
-  db.query(query, [client_name, doc_status, storedAt], (err, result) => {
+  // Format the date to match the format in your database
+  const formattedDate = threeDaysFromNow.toISOString().slice(0, 10);
+
+  const sql = `
+    SELECT clients.client_name, documents.doc_date_turnaround, documents.doc_status
+    FROM clients
+    JOIN documents ON clients.client_id = documents.client_id
+    WHERE documents.doc_date_turnaround >= CURDATE() AND documents.doc_date_turnaround <= ?
+  `;
+
+  db.query(sql, [formattedDate], (err, results) => {
     if (err) {
-      console.error(err);
-      res.status(500).send('Error storing notification');
-    } else {
-      res.status(200).send('Notification stored successfully');
+      console.error('Error executing query:', err);
+      res.status(500).send('Error fetching documents');
+      return;
     }
+
+    // For each document close to turnaround, insert a notification
+    results.forEach((doc) => {
+      // Format the current date and time to 'YYYY-MM-DD HH:MM:SS'
+      const currentDateTime = new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace('T', ' ');
+
+      const query =
+        'INSERT INTO prioritrack.notification (client_name, doc_status, stored_at) VALUES (?, ?, ?)';
+      db.query(
+        query,
+        [doc.client_name, doc.doc_status, currentDateTime],
+        (err, result) => {
+          if (err) {
+            console.error('Error inserting notification:', err.message);
+          } else {
+            console.log(
+              'Notification stored successfully for document:',
+              doc.doc_no,
+            );
+          }
+        },
+      );
+    });
+
+    res.status(200).send('Notifications checked and stored successfully');
   });
 });
 
