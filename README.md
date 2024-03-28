@@ -74,4 +74,6 @@ const db = mysql.createConnection({ <br>
 }); <br>
 <br>
 set this according to your connection settings so the system will connect to your database.
+Populate the database [temporary] : 
+https://docs.google.com/document/d/1Eq1ravTJ0vKU2cLd0nA7M5bCwqJRTPZXe6jGpmp2CTM/edit?usp=sharing
 
