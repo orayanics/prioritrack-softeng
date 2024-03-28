@@ -18,6 +18,19 @@ cd
 npm install
 ```
 
+```bash
+npm install bcrypt
+```
+```bash
+npm install xlsx
+```
+```bash
+npm install express-rate-limit
+```
+```bash
+npm install dotenv-webpack
+```
+
 ## Starting Development
 
 Start the app in the `dev` environment:
@@ -25,6 +38,8 @@ Start the app in the `dev` environment:
 ```bash
 npm start
 ```
+
+
 
 ## Packaging for Production
 
